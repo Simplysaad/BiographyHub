@@ -1,0 +1,23 @@
+{
+  "name": "Biography Hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "simplysaad",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.0.6",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-ejs-layouts": "^2.5.1",
+    "mongoose": "^8.7.0",
+    "server": "^1.0.41"
+  }
+}
