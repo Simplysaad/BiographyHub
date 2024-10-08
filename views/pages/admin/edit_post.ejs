@@ -1,0 +1,85 @@
+<section class="container edit-post">
+
+<a class="btn btn-dark float-end my-3 mx-2" href="/admin/add-post"><i class="fa fa-plus"></i> Add Post</a>
+  
+  <h3 class="display-5">
+    Edit post
+  </h3>
+
+  <form class="" method="post" action="/admin/edit-post/<%= myPost._id %>">
+    
+    <p class="fs-5 form-label">
+      Add a descriptive Title
+    </p>
+    <div class="form-floating">
+      <input class="form-control" id="postTitle" value="<%= myPost.title %>" name="postTitle" placeholder="">
+      <label for="postTitle">
+        Post Title
+      </label>
+    </div>
+    <p class="fs-5 form-label" onclick="">
+      Write the content
+      <span class="fa fa-clipboard float-end" onclick="pasteText('postContent')">Paste</span>
+    </p>
+    <div class="form-floating">
+      <textarea cols="" rows="10" class="col-12 form-text" id="postContent" 
+value="<%=myPost.content%>"       
+name="postContent" placeholder="Enter the text">
+        <%=myPost.content%>
+</textarea>
+    </div>
+
+    <button class="btn btn-dark btn-lg">
+      Save changes
+    </button>
+  </form>
+
+
+
+  <form class="" method="post" action="/admin/edit-post/<%= myPost._id %>">
+    <p class="fs-5 form-label my-3">
+      Edit Title
+    </p>
+    <div class="form-floating">
+      <input class="form-control" id="postTitle" name="postTitle" placeholder="">
+      <label for="postTitle" id="xyz">
+        Post Title
+      </label>
+    </div>
+    
+
+<div class="form-floating">
+              <input class="form-control" type="date" id="birthDate" name="birthDate" placeholder="Leave blank if not an individual">
+              <label for="birthDate">Birth Date</label>
+            </div>
+            <p class="fs-6 fw-light">Leave blank if not an individual</p>
+            <div class="form-floating">
+              <input class="form-control" type="date" id="deathDate" name="deathDate" placeholder="Leave blank if not an individual">
+              <label for="deathDate">Death Date</label>
+            </div>
+            <p class="fs-6 fw-light">Leave blank if not an individual</p>
+          
+            <div class="input-group flex-nowrap">
+              <input class="form-control" required type="url" id="imageUrl" name="imageUrl" placeholder="Image Url">
+              <span class="p-3 input-group-text fa fa-clipboard" onclick="pasteText('imageUrl')"></span>
+            </div>
+
+    <p class="fs-5 form-label my-3" onclick="">
+  Edit content
+      <span class="fa fa-clipboard float-end" onclick="pasteText('postContent')"></span>
+    </p>
+    <div class="form-floating">
+      <textarea cols="" rows="10" class="col-12 form-text" id="postContent" name="postContent" placeholder="Enter the text">
+        <%= myPost.content%>
+      </textarea>
+    </div>
+            
+            <button class="btn btn-lg col-12 btn-outline-success mb-3 mt-4">Submit</button>
+            
+    
+
+    <button class="btn btn-dark btn-lg">
+      Upload
+    </button>
+  </form>
+</section>
