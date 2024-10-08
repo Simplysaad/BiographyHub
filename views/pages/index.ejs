@@ -1,1 +1,32 @@
+<section class="container my-3 mb-4">
+
+<h3 class="display-5 my-4">
+  Latest Posts
+</h3>
+    
+<% allPosts.forEach((post)=>{ %>
+        <div class="article-card">
+    <div class="card-image col-5 col-md-4">
+      <img src="/IMG/<%= post.imageUrl %>" alt="<%= post.title%>" class="img-fluid" alt="image">
+    </div>
+    <div class="card-body p-1 col-7 col-md-9">
+      <a href="/category/<%= post.category %>" class="text-warning text-uppercase card-category p-0"><%= post.category%> </a>
+      <a href="/article/<%= post._id%>" class="card-title">
+        <%=post.title%>
+      </a>
+      <p class="card-description d-none d-md-block"><%= post.content.split(' ').slice(0, 20).join(' ')%> </p>
+      <div class="">
+        <img src="/IMG/<%= post.imageUrl %>" alt="<%= post.imageUrl %>" class="img-profile">
+        <a href="/author/<%= post.author %>" class="card-author">
+          <%= post.author %>
+        </a>
+        <span class="separator d-inline"></span>
+        <span class="card-age">
+          <%= readTime(post.content)%>
+        </span>
+      </div>
+    </div>
+        </div>
+<% })%>
+</section>       
 
