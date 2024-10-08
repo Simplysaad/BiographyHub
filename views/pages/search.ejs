@@ -1,0 +1,24 @@
+<section class="container">
+<h2 class="text-center fw-bold my-3 py-3 text-secondary-emphasis display-3 border-1 border-top border-bottom">
+  Search Results (<%= searchResults.length %>)
+</h2>
+
+<% searchResults.forEach((post)=>
+  {
+    %>
+    <div class="article-card py-2">
+      
+      <div class="card-body p-1 col my-0">
+        <a href="/article/<%= post._id%>" class="card-title">
+          <%= post.title%>
+        </a>
+        <div class="float-end">
+          <span class="card-age">
+            <%= post.createdAt.toLocaleString() %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <%
+  })%>
+</section>
