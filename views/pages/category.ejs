@@ -8,7 +8,7 @@
     %>
     <div class="article-card">
       <div class="card-image col-5 col-md-4">
-        <img src="/IMG/<%= post.imageUrl%>" class="img-fluid" alt="<%= post.title%>">
+        <img src="<%= post.imageUrl%>" class="img-fluid" alt="<%= post.title%>">
       </div>
       <div class="card-body p-1 col-7 col-md-9">
         <a href="/article/<%= post._id%>" class="card-title">
@@ -18,7 +18,7 @@
           <%= post.content.substring(1, 30) + "..." %>
         </p>
         <div class="">
-          <img src="/IMG/<%= post.imageUrl%>" class="img-profile">
+          <img src="<%= post.imageUrl%>" class="img-profile">
           <a href="/author/<%= post.author.split(" ").join("-")%>" class="card-author"><%= post.author%></a>
           <span class="separator d-inline"></span>
           <span class="card-age"><%= post.createdAt.toLocaleString() %></span>
