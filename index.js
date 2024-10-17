@@ -41,7 +41,7 @@ app.use(expressLayouts)
 app.set("layout", "layouts/main")
 
 //STATIC
-app.use(express.static('public'))
+app.use(express.static('PUBLIC'))
 
 //ROUTING
 app.use("/", require('./server/routes/admin_routes.js'))
