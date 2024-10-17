@@ -22,7 +22,7 @@ app.use(express.urlencoded({extended: true}))
 //EXPRESS SESSIONS
 app.use(session({
   store: mongoStore.create({
-    mongoUrl = process.env.MONGO_URI
+    mongoUrl : process.env.MONGO_URI
   }),
   secret: process.env.SECRET_KEY,
   resave: false,
