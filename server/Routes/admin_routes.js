@@ -21,7 +21,7 @@ router.get("/register", (req, res) => {
     console.log("register page is loading");
     try {
         console.log("register page is loaded");
-        res.render("admin/register", { locals, layout: "layouts/admin" });
+        res.render("admin/register", { locals });
     } catch (err) {
         console.error(err);
     }
@@ -65,7 +65,7 @@ router.post("/register", async (req, res) => {
 router.get("/login", (req, res) => {
     console.log("login page is loading");
     try {
-        res.render("admin/login", { locals, layout: "layouts/admin" });
+        res.render("admin/login", { locals });
         console.log("login page is loaded");
     } catch (err) {
         console.error(err);
