@@ -48,3 +48,51 @@ const readTime =(content)=>{
 
   return Math.ceil(words/speed) + ' min read'
 }
+let btnSubscribe = document.getElementById("btnSubscribe");
+let subscribeForm = document.getElementById("subscribeForm");
+let subscribed = document.getElementById("subscribed");
+
+subscribeForm.addEventListener("submit", () => {
+    subscribed.style.display = "block";
+    subscribeForm.style.display = "none";
+    alert(subscribed.textContent);
+});
+
+const inputName = document.getElementById("name");
+const inputUsername = document.getElementById("username");
+const inputEmail = document.getElementById("emailAddress");
+const inputPassword = document.getElementById("password");
+const confirmPassword = document.getElementById("passwordConfirm");
+const btnSubmit = document.getElementById("btnSubmit");
+const form = document.getElementById("form");
+const btnLogin = document.getElementById("btnLogin");
+const loginForm = document.getElementById("loginForm");
+const error = document.querySelectorAll(".text-error");
+console.log(error);
+
+btnLogin.addEventListener("click", async e => {
+    e.preventDefault();
+    if (inputPassword.value.length < 8) {
+        error[3].style.visibility = "visible";
+    } else {
+        console.log("form validated successfully");
+        // loginForm.action = "/login";
+        // loginForm.submit();
+    }
+});
+
+btnSubmit.addEventListener("click", e => {
+    e.preventDefault();
+    console.log("submit button clicked")
+    if (inputName.value.length < 2) {
+        error[0].style.visibility = "visible";
+    } else if (inputPassword.value.length < 8) {
+        error[3].style.visibility = "visible";
+    } else if (inputPassword.value !== confirmPassword.value) {
+        error[4].style.visibility = "visible";
+    } else {
+        console.log("form validated successfully");
+        // form.action = "/register";
+        // form.submit();
+    }
+});
