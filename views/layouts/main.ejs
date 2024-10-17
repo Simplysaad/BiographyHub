@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BiographyHub | </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= locals.description%>">
+    <meta charset="utf-8" >
+    <meta name="author" content="simplysaad">
+    <link rel="stylesheet" href="/css/style.css">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"> 
+  </head>
+  <body>
+    <div class="">
+      <%- include('../partials/_header.ejs')%>
+        <%- include('../partials/_search.ejs')%>
+      <main class="main">
+        <%- body %>
+      </main>
+      <%- include('../partials/_footer.ejs')%>
+   </div>
+
+        <script src="/JS/script.js"></script>
+        
+  </body>
+</html>
