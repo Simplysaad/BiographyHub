@@ -6,7 +6,7 @@
   width: 30px;
   border-radius: 50%;
 }
-.img-post{
+.im-post{
   min-width: 150px;
 }
 .article-card{
@@ -30,11 +30,15 @@
 }
 .card-image img{
   height: inherit;
-  width: auto;
+  width: 150px;
 }
 @media screen and (min-width: 600){
   .article-card{
     height: 250px;
+    
+  }
+  .im-post{
+    width: 100%;
   }
 }
 .card-body{
