@@ -101,3 +101,13 @@ footer a.fab{
   color: #6f6f6f;
   font-size: 1.2rem;
 }
+#subscribed{
+  display: none;
+}
+
+.text-error{
+  visibility: hidden;
+}
+.form-floating{
+  margin: 10px auto;
+}
