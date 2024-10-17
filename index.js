@@ -2,12 +2,13 @@
 
 const express = require('express')
 const session = require('express-session')
+const cookieParser = require('cookie-parser')
 const connectDb = require('./server/config/db.js')
 const expressLayouts = require("express-ejs-layouts")
 require('dotenv').config()
 
 const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8080
 app.listen(PORT, ()=>{
   console.log(`app listening at http://localhost:${PORT}`)
 })
@@ -19,7 +20,7 @@ app.use(express.urlencoded({extended: true}))
 
 //EXPRESS SESSIONS
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: true,
   cookies:{
@@ -28,7 +29,8 @@ app.use(session({
   }
 }))
 
-
+//USE COOKIE PARSER 
+app.use(cookieParser())
 
 //VIEWS
 app.set("view engine", "ejs")
