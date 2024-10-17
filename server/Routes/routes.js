@@ -1,12 +1,12 @@
 //routes.js
 
 const express = require("express");
-const dummyData = require("./dummyData");
+//const dummyData = require("./dummyData");
 const router = express.Router();
 const post = require("../models/Post");
 const helper = require('../../utils/helper')
 const locals = {
-  title: "BiographyHub | ",
+  title: "BiographyHub | "
 };
 
 //console.log(allPosts)
