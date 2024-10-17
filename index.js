@@ -2,7 +2,7 @@
 
 const express = require('express')
 const session = require('express-session')
-const {MongoStore} = require('connect-mongo')
+const MongoStore = require('connect-mongo')
 const cookieParser = require('cookie-parser')
 const connectDb = require('./server/Config/db.js')
 const expressLayouts = require("express-ejs-layouts")
@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended: true}))
 
 //EXPRESS SESSIONS
 app.use(session({
-  store: new MongoStore({
+  store: MongoStore.create({
     mongoUrl : process.env.MONGO_URI
   }),
   secret: process.env.SECRET_KEY,
