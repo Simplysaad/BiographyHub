@@ -7,7 +7,7 @@
 <% allPosts.forEach((post)=>{ %>
         <div class="article-card">
     <div class="card-image col-5 col-md-4">
-      <img src="/IMG/<%= post.imageUrl %>" alt="<%= post.title%>" class="img-fluid" alt="image">
+      <img src="<%= post.imageUrl %>" alt="<%= post.title%>" class="img-fluid" alt="image">
     </div>
     <div class="card-body p-1 col-7 col-md-9">
       <a href="/category/<%= post.category %>" class="text-warning text-uppercase card-category p-0"><%= post.category%> </a>
@@ -16,7 +16,7 @@
       </a>
       <p class="card-description d-none d-md-block"><%= post.content.split(' ').slice(0, 20).join(' ')%> </p>
       <div class="">
-        <img src="/IMG/<%= post.imageUrl %>" alt="<%= post.imageUrl %>" class="img-profile">
+        <img src="<%= post.imageUrl %>" alt="<%= post.imageUrl %>" class="img-profile">
         <a href="/author/<%= post.author %>" class="card-author">
           <%= post.author %>
         </a>
