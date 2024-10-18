@@ -59,6 +59,7 @@ router.get("/article/:id", async (req, res) => {
 
         let relatedPosts = relatedPostsFunc(allPosts);
         locals.description = article.content.substring(0, 158)
+        locals.imageUrl = article.imageUrl
 
         res.render("pages/article", {
             locals,
