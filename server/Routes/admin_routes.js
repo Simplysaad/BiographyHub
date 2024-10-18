@@ -171,7 +171,7 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
 
         res.render("admin/dashboard", {
             locals,
-            my})Posts,
+            myPosts,
             layout: "layouts/admin"
         });
     } catch (err) {
