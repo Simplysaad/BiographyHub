@@ -87,6 +87,9 @@ router.get("/category/:categoryName", async (req, res) => {
             .find({ category: categoryName })
             .exec();
 
+        locals.title = "BiographyHub | " + categoryName;
+        //locals.description 
+
         res.render("pages/category", {
             locals,
             categoryPosts,
@@ -119,6 +122,10 @@ router.post("/search", async (req, res) => {
                 { category: { $regex: newRegex } }
             ]
         });
+
+        locals.title = 'BiographyHub |  Search Results';
+        locals.description = "Results For '" + searchTerm +"'";
+                            
 
         res.render("pages/search", { locals, searchResults });
     } catch (err) {
