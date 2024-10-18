@@ -10,7 +10,8 @@ const user = require("../models/User.js");
 const authMiddleware = require("../../utils/auth.js");
 
 const locals = {
-    title: "BiographyHub | Admin"
+    title: "BiographyHub | Admin",
+    imageUrl: "/IMG/brand-image.png"
 };
 
 /**
@@ -170,6 +171,7 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
             myPosts = await post.find({authorId: currentUserId})
         }
         //const myPosts = await post.find({});
+        locals.title = "BiographyHub | Dashboard"
 
         res.render("admin/dashboard", {
             locals,
@@ -189,6 +191,7 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
 
 router.get("/admin/add-post", authMiddleware, async (req, res) => {
     try {
+        locals.title = "BiographyHub | Add post"
         res.render("admin/add_post", {
             locals,
             layout: "layouts/admin"
@@ -245,7 +248,8 @@ router.get("/admin/edit-post/:id", authMiddleware, async (req, res) => {
     try {
         let myPost = await post.findOne({ _id: req.params.id });
 
-        console.log(myPost);
+        //console.log(myPost);
+        locals.title = "BiographyHub | Edit post"
         res.render("admin/edit_post", {
             locals,
             myPost,
@@ -262,7 +266,7 @@ router.get("/admin/edit-post/:id", authMiddleware, async (req, res) => {
  * completed successfully
  */
 router.post("/admin/edit-post/:id", authMiddleware, async (req, res) => {
-    console.log("you are trying to edit", req.params.id);
+    //console.log("you are trying to edit", req.params.id);
     try {
         let updatedPost = await post.updateOne(
             { _id: req.params.id },
