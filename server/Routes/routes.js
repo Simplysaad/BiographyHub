@@ -6,8 +6,8 @@ const user = require("../models/User");
 const subscriber = require("../models/Subscriber.js");
 const helper = require("../../utils/helper");
 const locals = {
-    title: " ",
-    imageUrl: "",
+    title: "",
+    imageUrl: "/IMG/brand-image.png",
     description: "Find out about notable events, influential individuals and discusions"
 };
 
@@ -62,6 +62,7 @@ router.get("/article/:id", async (req, res) => {
         let relatedPosts = relatedPostsFunc(allPosts);
         locals.description = article.content.substring(0, 160)
         locals.imageUrl = article.imageUrl
+        locals.title = article.title
 
         res.render("pages/article", {
             locals,
