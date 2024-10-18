@@ -45,9 +45,12 @@ router.post("/register", async (req, res) => {
         }
         await newUser.save();
 
-        const token = jwt.sign({ sub: data._id }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ sub: newUser._id }, process.env.SECRET_KEY, {
             expiresIn: "1h"
         });
+
+        req.session.userId = currentUser._id;
+        req.session.username = currentUser.username;
         
         res.cookie("token", token, { httpOnly: true });
         res.redirect("/dashboard");
@@ -157,11 +160,18 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
     try {
         let currentUserId = await getAuthorId(req);
         //const myPosts = await post.find({authorId: currentUserId});
-        const myPosts = await post.find({});
+        let myPosts;
+        if(req.session.username === "JustSaad"){
+            myPosts = await post.find({})
+        }
+        else{
+            myPosts = post.find({authorId: currentUserId})
+        }
+        //const myPosts = await post.find({});
 
         res.render("admin/dashboard", {
             locals,
-            myPosts,
+            my})Posts,
             layout: "layouts/admin"
         });
     } catch (err) {
