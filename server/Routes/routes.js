@@ -6,7 +6,9 @@ const user = require("../models/User");
 const subscriber = require("../models/Subscriber.js");
 const helper = require("../../utils/helper");
 const locals = {
-    title: "BiographyHub | "
+    title: "BiographyHub | ",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Calgary_Wranglers_vs._Coachella_Valley_Firebirds_-_October_29%2C_2022_-_Jessica_Campbell_Assistant_Coach_%2852484938474%29.jpg",
+    description: "Find out about notable events, influential individuals and discusions"
 };
 
 //console.log(allPosts)
