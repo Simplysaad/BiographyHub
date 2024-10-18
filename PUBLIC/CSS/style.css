@@ -1,6 +1,8 @@
 /**/
 
-
+main{
+  min-height: 100vh
+}
 .img-profile{
   height: 30px;
   width: 30px;
