@@ -165,7 +165,7 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
             myPosts = await post.find({})
         }
         else{
-            myPosts = post.find({authorId: currentUserId})
+            myPosts = await post.find({authorId: currentUserId})
         }
         //const myPosts = await post.find({});
 
