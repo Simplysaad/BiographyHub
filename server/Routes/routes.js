@@ -58,6 +58,7 @@ router.get("/article/:id", async (req, res) => {
         const allPosts = await post.find().exec();
 
         let relatedPosts = relatedPostsFunc(allPosts);
+        locals.description = article.content.substring(0, 158)
 
         res.render("pages/article", {
             locals,
