@@ -20,7 +20,8 @@ const locals = {
 router.get("/register", (req, res) => {
     console.log("register page is loading");
     try {
-        console.log("register page is loaded");
+        //console.log("register page is loaded");
+        locals.title = "BiographyHub | Create Account"
         res.render("admin/register", { locals, layout: "layouts/auth" });
     } catch (err) {
         console.error(err);
@@ -68,8 +69,9 @@ router.post("/register", async (req, res) => {
 router.get("/login", (req, res) => {
     console.log("login page is loading");
     try {
+        locals.title = "BiographyHub | Login"
         res.render("admin/login", { locals, layout:"layouts/auth" });
-        console.log("login page is loaded");
+        //console.log("login page is loaded");
     } catch (err) {
         console.error(err);
     }
