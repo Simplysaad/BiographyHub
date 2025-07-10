@@ -1,12 +1,9 @@
   <section id="infoSection">
     <div class="article-image overflow-hidden">
-        <div
-            class="col-md-10 col-12 py-5 position-absolut placeholder-wave placeholder"
-        ></div>
         <img
             src="<%= article.imageUrl%>"
-            alt="<%= article.imageUrl%>"
-            class="img-fluid w-100 h-auto object-fit-cover"
+            alt="<%= article.title + " image" %>"
+            class="img-fluid w-100 h-auto placeholde object-fit-cover"
         />
     </div>
     <div class="article-title py-3">
@@ -31,14 +28,14 @@
         <span id="btnShare" data-title="<%= article.title %>">
             <i class="fa fa-share-alt"> </i>
         </span>
-        <a href="" class="share-icon">
+        <a href=""  id="whatsapp" class="share-icon">
             <i class="fab fa-whatsapp"> </i>
         </a>
-        <a href="" class="share-icon">
-            <i class="fab fa-twitter"> </i>
-        </a>
-        <a href="" class="share-icon">
+        <a href="" id="facebook" class="share-icon">
             <i class="fab fa-facebook"> </i>
+        </a>
+        <a href="" id="twitter" class="share-icon">
+            <i class="fab fa-twitter"> </i>
         </a>
     </div>
   </article>

@@ -1,6 +1,2 @@
-node_modules/
 .env
-
-npm i bcryptjs connect-mongo mongoose --no-bin-links
-npm i jsonwebtoken express-session express-ejs-layouts --no-bin-links
-npm i ejs dotenv cookie-parser express --no-bin-links
+node_modules/
