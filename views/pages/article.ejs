@@ -1,52 +1,132 @@
-<section class="article-container container my-5">
-
-<div class="cover-image mb-3">
-  <img src="<%= article.imageUrl%>" class="img-fluid" alt="<%= article.imageUrl%>">
-</div>
-  
-  <h2 class="display-4 article-title">
-    <%= article.title%>
-  </h2>
-  <div class="fw-6 my-3">
-    <img src="<%= article.imageUrl%>" class="img-profile" alt="">
-    <a href="#" class="card-author"><%= article.author%></a>
-    <span class="separator d-inline"></span>
-    <span class="card-age"><%= readTime(article.content) %></span>
-  </div>
-  <div class="fw-6 main text mb-4">
-    <%- article.content%>
-  </div>
-        
-  <div class="other-articles overflow-x-scroll mt-5 ">
-
-<h3 class="display-5 my-4">
-  Related Posts
-</h3>
-    
-    <% relatedPosts.forEach((post)=>{ %>
-    
-    <div class="article-card">
-    <div class="card-image col-5 col-md-4">
-      <img src="<%= post.imageUrl %>" alt="<%= post.title%>" class="img-fluid img-post" alt="image">
+  <section id="infoSection">
+    <div class="article-image overflow-hidden">
+        <div
+            class="col-md-10 col-12 py-5 position-absolut placeholder-wave placeholder"
+        ></div>
+        <img
+            src="<%= article.imageUrl%>"
+            alt="<%= article.imageUrl%>"
+            class="img-fluid w-100 h-auto object-fit-cover"
+        />
     </div>
-    <div class="card-body p-1 col-7 col-md-9">
-      <a href="/category/<%= post.category %>" class="text-warning text-uppercase card-category p-0"><%= post.category%> </a>
-      <a href="/article/<%= post._id%>" class="card-title">
-        <%=post.title%>
-      </a>
-      <p class="card-description d-none d-md-block"><%= post.content.split(' ').slice(0, 20).join(' ')%> </p>
-      <div class="">
-        <img src="<%= post.imageUrl %>" alt="<%= post.imageUrl %>" class="img-profile">
-        <a href="/author/<%= post.author %>" class="card-author">
-          <%= post.author %>
-        </a>
-        <span class="separator d-inline"></span>
-        <span class="card-age">
-          <%= readTime(post.content)%>
+    <div class="article-title py-3">
+        <span class="rounded small text-uppercase">
+            technology
         </span>
-      </div>
+        <h3 class="fs-1 led">
+            <%= article.title%>
+        </h3>
     </div>
-  </div>
-<% })%>
-  </div>       
-</section>
+    <div class="article-info d-flex flex-column">
+        <span class="text-capitalize"><%= article.author%> </span>
+        <span class="small"><%= article.updatedAt.toDateString() %> </span>
+        <span class="small"><%= article.readTime %>  </span>
+    </div>
+  </section>
+  <article id="mainArticle" class="py-4">
+    <p class="">
+        <%- article.content%>
+    </p>
+    <div class="article-share d-flex gap-2 fs-2">
+        <span id="btnShare" data-title="<%= article.title %>">
+            <i class="fa fa-share-alt"> </i>
+        </span>
+        <a href="" class="share-icon">
+            <i class="fab fa-whatsapp"> </i>
+        </a>
+        <a href="" class="share-icon">
+            <i class="fab fa-twitter"> </i>
+        </a>
+        <a href="" class="share-icon">
+            <i class="fab fa-facebook"> </i>
+        </a>
+    </div>
+  </article>
+  <section id="chatbotSection" class="col-md-8">
+    <div class="heading my-4">
+        <h3 class="fs-2 lead">Ask Ai!</h3>
+        <h3 class="fs-6 fw-light">
+            For more insight and context
+        </h3>
+    </div>
+    <div class="input-bar border rounded gap-1 d-flex">
+        <input
+            class="border-0 form-control"
+            type="text"
+            name="message"
+            id="inputMessage"
+            placeholder="Ask anything..."
+            value=""
+        />
+        <button id="btnVoiceSearch" class="btn border-0">
+            <i class="fa fa-microphone"> </i>
+        </button>
+        <button
+            id="btnSendMessage"
+            class="btn btn-outline-light"
+        >
+            <i class="fa fa-paper-plane"> </i>
+        </button>
+    </div>
+    <div class="input-suggestions my-4">
+        <div
+            class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+        >
+            <span class="col-8 text-truncate">
+                lorem ipsum dolor sit amet consectetur?
+            </span>
+            <i class="fa small fa-search"> </i>
+        </div>
+        <div
+            class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+        >
+            <span class="col-8 text-truncate">
+                lorem ipsum dolor sit amet consectetur?
+            </span>
+            <i class="fa small fa-search"> </i>
+        </div>
+    </div>
+  </section>
+  <section id="relatedSection" class="my-5">
+    <div class="heading my-3">
+        <h3 class="fs-3 fw-light">Related Posts</h3>
+    </div>
+  
+    <div class="reel container">
+        <div
+            class="portrait card overflow-hidden border col-8 col-md-4 col-lg-3"
+        >
+            <div
+                class="card-image placeholder placeholder-wave glass p-5 object-fit-cover"
+            >
+                <img
+                    class="img-fluid"
+                    src="./image.jpeg"
+                    alt="no image"
+                />
+            </div>
+            <div class="d-flex flex-column p-2 card-info">
+                <span
+                    class="text-decoration-underline small card-category"
+                >
+                    Technology
+                </span>
+                <span
+                    class="card-title text-decoration-underline fs-6"
+                >
+                    <a class="" href="#"
+                        >Lorem ipsum dolor sit</a
+                    >
+                </span>
+                <span class="card-text fw-light small">
+                    Lorem ipsum dolor sit amet, consectetur
+                    adipisicing elit. Aliquid totam nobis
+                    assumenda...
+                </span>
+                <span class="card-date py-2 small">
+                    March 2, 2025
+                </span>
+            </div>
+        </div>
+    </div>
+  </section>

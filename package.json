@@ -1,35 +1,37 @@
 {
-  "name": "Biograpghy Hub",
-  "version": "1.0.0",
-  "description": "A place where we discuss notable events, influential individuals, intriguing topics and many more",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index",
-    "dev": "nodemon index"
-  },
-  "keywords": [],
-  "author": "Saad idris",
-  "license": "ISC",
-  "dependencies": {
-    "@types/node": "^18.0.6",
-    "bcrypt": "^5.1.1",
-    "connect-mongo": "^4.6.0",
-    "bcryptjs": "^2.4.3",
-    "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.5",
-    "ejs": "^3.1.10",
-    "express": "^4.21.1",
-    "express-ejs-layouts": "^2.5.1",
-    "express-session": "^1.18.1",
-    "jsonwebtoken": "^9.0.2",
-    "method-override": "^3.0.0",
-    "mongoose": "^8.7.1",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-local": "^1.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-  }
+    "name": "biographyhub",
+    "version": "2.0.0",
+    "description": "A place where we discuss notable events, influential individuals, intriguing topics and many more",
+    "keywords": ["blog", "history", "express"],
+    "homepage": "https://github.com/simplysaad/biographyhub#readme",
+    "bugs": {
+        "url": "https://github.com/simplysaad/biographyhub/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/simplysaad/biographyhub.git"
+    },
+    "license": "MIT",
+    "author": "simplysaad",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest",
+                "dev": "nodemon index",
+        "start": "node --watch index"
+    },
+    "dependencies": {
+        "@huggingface/inference": "^4.4.0",
+        "bcryptjs": "^3.0.2",
+        "connect-mongo": "^5.1.0",
+        "cookie-parser": "^1.4.7",
+        "dotenv": "^17.2.0",
+        "ejs": "^3.1.10",
+        "express": "^5.1.0",
+        "express-ejs-layouts": "^2.5.1",
+        "express-session": "^1.18.1",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.16.2",
+        "openai": "^5.8.3"
+    }
 }

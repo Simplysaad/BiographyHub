@@ -1,32 +1,31 @@
-<section class="container my-3 mb-4">
-
-<h3 class="display-5 my-4">
-  Latest Posts
-</h3>
-    
-<% allPosts.forEach((post)=>{ %>
-        <div class="article-card">
-    <div class="card-image col-5 col-md-4">
-      <img src="<%= post.imageUrl %>" alt="<%= post.title%>" class="img-fluid" alt="image">
-    </div>
-    <div class="card-body p-1 col-7 col-md-9">
-      <a href="/category/<%= post.category %>" class="text-warning text-uppercase card-category p-0"><%= post.category%> </a>
-      <a href="/article/<%= post._id%>" class="card-title">
-        <%=post.title%>
-      </a>
-      <p class="card-description d-none d-md-block"><%= post.content.split(' ').slice(0, 20).join(' ')%> </p>
-      <div class="">
-        <img src="<%= post.imageUrl %>" alt="<%= post.imageUrl %>" class="img-profile">
-        <a href="/author/<%= post.author %>" class="card-author">
-          <%= post.author %>
-        </a>
-        <span class="separator d-inline"></span>
-        <span class="card-age">
-          <%= readTime(post.content)%>
-        </span>
-      </div>
-    </div>
+    <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
+        <div
+            class="rounded mx-2 p-2 hero-content col-md-6 col-lg-6 text-center text-md-start clearfix float-md-end"
+        >
+            <span
+                class="d-none d-md-inline-block content-tag text-uppercase text-start"
+            >
+                Technology
+            </span>
+            <h2 class="content-title">
+                Emerging Technologies in africa: the uprising
+            </h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Voluptate temporibus veniam consequuntur excepturi
+            </p>
+            <a href="" class="btn border border-2 btn-outline-light">
+                Read more</a
+            >
         </div>
-<% })%>
-</section>       
-
+    </section>
+    <section id="topicsSection" class=""></section>
+    <section id="topStoriesSection" class="">
+        <div class="heading py-3">
+            <h2 class="display-6">Top Stories</h2>
+        </div>
+        <div class="reel py-3 px-2 gap-3 overflow-x-scroll d-flex flex-wra">
+            <% allPosts.forEach((post)=>{ %> <%-
+            include("../components/portrait.card.ejs", {post}) %> <% })%>
+        </div>
+    </section>

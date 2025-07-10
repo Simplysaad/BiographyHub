@@ -1,0 +1,19 @@
+<div class="portrait card overflow-hidden border col-8 col-md-4 col-lg-3">
+    <div
+        class="card-image placeholder placeholder-wave glass p-5 object-fit-cover"
+    >
+        <img class="img-fluid" src="<%= post.imageUrl %>" alt="no image" />
+    </div>
+    <div class="d-flex flex-column p-2 card-info">
+        <span class="text-decoration-underline small card-category">
+            <%= post.category %>
+        </span>
+        <span class="card-title text-decoration-underline fs-6">
+            <a class="" href="/article/<%= post.slug %>"><%= post.title %></a>
+        </span>
+        <span class="card-text fw-light small">
+            <%= post.description %>
+        </span>
+        <span class="card-date py-2 small"> <%= post.updatedAt.toLocaleDateString() %> </span>
+    </div>
+</div>

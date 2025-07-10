@@ -5,120 +5,15 @@ const jwt = require("jsonwebtoken");
 //const passport = require('passport')
 //const localStrategy = require('passport-local')
 
-const post = require("../models/Post.js");
-const user = require("../models/User.js");
-const authMiddleware = require("../../utils/auth.js");
+const post = require("../models/post.model.js");
+const user = require("../models/user.model.js");
+const authMiddleware = require("../utils/auth.js");
 
 const locals = {
     title: "BiographyHub | Admin",
     imageUrl: "/IMG/brand-image.png"
 };
 
-/**
- * GET
- * ADMIN - register page
- */
-router.get("/register", (req, res) => {
-    console.log("register page is loading");
-    try {
-        //console.log("register page is loaded");
-        locals.title = "BiographyHub | Create Account"
-        res.render("admin/register", { locals, layout: "layouts/auth" });
-    } catch (err) {
-        console.error(err);
-    }
-});
-/**
- * POST
- * ADMIN - register
- * For register, the three things we have to do is:
- * * save info to mongodb
- * * create a new user
- * * sign the web token
- */
-
-router.post("/register", async (req, res) => {
-    try {
-        let hashedPassword = await bcrypt.hash(req.body.password, 10);
-        req.body.password = hashedPassword;
-        let newUser = new user(req.body);
-        if (!newUser) {
-            throw new Error("");
-        }
-        await newUser.save();
-
-        const token = jwt.sign({ sub: newUser._id }, process.env.SECRET_KEY, {
-            expiresIn: "1h"
-        });
-
-        req.session.userId = currentUser._id;
-        req.session.username = currentUser.username;
-        
-        res.cookie("token", token, { httpOnly: true });
-        res.redirect("/dashboard");
-    } catch (err) {
-        console.error(err);
-        return res.status(400).json({ message: "Registration Failed" });
-    }
-});
-
-/**
- * GET
- * ADMIN -login page
- */
-
-router.get("/login", (req, res) => {
-    console.log("login page is loading");
-    try {
-        locals.title = "BiographyHub | Login"
-        res.render("admin/login", { locals, layout:"layouts/auth" });
-        //console.log("login page is loaded");
-    } catch (err) {
-        console.error(err);
-    }
-});
-
-/**
- * POST
- * ADMIN -login
- * For login, the three things we have to do is:
- * * check info with mongodb
- * * create web token
- * * enter the dashboard if successful
- */
-
-router.post("/login", async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const currentUser = await user.findOne({
-            $or: [{ username: username }, { emailAddress: username }]
-        });
-        if (!currentUser) {
-            console.log("user not found");
-            return res.status(404).json({ message: "user not found" });
-        }
-
-        const isMatch = await bcrypt.compare(password, currentUser.password);
-        if (!isMatch) {
-            console.log("invalid credentials");
-            return res.status(401).send({ message: "invalid credentials" });
-        }
-        req.session.userId = currentUser._id;
-        req.session.username = currentUser.username;
-
-        const token = jwt.sign(
-            { sub: currentUser._id },
-            process.env.SECRET_KEY,
-            {
-                expiresIn: "1h"
-            }
-        );
-        res.cookie("token", token, { httpOnly: true });
-        res.redirect("/dashboard");
-    } catch (error) {
-        console.error(error);
-    }
-});
 
 /**
  * ADMIN - finds the authorId from the current user session
@@ -141,37 +36,23 @@ async function getAuthorId(req) {
 
 /**
  * GET
- * ADMIN - logout
- * clears the token cookie
- */
-
-router.get("/logout", (req, res)=>{
-  res.clearCookie('token')
-  res.redirect("/login")
-})
-
-
-
-/**
- * GET
  * ADMIN - get all posts related to a single user
  * For now it should find all posts*
  * requires authentication with "authMiddleware"
  */
 
-router.get("/dashboard", authMiddleware, async (req, res) => {
+router.get("/dashboard", authMiddleware, async (req, res, next) => {
     try {
         let currentUserId = await getAuthorId(req);
         //const myPosts = await post.find({authorId: currentUserId});
         let myPosts;
-        if(req.session.username === "JustSaad"){
-            myPosts = await post.find({})
-        }
-        else{
-            myPosts = await post.find({authorId: currentUserId})
+        if (req.session.username === "JustSaad") {
+            myPosts = await post.find({});
+        } else {
+            myPosts = await post.find({ authorId: currentUserId });
         }
         //const myPosts = await post.find({});
-        locals.title = "BiographyHub | Dashboard"
+        locals.title = "BiographyHub | Dashboard";
 
         res.render("admin/dashboard", {
             locals,
@@ -189,9 +70,9 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
  * requires authentication with "authMiddleware"
  */
 
-router.get("/admin/add-post", authMiddleware, async (req, res) => {
+router.get("/admin/add-post", authMiddleware, async (req, res, next) => {
     try {
-        locals.title = "BiographyHub | Add post"
+        locals.title = "BiographyHub | Add post";
         res.render("admin/add_post", {
             locals,
             layout: "layouts/admin"
@@ -208,7 +89,7 @@ router.get("/admin/add-post", authMiddleware, async (req, res) => {
  * still requires authentication with "authMiddleware"
  */
 
-router.post("/admin/add-post", authMiddleware, async (req, res) => {
+router.post("/admin/add-post", authMiddleware, async (req, res, next) => {
     try {
         if (!req.body) {
             throw new Error("request body not found");
@@ -244,12 +125,12 @@ router.post("/admin/add-post", authMiddleware, async (req, res) => {
  * excecuted successfully(not yet)
  * still requires authentication with "authMiddleware"
  */
-router.get("/admin/edit-post/:id", authMiddleware, async (req, res) => {
+router.get("/admin/edit-post/:id", authMiddleware, async (req, res, next) => {
     try {
         let myPost = await post.findOne({ _id: req.params.id });
 
         //console.log(myPost);
-        locals.title = "BiographyHub | Edit post"
+        locals.title = "BiographyHub | Edit post";
         res.render("admin/edit_post", {
             locals,
             myPost,
@@ -265,7 +146,7 @@ router.get("/admin/edit-post/:id", authMiddleware, async (req, res) => {
  * ADMIN -edit-post
  * completed successfully
  */
-router.post("/admin/edit-post/:id", authMiddleware, async (req, res) => {
+router.post("/admin/edit-post/:id", authMiddleware, async (req, res, next) => {
     //console.log("you are trying to edit", req.params.id);
     try {
         let updatedPost = await post.updateOne(
@@ -292,7 +173,7 @@ router.post("/admin/edit-post/:id", authMiddleware, async (req, res) => {
  * I should use the DELETE method, not GET
  */
 
-router.get("/admin/delete-post/:id", authMiddleware, async (req, res) => {
+router.get("/admin/delete-post/:id", authMiddleware, async (req, res, next) => {
     console.log("you are trying to delete: ", req.params.id);
     try {
         let deletedPost = await post.deleteOne({ _id: req.params.id });

@@ -292,30 +292,3 @@ const dummyData = [
     deathDate: null
   }
 ];
-
-
-const deleteAllPosts = async()=>{
-  try{
-      await post.deleteMany().then(data=>{
-      console.log('all posts deleted')
-  })
-  }
-  catch(err){
-    console.log(err)
-  }
-}
-
-const insertPosts = async()=>{
-  try{
-      await post.insertMany(dummyData).then(data=>{
-      console.log(data)
-    })
-  }
-  catch(err){
-    console.log(err)
-  }
-}
-
-//insertPosts()
-
-module.exports = dummyData;

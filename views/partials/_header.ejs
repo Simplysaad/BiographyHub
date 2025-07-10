@@ -1,38 +1,80 @@
-
-     <header class="nav navbar bg-success text-light">
-      <div class="container">
-        <a href="/" class="navbar-brand text-light">BiographyHub</a>
-        <div class="navbar-na">
-          <a href="/login" class="btn btn-success" id="btnLoginPage">
-            <i class="fa fa-user"></i>
-            <span class="d-none d-md-inline">Login</span>
-          </a>
-          <button class="btn btn-success" id="btnDisplaySearch">
-            <i class="fa fa-search"></i>
-            <span class="d-none d-md-inline">Search</span>
-          </button>
-        </div>
-      </div>
-    </header>
-    <nav class="side-nav overflow-x-scroll bg-success opacity-25">
-      <div class="side-nav-container mx-auto container  d-flex">
-        <a href="/category/People" class="navbar-link">
-          People
-        </a>
-        <a href="/category/News" class="navbar-link">
-          News
-        </a>
-        <a href="/category/Events" class="navbar-link">
-          Events
-        </a>
-        <a href="/category/Topics" class="navbar-link">
-          Discussion
-        </a>
-        <a href="/this-day" class="navbar-link">
-          This day
-        </a>
-        <a href="/guess-game" class="navbar-link">
-          Guess Game
-        </a>
-      </div>
-    </nav>
+        <header id="navBar" class="nav shadow-sm mx-md-2 navbar">
+            <div
+                class="container pt-sm-2 d-flex justify-content-between flex-wrap flex-md-nowrap"
+            >
+                <div class="navbar-brand order-1">
+                    <a href="/" class=" "> BiographyHub </a>
+                </div>
+                <div
+                    id="horizontalNav"
+                    class="horizontal-nav order-3 order-md-2 overflow-x-scroll"
+                >
+                    <ul
+                        class="d-flex overflow-x-scroll my-2 px-0 align-items-center gap-2"
+                    >
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/people"
+                            >
+                                people
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/news"
+                            >
+                                news
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/events"
+                            >
+                                events
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/discussion"
+                            >
+                                discussion
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/this-day"
+                            >
+                                this day
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/guess-game"
+                            >
+                                guess game
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex order-2 order-md-3 gap-2 navbar-options">
+                    <a href="/search" class="" id="btnLoginPage">
+                        <i class="fa fa-search"></i>
+                        <span class="d-none d-lg-inline">Search</span>
+                    </a>
+                    <a href="/notifications" class="" id="btnLoginPage">
+                        <i class="fa fa-bell"></i>
+                        <span class="d-none d-lg-inline">Notifications</span>
+                    </a>
+                    <a href="/auth/login" class="" id="btnLoginPage">
+                        <i class="fa fa-user"></i>
+                        <span class="d-none d-lg-inline">Login</span>
+                    </a>
+                </div>
+            </div>
+        </header>
