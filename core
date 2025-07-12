@@ -1,0 +1,28 @@
+commit d1fea677127994071244382f52f36d4badb52e87
+Author: simplysaad <saadidris70@gmail.com>
+Date:   Sat Jul 12 18:20:55 2025 +0100
+
+    add forgot password functionality
+
+diff --git a/server/Routes/auth.routes.js b/server/Routes/auth.routes.js
+index 0ea25fd..aafa02b 100644
+--- a/server/Routes/auth.routes.js
++++ b/server/Routes/auth.routes.js
+@@ -21,7 +21,7 @@ router.get("/register", (req, res, next) => {
+         locals.title = "Create Account | BiographyHub";
+         return res.render("Pages/Auth/register", {
+             locals,
+-            layout: "layouts/auth"
++            layout: "Layouts/auth"
+         });
+     } catch (err) {
+         next(err);
+@@ -110,7 +110,7 @@ router.get("/login", (req, res, next) => {
+         locals.title = "Login | BiographyHub";
+         return res.render("Pages/Auth/login", {
+             locals,
+-            layout: "layouts/auth"
++            layout: "Layouts/auth"
+         });
+     } catch (err) {
+         next(err);

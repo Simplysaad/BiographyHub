@@ -47,7 +47,7 @@ app.use(expressLayouts);
 app.set("layout", "Layouts/main");
 
 //STATIC
-app.use(express.static("./PUBLIC"));
+app.use(express.static("./Public"));
 
 //ROUTING
 app.use("/auth", require("./Server/Routes/auth.routes.js"));
