@@ -1,64 +1,61 @@
 const mongoose = require("mongoose");
-const postSchema = new mongoose.Schema({
-    title: {
-        required: true,
-        type: String
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String
-    },
-    authorId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users"
-    },
-    imageUrl: {
-        type: String,
-        default: "https://picsum.photos/600/400"
-    },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "categories"
-    },
-    tags: [String],
-    status: {
-        type: String,
-        enum: ["published", "draft", "archived"],
-        default: "draft"
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    },
-    meta: {
-        views: {
-            type: Number,
-            default: 0
+const postSchema = new mongoose.Schema(
+    {
+        title: {
+            required: true,
+            type: String
         },
-        likes: {
-            type: Number,
-            default: 0
+        content: {
+            type: String,
+            required: true
         },
-        commentsCount: {
-            type: Number,
-            default: 0
+        description: {
+            type: String
         },
-        sources: [{
-          name: String,
-          count: {
-            type: Number,
-            default: 0
-          }
-        }]
-    }
-});
+        authorId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        },
+        imageUrl: {
+            type: String,
+            default: "https://picsum.photos/600/400"
+        },
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "categories"
+        },
+        tags: [String],
+        status: {
+            type: String,
+            enum: ["published", "draft", "archived"],
+            default: "draft"
+        },
+        meta: {
+            views: {
+                type: Number,
+                default: 0
+            },
+            likes: {
+                type: Number,
+                default: 0
+            },
+            commentsCount: {
+                type: Number,
+                default: 0
+            },
+            sources: [
+                {
+                    name: String,
+                    count: {
+                        type: Number,
+                        default: 0
+                    }
+                }
+            ]
+        }
+    },
+    { timestamps: true }
+);
 
 postSchema.index({ authorId: 1 });
 

@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User.model.js");
-const authMiddleware = require("../Utils/auth.js");
+const authMiddleware = require("../Utils/auth.middleware.js");
 
 const locals = {
     title: "Auth | BiographyHub",
@@ -14,20 +14,22 @@ const locals = {
 
 /**
  * GET
- * ADMIN - register page
+ * AUTH - register page
  */
 router.get("/register", (req, res, next) => {
-    console.log("register page is loading");
     try {
         locals.title = "Create Account | BiographyHub";
-        return res.render("Pages/Auth/register", { locals, layout: "layouts/auth" });
+        return res.render("Pages/Auth/register", {
+            locals,
+            layout: "layouts/auth"
+        });
     } catch (err) {
         next(err);
     }
 });
 /**
  * POST
- * ADMIN - register
+ * AUTH - register
  * For register, the three things we have to do is:
  * * save info to mongodb
  * * create a new user
@@ -40,28 +42,49 @@ router.post("/register", async (req, res, next) => {
         const { bio, phoneNumber, socials } = req.body;
         //socials = { name: "instagram", url: "https://instagram.com/" };
 
-        const isEmailExist = await User.findOne({ emailAddress }).select("_id");
+        const existingUser = await User.findOne({ emailAddress }).select(
+            "_id roles emailAddress"
+        );
+        let hashedPassword = await bcrypt.hash(password, 10);
+        let newUser;
+        if (existingUser) {
+            const isSubscriber = existingUser.roles?.includes("subscriber");
+            const isAuthor = existingUser.roles?.includes("author");
+            const isAdmin = existingUser.roles?.includes("admin");
 
-        if (isEmailExist) {
-            return res.status(400).json({
-                success: false,
-                message: "user already exists"
+            if (isAuthor || isAdmin) {
+                return res.status(400).json({
+                    success: false,
+                    message: "user already exists"
+                });
+            }
+
+            if (isSubscriber) {
+                newUser = currentUser.findByIdAndUpdate(existingUser._id, {
+                    $set: {
+                        ...req.body,
+                        roles: ["author", "subscriber"],
+                        password: hashedPassword
+                    }
+                });
+            }
+        } else {
+            newUser = new User({
+                ...req.body,
+                roles: ["author", "subscriber"],
+                password: hashedPassword
             });
+
+            await newUser.save();
         }
 
-        let hashedPassword = await bcrypt.hash(password, 10);
-
-        let newUser = new User({
-            ...req.body,
-            roles: ["author", "subscriber"],
-            password: hashedPassword
-        });
-
-        await newUser.save();
-
-        const token = jwt.sign({ sub: newUser._id }, process.env.SECRET_KEY, {
-            expiresIn: "1h"
-        });
+        const token = jwt.sign(
+            { userId: newUser._id },
+            process.env.SECRET_KEY,
+            {
+                expiresIn: "1h"
+            }
+        );
 
         req.session.userId = newUser._id;
 
@@ -79,14 +102,16 @@ router.post("/register", async (req, res, next) => {
 
 /**
  * GET
- * ADMIN -login page
+ * AUTH -login page
  */
 
 router.get("/login", (req, res, next) => {
-    console.log("login page is loading");
     try {
         locals.title = "Login | BiographyHub";
-        return res.render("Pages/Auth/login", { locals, layout: "layouts/auth" });
+        return res.render("Pages/Auth/login", {
+            locals,
+            layout: "layouts/auth"
+        });
     } catch (err) {
         next(err);
     }
@@ -94,7 +119,7 @@ router.get("/login", (req, res, next) => {
 
 /**
  * POST
- * ADMIN -login
+ * AUTH -login
  * For login, the three things we have to do is:
  * * check info with mongodb
  * * create web token
@@ -126,7 +151,7 @@ router.post("/login", async (req, res, next) => {
         req.session.userId = currentUser._id;
 
         const token = jwt.sign(
-            { sub: currentUser._id },
+            { userId: currentUser._id },
             process.env.SECRET_KEY,
             {
                 expiresIn: "1h"
@@ -145,14 +170,126 @@ router.post("/login", async (req, res, next) => {
 
 /**
  * GET
- * ADMIN - logout
+ * AUTH - forgot password
+ * send a token and verify user
+ */
+
+router.post("/forgot-password", async (req, res, next) => {
+    try {
+        let { emailAddress } = req.body;
+
+        let existingUser = await User.findOne({ emailAddress }).select(
+            "emailAddress _id"
+        );
+
+        if (!existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "user does not exist"
+                //Do not add this message, for security purposes
+            });
+        }
+
+        // createToken and send
+        let { _id: userId } = existingUser;
+
+        let token = jwt.sign({ userId }, process.env.SECRET_KEY, {
+            expiresIn: "20m"
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "this token is valid.for only 20 minutes",
+            token
+            //,url: `http://localhost:3000/reset-password?t=${token}`
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+router.get("/reset-password", async (req, res, next) => {
+    try {
+        let { t: token = null } = req.query;
+
+        let decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+        if (!token) {
+            console.log(decoded);
+            return res.status(403).json({
+                success: false,
+                message: "invalid token"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message:
+                "token verified successfully, redirecting to reset password page",
+            decoded
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+router.post("/reset-password", async (req, res, next) => {
+    try {
+        let { t: token = null } = req.query;
+        let { password } = req.body;
+
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const { userId } = decoded;
+
+        if (!decoded) {
+            return res.status(403).json({
+                success: false,
+                message: "invalid token"
+            });
+        }
+
+        let hashedPassword = await bcrypt.hash(password, 10);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $set: {
+                    password: hashedPassword
+                }
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(201).json({
+                success: false,
+                message: "user not found, so password could not be changed"
+            });
+        }
+
+        return res.status(201).json({
+            success: true,
+            message: "password changed successfully"
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * GET
+ * AUTH - logout
  * clears the token cookie
  */
 
 router.get("/logout", async (req, res, next) => {
     try {
-        res.clearCookie("token");
-        res.redirect("/login");
+        req.session.destroy(() => {
+            res.clearCookie("token");
+
+            return res.status(200).json({
+                success: true,
+                message: "logged out successfully"
+            });
+        });
     } catch (err) {
         next(err);
     }

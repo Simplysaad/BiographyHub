@@ -1,21 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 const user = require("../Models/user.model.js");
 
 const authMiddleware = (req, res, next) => {
     try {
-        //const token = req.headers.authorization;
         const token = req.cookies.token;
         if (!token) {
-            throw new Error("Unauthorized token");
+            return res.status(403).json({
+                success: false,
+                message: "user logged in"
+            });
         }
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        req.user = decoded;
+        const { userId } = jwt.verify(token, process.env.SECRET_KEY);
+        req.session.userId = userId;
         next();
     } catch (err) {
-        console.error(err);
-        //res.status(401)//.json({ message: "Unauthorized User" });
+        next(err);
         res.redirect("/login");
     }
 };

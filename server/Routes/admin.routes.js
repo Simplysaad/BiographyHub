@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const Post = require("../models/Post.model.js");
 const User = require("../models/user.model.js");
-const authMiddleware = require("../utils/auth.js");
+const authMiddleware = require("../Utils/auth.middleware.js");
 
 const locals = {
     title: "Admin | BiographyHub",

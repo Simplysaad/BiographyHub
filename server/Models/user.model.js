@@ -1,57 +1,51 @@
 const mongoose = require("mongoose");
-const UserSchema = new mongoose.Schema({
-    //USER PROFILE
-    name: {
-        type: String,
-        required: true
-    },
-    profileImage: {
-        type: String,
-        default: "https://picsum.photos/200"
-    },
-    bio: String,
-
-    //LOGIN DETAILS
-    password: {
-        type: String
-    },
-    emailAddress: {
-        type: String,
-        required: true
-    },
-    phoneNumber: {
-        type: String
-    },
-    roles: [
-        {
+const UserSchema = new mongoose.Schema(
+    {
+        //USER PROFILE
+        name: {
             type: String,
-            enum: ["author", "subscriber", "admin"],
-            default: "subscriber"
-        }
-    ],
+            required: true
+        },
+        profileImage: {
+            type: String,
+            default: "https://picsum.photos/200"
+        },
+        bio: String,
 
-    //SOCIAL LINKS
-    socials: [
-        {
-            name: {
+        //LOGIN DETAILS
+        password: {
+            type: String
+        },
+        emailAddress: {
+            type: String,
+            required: true
+        },
+        phoneNumber: {
+            type: String
+        },
+        roles: [
+            {
                 type: String,
-                enum: ["twitter", "instagram", "medium", "linkedin"]
-            },
-            url: {
-                type: String
+                enum: ["author", "subscriber", "admin"],
+                default: "subscriber"
             }
-        }
-    ],
+        ],
 
-    createdAt: {
-        type: Date,
-        default: Date.now
+        //SOCIAL LINKS
+        socials: [
+            {
+                name: {
+                    type: String,
+                    enum: ["twitter", "instagram", "medium", "linkedin"]
+                },
+                url: {
+                    type: String
+                }
+            }
+        ]
     },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+    { timestamps: true }
+);
 
 UserSchema.index({ emailAddress: 1 }, { unique: true });
 UserSchema.virtual("slug").get(function () {
