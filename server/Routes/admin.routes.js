@@ -2,37 +2,18 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-//const passport = require('passport')
-//const localStrategy = require('passport-local')
 
-const post = require("../models/post.model.js");
-const user = require("../models/user.model.js");
+const Post = require("../models/Post.model.js");
+const User = require("../models/user.model.js");
 const authMiddleware = require("../utils/auth.js");
 
 const locals = {
-    title: "BiographyHub | Admin",
-    imageUrl: "/IMG/brand-image.png"
+    title: "Admin | BiographyHub",
+    imageUrl: "/IMG/brand-image.png",
+    description: ""
 };
 
-
-/**
- * ADMIN - finds the authorId from the current user session
- * @params {req}
- */
-async function getAuthorId(req) {
-    try {
-        const userId = req.session.userId;
-        const currentUser = await user.findOne({ _id: userId });
-        console.log(currentUser);
-        const currentUserId = currentUser._id;
-
-        console.log(currentUserId);
-        return currentUserId;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
+// router.use(authMiddleware);
 
 /**
  * GET
@@ -41,26 +22,34 @@ async function getAuthorId(req) {
  * requires authentication with "authMiddleware"
  */
 
-router.get("/dashboard", authMiddleware, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
     try {
-        let currentUserId = await getAuthorId(req);
-        //const myPosts = await post.find({authorId: currentUserId});
-        let myPosts;
-        if (req.session.username === "JustSaad") {
-            myPosts = await post.find({});
-        } else {
-            myPosts = await post.find({ authorId: currentUserId });
-        }
-        //const myPosts = await post.find({});
-        locals.title = "BiographyHub | Dashboard";
+        let { userId } = req.session;
+        let currentUser = await User.findById(userId);
 
-        res.render("admin/dashboard", {
+        if (!currentUser) {
+            return res.status(403).json({
+                success: false,
+                message: "user not logged in"
+            });
+        }
+
+        let currentUserPosts = [];
+
+        //  if (currentUser.roles.includes("admin")) {
+        currentUserPosts = await Post.find({});
+        // } else {
+        //     currentUserPosts = await Post.find({ authorId: currentUser._id });
+        // }
+        locals.title = "Admin Dashboard | BiographyHub";
+
+        res.render("Pages/Admin/dashboard", {
             locals,
-            myPosts,
-            layout: "layouts/admin"
+            currentUserPosts,
+            layout: "Layouts/admin"
         });
     } catch (err) {
-        console.error(err);
+        next(err);
     }
 });
 
@@ -70,15 +59,15 @@ router.get("/dashboard", authMiddleware, async (req, res, next) => {
  * requires authentication with "authMiddleware"
  */
 
-router.get("/admin/add-post", authMiddleware, async (req, res, next) => {
+router.get("/posts/add", async (req, res, next) => {
     try {
-        locals.title = "BiographyHub | Add post";
-        res.render("admin/add_post", {
+        locals.title = "Create Post | BiographyHub";
+        res.status(200).render("admin/add_post", {
             locals,
-            layout: "layouts/admin"
+            layout: "Layouts/admin"
         });
     } catch (err) {
-        console.log(err);
+        next(err);
     }
 });
 
@@ -89,33 +78,45 @@ router.get("/admin/add-post", authMiddleware, async (req, res, next) => {
  * still requires authentication with "authMiddleware"
  */
 
-router.post("/admin/add-post", authMiddleware, async (req, res, next) => {
+router.post("/posts", async (req, res, next) => {
     try {
+        let { userId } = req.session;
+        const currentUser = await User.findOne({ _id: userId });
+
+        if (!currentUser) {
+            return res.status(403).json({
+                success: false,
+                message: "user not logged in"
+            });
+        }
+
         if (!req.body) {
-            throw new Error("request body not found");
-        }
-        let currentUserId = await getAuthorId(req);
-        let username = req.session.username;
-        if (!currentUserId || !username) {
-            throw new Error("user not logged in");
+            return res.status(400).json({
+                success: false,
+                message: "empty request"
+            });
         }
 
-        req.body.tags = req.body.tags.split(",");
+        const { title, description, content, imageUrl, tags } = req.body;
 
-        //const {title, content, imageUrl, tags, birthDate, deathDate } = req.body
-        console.log(req.body.tags);
-        const reqBody = req.body;
-        console.log("reqBody", reqBody);
+        //let description = await generateDescription(content)
+        //let title = await generateTitle(content)
 
-        let newPost = new post({
-            ...reqBody,
-            author: username,
-            authorId: currentUserId
+        let newPost = new Post({
+            ...req.body,
+            // description,
+            tags: tags.split(","),
+            authorId: currentUser._id
         });
-        console.log("newPost", newPost);
-        await newPost.save().then(res.redirect("/dashboard"));
+        await newPost.save();
+
+        return res.status(201).json({
+            success: true,
+            message: "post created successfully",
+            newPost
+        });
     } catch (err) {
-        console.log(err, "error while inserting new post");
+        next(err);
     }
 });
 
@@ -125,19 +126,38 @@ router.post("/admin/add-post", authMiddleware, async (req, res, next) => {
  * excecuted successfully(not yet)
  * still requires authentication with "authMiddleware"
  */
-router.get("/admin/edit-post/:id", authMiddleware, async (req, res, next) => {
+router.get("/posts/:id", async (req, res, next) => {
     try {
-        let myPost = await post.findOne({ _id: req.params.id });
+        let currentPost = await Post.findById(req.params.id);
+        locals.title = "Edit post | BiographyHub";
 
-        //console.log(myPost);
-        locals.title = "BiographyHub | Edit post";
-        res.render("admin/edit_post", {
-            locals,
-            myPost,
-            layout: "layouts/admin"
+        let { userId } = req.session;
+        const currentUser = await User.findById(userId);
+
+        let authorized =
+            currentPost.authorId === currentUser._id ||
+            currentUser.roles.includes("admin");
+
+        if (!authorized) {
+            return res.status(403).json({
+                success: false,
+                message: "insufficient authorization"
+            });
+        }
+
+        return res.status(200).json({
+            succes: true,
+            message: "post retrieved successfully",
+            currentPost
         });
+
+        // return res.render("Pages/Admin/edit_post", {
+        //     locals,
+        //     currentPost,
+        //     layout: "Layouts/admin"
+        // });
     } catch (err) {
-        console.log(err);
+        next(err);
     }
 });
 
@@ -146,44 +166,61 @@ router.get("/admin/edit-post/:id", authMiddleware, async (req, res, next) => {
  * ADMIN -edit-post
  * completed successfully
  */
-router.post("/admin/edit-post/:id", authMiddleware, async (req, res, next) => {
-    //console.log("you are trying to edit", req.params.id);
+
+router.put("/posts/:id", async (req, res, next) => {
     try {
-        let updatedPost = await post.updateOne(
-            { _id: req.params.id },
+        let { title, content, tags, imageUrl } = req.body;
+
+        req.body.tags ? req.body.tags.split(",") : null;
+
+        let updatedPost = await Post.findByIdAndUpdate(
+            req.params.id,
             {
                 $set: {
-                    title: req.body.title,
-                    content: req.body.content,
+                    ...req.body,
                     updatedAt: Date.now()
-                    //,tags: req.body.tagString.split(',')
                 }
-            }
+            },
+            { new: true }
         );
-        console.log(updatedPost, "post updated successfully");
-        res.redirect("/dashboard");
+        if (!updatedPost) {
+            return res.status(201).json({
+                success: false,
+                message: "post not found and could not be updated"
+            });
+        }
+        return res.status(201).json({
+            success: true,
+            message: "post updated successfully",
+            updatedPost
+        });
     } catch (error) {
-        console.error(error);
+        next(error);
     }
 });
-
 /**
  * DELETE
- * ADMIN -delete post
+ * ADMIN - delete post
  * I should use the DELETE method, not GET
  */
 
-router.get("/admin/delete-post/:id", authMiddleware, async (req, res, next) => {
-    console.log("you are trying to delete: ", req.params.id);
+router.delete("/posts/:id", async (req, res, next) => {
     try {
-        let deletedPost = await post.deleteOne({ _id: req.params.id });
+        let deletedPost = await Post.findByIdAndDelete(req.params.id);
+
         if (!deletedPost) {
-            throw new InternalError("cannot find post to delete");
+            return res.status(201).json({
+                success: false,
+                message: "post could not be deleted"
+            });
         }
-        console.log("post deleted successfully ");
-        res.redirect("/dashboard");
+        return res.status(201).json({
+            success: true,
+            message: "post deleted successfully",
+            deletedPost
+        });
     } catch (err) {
-        console.log(err);
+        next(err);
     }
 });
 module.exports = router;

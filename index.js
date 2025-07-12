@@ -50,6 +50,6 @@ app.set("layout", "Layouts/main");
 app.use(express.static("./PUBLIC"));
 
 //ROUTING
-app.use("/", require("./Server/Routes/main.routes.js"));
+app.use("/auth", require("./Server/Routes/auth.routes.js"));
 app.use("/admin", require("./Server/Routes/admin.routes.js"));
-
+app.use("/", require("./Server/Routes/main.routes.js"));

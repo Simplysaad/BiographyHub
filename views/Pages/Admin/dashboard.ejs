@@ -1,8 +1,8 @@
 <section class="my-5 user_posts container">
 
-  <a class="btn btn-dark clear-end mx-3 my-2 d-block" href="/admin/add-post"><i class="fa fa-plus"></i> Add Post</a>
+  <a class="btn btn-dark clear-end mx-3 my-2 d-block" href="/admin/posts/add"><i class="fa fa-plus"></i> Add Post</a>
 
-  <% myPosts.forEach((post)=> {
+  <% currentUserPosts.forEach((post)=> {
     %>
     <div class="article-card">
       <div class="card-body p-1 col-7 col-md-9">
@@ -14,12 +14,12 @@
         </p>
       </div>
       <div class="options d-flex">
-        <a href="/admin/edit-post/<%= post._id%>" class="btn btn-dark">
+        <a href="/admin/posts/<%= post._id%>" class="btn btn-dark">
           <i class="fa fa-pencil me-2"></i>
           <span class="d-none d-md-inline">Edit</span>
         </a>
 
-        <form action="/admin/delete-post/<%= post._id%>" class="d-inline" method="get">
+        <form action="/admin/posts/<%= post._id%>" class="d-inline" method="delete">
           <button type="submit" class="btn btn-danger">
             <i class="fa fa-trash "></i>
             <span class="d-none d-md-inline ms-1">Delete</span>

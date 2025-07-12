@@ -4,6 +4,8 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%= locals.title %></title>
+        <meta name="description" content="<%= locals.description %>"/>
+
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -28,21 +30,18 @@
             title=""
             type=""
         />
-        <meta name="description" content="<%= article?.description || locals.description %>"/>
+        <script
+            src="https://cdn.tiny.cloud/1/9si6imhvnqxm5h7yi1gstfxpln0rcb0jrpg4d4udlio7zahz/tinymce/7/tinymce.min.js"
+            referrerpolicy="origin"
+        ></script>
+
     </head>
     <body class="" data-bs-theme="">
         <%- include('../partials/_header.ejs')%>
 
-        <div class="d-flex flex-column container my-3 flex-md-row gap-2">
-            <main
-                id="mainContent"
-                class="col-md-8 col-lg-9"
-            >
+            <main id="mainContent" class="d-flex flex-column container my-3 flex-md-row gap-2">
                 <%- body %>
             </main>
-            <aside class="col-md-4 col-lg-3 border border-danger">
-                hello world
-            </aside>
         </div>
         <%- include('../partials/_footer.ejs')%>
     </body>

@@ -4,6 +4,7 @@ const router = express.Router();
 
 const Post = require("../Models/post.model.js");
 const User = require("../Models/user.model.js");
+const Category = require("../Models/category.model.js");
 
 const helper = require("../Utils/helper");
 const locals = {
@@ -38,7 +39,7 @@ router.get("/", async (req, res, next) => {
             .limit(40)
             .select("title slug description updatedAt imageUrl");
 
-        return res.render("pages/index", { locals, allPosts, readTime });
+        return res.render("Pages/Main/index", { locals, allPosts, readTime });
     } catch (err) {
         next(err);
     }
@@ -52,8 +53,8 @@ router.get("/author/:slug", async (req, res, next) => {
     try {
         let { slug } = req.params;
         let authorId = slug.split("-").at(-1);
-        let authorPosts = await post.find({ authorId });
-        return res.render("Pages/author", {
+        let authorPosts = await Post.find({ authorId });
+        return res.render("Pages/Main/author", {
             locals,
             authorPosts,
             name,
@@ -78,15 +79,17 @@ router.get("/article/:slug", async (req, res, next) => {
         let article = await Post.findById(articleId);
 
         const allPosts = await Post.find();
+        const author = await User.findById(article.authorId);
 
         let relatedPosts = relatedPostsFunc(allPosts);
         locals.description = article.description;
         locals.imageUrl = article.imageUrl;
         locals.title = article.title;
 
-        res.render("pages/article", {
+        res.render("Pages/Main/article", {
             locals,
             article,
+            author,
             relatedPosts,
             readTime
         });
@@ -115,7 +118,7 @@ router.get("/category/:slug/", async (req, res, next) => {
         locals.title = "BiographyHub | " + category.name;
         locals.description = category.description;
 
-        res.render("pages/category", {
+        res.render("Pages/Main/category", {
             locals,
             categoryPosts,
             category,
@@ -153,7 +156,7 @@ router.post("/search", async (req, res, next) => {
             searchResults.length ?? "no"
         } results `;
 
-        return res.render("pages/search", { locals, searchResults });
+        return res.render("Pages/Main/search", { locals, searchResults });
     } catch (err) {
         next(err);
     }
@@ -167,7 +170,7 @@ router.post("/search", async (req, res, next) => {
 router.post("/subscribe", async (req, res, next) => {
     try {
         let { emailAddress, name } = req.body;
-        let newSubscriber = new user({ emailAddress, name });
+        let newSubscriber = new User({ emailAddress, name });
 
         await newSubscriber.save();
     } catch (error) {
@@ -181,7 +184,7 @@ router.post("/subscribe", async (req, res, next) => {
  */
 
 // router.get("/", (req, res, next) => {
-//     res.render("pages/404", { locals });
+//     res.render("Pages/Error/404", { locals });
 // });
 
 module.exports = router;

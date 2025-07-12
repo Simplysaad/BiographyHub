@@ -2,16 +2,14 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-//const passport = require('passport')
-//const localStrategy = require('passport-local')
 
-const Post = require("../models/Post.model.js");
-const user = require("../models/User.model.js");
-const authMiddleware = require("../../utils/auth.js");
+const User = require("../models/User.model.js");
+const authMiddleware = require("../Utils/auth.js");
 
 const locals = {
-    title: "BiographyHub | Admin",
-    imageUrl: "/IMG/brand-image.png"
+    title: "Auth | BiographyHub",
+    imageUrl: "/IMG/brand-image.png",
+    description: ""
 };
 
 /**
@@ -21,8 +19,8 @@ const locals = {
 router.get("/register", (req, res, next) => {
     console.log("register page is loading");
     try {
-        locals.title = "BiographyHub | Create Account";
-        res.render("admin/register", { locals, layout: "layouts/auth" });
+        locals.title = "Create Account | BiographyHub";
+        return res.render("Pages/Auth/register", { locals, layout: "layouts/auth" });
     } catch (err) {
         next(err);
     }
@@ -38,26 +36,44 @@ router.get("/register", (req, res, next) => {
 
 router.post("/register", async (req, res, next) => {
     try {
-        let hashedPassword = await bcrypt.hash(req.body.password, 10);
-        req.body.password = hashedPassword;
-        let newUser = new user(req.body);
-        if (!newUser) {
-            throw new Error("");
+        const { password, emailAddress } = req.body;
+        const { bio, phoneNumber, socials } = req.body;
+        //socials = { name: "instagram", url: "https://instagram.com/" };
+
+        const isEmailExist = await User.findOne({ emailAddress }).select("_id");
+
+        if (isEmailExist) {
+            return res.status(400).json({
+                success: false,
+                message: "user already exists"
+            });
         }
+
+        let hashedPassword = await bcrypt.hash(password, 10);
+
+        let newUser = new User({
+            ...req.body,
+            roles: ["author", "subscriber"],
+            password: hashedPassword
+        });
+
         await newUser.save();
 
         const token = jwt.sign({ sub: newUser._id }, process.env.SECRET_KEY, {
             expiresIn: "1h"
         });
 
-        req.session.userId = currentUser._id;
-        req.session.username = currentUser.username;
+        req.session.userId = newUser._id;
 
         res.cookie("token", token, { httpOnly: true });
-        res.redirect("/dashboard");
+
+        return res.status(201).json({
+            success: true,
+            message: "new user created successfully",
+            newUser
+        });
     } catch (err) {
-        console.error(err);
-        return res.status(400).json({ message: "Registration Failed" });
+        next(err);
     }
 });
 
@@ -69,11 +85,10 @@ router.post("/register", async (req, res, next) => {
 router.get("/login", (req, res, next) => {
     console.log("login page is loading");
     try {
-        locals.title = "BiographyHub | Login";
-        res.render("admin/login", { locals, layout: "layouts/auth" });
-        //console.log("login page is loaded");
+        locals.title = "Login | BiographyHub";
+        return res.render("Pages/Auth/login", { locals, layout: "layouts/auth" });
     } catch (err) {
-        console.error(err);
+        next(err);
     }
 });
 
@@ -88,22 +103,27 @@ router.get("/login", (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const currentUser = await user.findOne({
-            $or: [{ username: username }, { emailAddress: username }]
+        const { emailAddress, password } = req.body;
+
+        const currentUser = await User.findOne({
+            emailAddress
         });
+
         if (!currentUser) {
-            console.log("user not found");
-            return res.status(404).json({ message: "user not found" });
+            return res.status(404).json({
+                success: false,
+                message: "user not found"
+            });
         }
 
         const isMatch = await bcrypt.compare(password, currentUser.password);
         if (!isMatch) {
-            console.log("invalid credentials");
-            return res.status(401).send({ message: "invalid credentials" });
+            return res.status(403).json({
+                success: false,
+                message: "invalid credentials"
+            });
         }
         req.session.userId = currentUser._id;
-        req.session.username = currentUser.username;
 
         const token = jwt.sign(
             { sub: currentUser._id },
@@ -113,9 +133,13 @@ router.post("/login", async (req, res, next) => {
             }
         );
         res.cookie("token", token, { httpOnly: true });
-        res.redirect("/dashboard");
+        return res.status(200).json({
+            success: true,
+            message: "user logged in successfully",
+            currentUser
+        });
     } catch (error) {
-        console.error(error);
+        next(error);
     }
 });
 
@@ -125,7 +149,7 @@ router.post("/login", async (req, res, next) => {
  * clears the token cookie
  */
 
-router.get("/logout", async(req, res, next) => {
+router.get("/logout", async (req, res, next) => {
     try {
         res.clearCookie("token");
         res.redirect("/login");

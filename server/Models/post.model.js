@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const postSchema = new mongoose.Schema({
     title: {
         required: true,
@@ -50,7 +49,14 @@ const postSchema = new mongoose.Schema({
         commentsCount: {
             type: Number,
             default: 0
-        }
+        },
+        sources: [{
+          name: String,
+          count: {
+            type: Number,
+            default: 0
+          }
+        }]
     }
 });
 

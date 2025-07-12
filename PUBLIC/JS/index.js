@@ -16,9 +16,9 @@ btnShare.addEventListener("click", async e => {
 });
 
 let socials = {
-    whatsapp: `https://wa.me/?text=${document.title}%0A${metaDescription}%0A${window.location.href}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
-    twitter: `https://x.com/intent/tweet?url=${window.location.href}&text=${document.title}%0A${metaDescription}`
+    whatsapp: `https://wa.me/?text=${document.title}%0A${metaDescription}%0A${window.location.href + "?source=whatsapp"}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${window.location.href + "?source=facebook"}`,
+    twitter: `https://x.com/intent/tweet?url=${window.location.href + "?source=twitter"}&text=${document.title}%0A${metaDescription}`
 };
 
 let shareIcons = document.querySelectorAll(".share-icon");

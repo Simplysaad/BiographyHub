@@ -9,10 +9,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "https://picsum.photos/200"
     },
-    username: {
-        type: String,
-        required: true
-    },
     bio: String,
 
     //LOGIN DETAILS
@@ -26,11 +22,13 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: {
         type: String
     },
-    role: {
-        type: String,
-        enum: ["author", "subscriber", "admin"],
-        default: "subscriber"
-    },
+    roles: [
+        {
+            type: String,
+            enum: ["author", "subscriber", "admin"],
+            default: "subscriber"
+        }
+    ],
 
     //SOCIAL LINKS
     socials: [
