@@ -2,20 +2,26 @@ const express = require("express");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
-const connectDb = require("./Server/Config/db.js");
 const expressLayouts = require("express-ejs-layouts");
+const morgan = require("morgan");
+
 require("dotenv").config();
+
+const connectDb = require("./Server/Config/db.js");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`app listening at http://localhost:${PORT}`);
+    connectDb();
 });
-connectDb();
 
 //body parser to json
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//Morgan 
+app.use(morgan("dev"))
 
 //EXPRESS SESSIONS
 app.use(

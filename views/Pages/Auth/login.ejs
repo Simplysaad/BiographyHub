@@ -1,32 +1,69 @@
-<section class="container border pt-5 pb-3  col-11 col-lg-6 ">
-  <div class="title-text">
-    <h1 class="display-3 text-center">
-      Login
-    </h1>
-    <p class="form-text text-center text-danger">
-      <%# = errorMessage %>
-    </p>
-
-  </div>
-
-  <!-- <form method="post" action="/login" class="px-3 py-4 my-5"> -->
-  <form method="post" class="px-3 py-4 my-5" id="loginForm">
-    <div class="form-floating my-3">
-      <input name="username" required placeholder="" id="username" class="form-control">
-      <label for="username">username or email address</label>
-    </div>
-
-    <div class="form-floating my-3">
-      <input name="password" required placeholder="" id="password" class="form-control">
-      <label for="password">Password</label>
-    </div>
-
-    <button class="btn col-12 btn-lg mt-4 btn-outline-success" id="btnLogin">
-      Submit
-    </button>
-    <p class="form-text">
-      Don't have an account yet? <a href="/register">Create One!</a>
-    </p>
+<section class="container">
+  <form
+        class="py-5 col-12 col-md-8 col-lg-6"
+      action="/auth/login"
+      method="post"
+      accept-charset="utf-8"
+  >
+      <legend class="heading my-4">
+          <span class="small fw-light fs-6 text-muted">
+              Welcome back
+          </span>
+          <h3 class="display-3 fw-semibold text-capitalize">Login</h3>
+      </legend>
+      <fieldset class="my-4 d-flex gap-3 flex-column">
+          <div class="form-floating">
+              <input
+                  type="email"
+                  class="form-control"
+                  name="emailAddress"
+                  id="emailAddress"
+                  placeholder=""
+              />
+              <label for="emailAddress" class="">
+                  <i class="fa fa-user text-muted small"> </i>
+                  <span class="mx-2"> Email Address </span>
+              </label>
+              <span class="small text-danger d-none error-message">
+                  <i class="fa fa-exclamation-circle small"> </i>
+                  <span class="error-message-text">
+                      Invalid email address
+                  </span>
+              </span>
+          </div>
+          <div class="form-floating">
+              <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  id="password"
+                  placeholder=""
+              />
+              <label for="password">
+                  <i class="fa fa-lock text-muted small"> </i>
+                  <span class="mx-2"> Password </span>
+              </label>
+              <span class="small text-danger d-none error-message">
+                  <i class="fa fa-exclamation-circle small"> </i>
+                  <span class="error-message-text">
+                      Invalid password
+                  </span>
+              </span>
+          </div>
+      </fieldset>
+      <div class="cta d-flex py-4 gap-2 flex-column">
+          <button class="btn btn-lg btn-success shadow" type="submit">
+              Submit
+          </button>
+          <span class="my-2">
+              Don't have an account?
+              <a
+                  class="link-success text-decoration-underline"
+                  href="/auth/register"
+              >
+                  Create one!
+              </a>
+          </span>
+      </div>
   </form>
-
 </section>

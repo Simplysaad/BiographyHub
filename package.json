@@ -2,7 +2,11 @@
     "name": "biographyhub",
     "version": "2.0.0",
     "description": "A place where we discuss notable events, influential individuals, intriguing topics and many more",
-    "keywords": ["blog", "history", "express"],
+    "keywords": [
+        "blog",
+        "history",
+        "express"
+    ],
     "homepage": "https://github.com/simplysaad/biographyhub#readme",
     "bugs": {
         "url": "https://github.com/simplysaad/biographyhub/issues"
@@ -17,7 +21,7 @@
     "main": "index.js",
     "scripts": {
         "test": "jest",
-                "dev": "nodemon index",
+        "dev": "nodemon index",
         "start": "node --watch index"
     },
     "dependencies": {
@@ -32,6 +36,7 @@
         "express-session": "^1.18.1",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.16.2",
+        "morgan": "^1.10.0",
         "openai": "^5.8.3"
     }
 }
