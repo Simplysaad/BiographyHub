@@ -1,19 +1,65 @@
-commit d1fea677127994071244382f52f36d4badb52e87
+commit 344d5489fa0b9e5aada5ec44f529c2929e3f396a
 Author: simplysaad <saadidris70@gmail.com>
-Date:   Sat Jul 12 18:20:55 2025 +0100
+Date:   Sat Jul 12 18:25:21 2025 +0100
 
-    add forgot password functionality
+    fix small issues
 
+diff --git a/core b/core
+index e69de29..31ae754 100644
+--- a/core
++++ b/core
+@@ -0,0 +1,28 @@
++commit d1fea677127994071244382f52f36d4badb52e87
++Author: simplysaad <saadidris70@gmail.com>
++Date:   Sat Jul 12 18:20:55 2025 +0100
++
++    add forgot password functionality
++
++diff --git a/server/Routes/auth.routes.js b/server/Routes/auth.routes.js
++index 0ea25fd..aafa02b 100644
++--- a/server/Routes/auth.routes.js
+++++ b/server/Routes/auth.routes.js
++@@ -21,7 +21,7 @@ router.get("/register", (req, res, next) => {
++         locals.title = "Create Account | BiographyHub";
++         return res.render("Pages/Auth/register", {
++             locals,
++-            layout: "layouts/auth"
+++            layout: "Layouts/auth"
++         });
++     } catch (err) {
++         next(err);
++@@ -110,7 +110,7 @@ router.get("/login", (req, res, next) => {
++         locals.title = "Login | BiographyHub";
++         return res.render("Pages/Auth/login", {
++             locals,
++-            layout: "layouts/auth"
+++            layout: "Layouts/auth"
++         });
++     } catch (err) {
++         next(err);
+diff --git a/index.js b/index.js
+index 9ad88b8..f9618bf 100644
+--- a/index.js
++++ b/index.js
+@@ -47,7 +47,7 @@ app.use(expressLayouts);
+ app.set("layout", "Layouts/main");
+ 
+ //STATIC
+-app.use(express.static("./PUBLIC"));
++app.use(express.static("./Public"));
+ 
+ //ROUTING
+ app.use("/auth", require("./Server/Routes/auth.routes.js"));
 diff --git a/server/Routes/auth.routes.js b/server/Routes/auth.routes.js
-index 0ea25fd..aafa02b 100644
+index aafa02b..18e8f6c 100644
 --- a/server/Routes/auth.routes.js
 +++ b/server/Routes/auth.routes.js
 @@ -21,7 +21,7 @@ router.get("/register", (req, res, next) => {
          locals.title = "Create Account | BiographyHub";
          return res.render("Pages/Auth/register", {
              locals,
--            layout: "layouts/auth"
-+            layout: "Layouts/auth"
+-            layout: "Layouts/auth"
++            layout: "Layouts/Auth"
          });
      } catch (err) {
          next(err);
@@ -21,8 +67,8 @@ index 0ea25fd..aafa02b 100644
          locals.title = "Login | BiographyHub";
          return res.render("Pages/Auth/login", {
              locals,
--            layout: "layouts/auth"
-+            layout: "Layouts/auth"
+-            layout: "Layouts/auth"
++            layout: "Layouts/Auth"
          });
      } catch (err) {
          next(err);
