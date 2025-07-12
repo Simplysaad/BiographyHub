@@ -1,55 +1,115 @@
-<section class="container edit-post">
+<form
+    class="py-5 col-12 col-md-8 col-lg-6"
+    action="/admin/posts/<%= currentPost._id %>"
+    method="post"
+    accept-charset="utf-8"
+>
+    <legend class="heading my-4">
+        <span class="small fw-light fs-6 text-muted"> Keep writing </span>
+        <h3 class="display-3 fw-semibold text-capitalize">Edit Post</h3>
+    </legend>
+    <fieldset class="my-4 d-flex gap-3 flex-column">
+        <div class="form-group my-1">
+            <label for="title" class=""> Title </label>
+            <input
+                type="text"
+                class="form-control"
+                name="title"
+                id="title"
+                value="<%= currentPost.title %>"
+                placeholder=""
+            />
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid title</span>
+            </span>
+        </div>
+        <div class="form-group my-1">
+            <label for="description" class="">Short description </label>
+            <input
+                class="form-control"
+                rows="3"
+                name="description"
+                id="description"
+                value="<%= currentPost.description %>"
+                placeholder="What's the post about?"
+            />
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid Description</span>
+            </span>
+        </div>
 
-<a class="btn btn-dark mx-auto my-3 d-block p-2 col-md-4" href="/admin/add-post">
-  <i class="fa fa-plus"></i>
-  Add Post
-</a>
-  
-  <h3 class="display-5 d-block  mx-auto fw-bold text-center mt-3 mb-4">
-    Edit post
-  </h3>
+        <div class="image-choice">
+            <div class="form-group my-1">
+                <label for="postImage" class=""> Image File </label>
+                <input
+                    type="file"
+                    class="form-control"
+                    name="postImage"
+                    accept="image/*"
+                    id="postImage"
+                    multiple=""
+                    placeholder=""
+                />
+                <span class="small d-none text-danger error-message">
+                    <i class="fa fa-exclamation-circle small"> </i>
+                    <span class="error-message-text">Invalid PostImage</span>
+                </span>
+            </div>
+            <div class="form-group my-1">
+                <label for="imageUrl" class=""> Image URL </label>
+                <input
+                    type="url"
+                    class="form-control"
+                    name="imageUrl"
+                    id="imageUrl"
+                    value="<%= currentPost.imageUrl %>"
+                    placeholder=""
+                />
+                <span class="small d-none text-danger error-message">
+                    <i class="fa fa-exclamation-circle small"> </i>
+                    <span class="error-message-text">Invalid imageUrl</span>
+                </span>
+            </div>
+        </div>
 
+        <div class="form-group my-1">
+            <label for="category" class=""> Category </label>
+            <input
+                type="text"
+                class="form-control"
+                name="category"
+                id="category"
+                value="<%= currentPost.category %>"
+                placeholder=""
+            />
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid Category</span>
+            </span>
+        </div>
 
-  <form class="" method="post" action="/admin/edit-post/<%= myPost._id %>">
-    
-    <div class="form-floating">
-      <input class="form-control" id="postTitle" name="title" placeholder=" " value="<%= myPost.title%>">
-      <label for="postTitle">
-        Post Title
-      </label>
+        <div class="form-group my-1">
+            <label for="content" class=""> Content </label>
+            <textarea
+                class="form-control tinymce"
+                name="content"
+                rows="5"
+                id="content"
+                placeholder="Start writing..."
+            ><%= currentPost.content %></textarea>
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid Content</span>
+            </span>
+        </div>
+    </fieldset>
+    <div class="cta d-flex py-4 gap-2 flex-column">
+        <button class="btn btn-lg btn-success shadow" type="submit">
+            Publish 
+        </button>
+
     </div>
-    <p class="fs-6 fw-light">
-      Edit Title or leave as it is
-    </p>
-
-<div class="form-floating">
-              <input class="form-control" type="date" id="birthDate" name="birthDate" placeholder="Leave blank if not an individual">
-              <label for="birthDate">Birth Date</label>
-            </div>
-            <p class="fs-6 fw-light">Leave blank if not an individual</p>
-            <div class="form-floating">
-              <input class="form-control" type="date" id="deathDate" name="deathDate" placeholder="Leave blank if not an individual">
-              <label for="deathDate">Death Date</label>
-            </div>
-            <p class="fs-6 fw-light">Leave blank if not an individual</p>
-          
-            <div class="input-group flex-nowrap">
-              <input class="form-control" required type="url" id="imageUrl" name="imageUrl" placeholder="Image Url" value="<%= myPost.imageUrl%>">
-              <span class="p-3 input-group-text fa fa-clipboard" onclick="pasteText('imageUrl')"></span>
-            </div>
-
-    <p class="fs-5 form-label my-3" onclick="">
-  Edit content
-      <span class="fa fa-clipboard float-end" onclick="pasteText('postContent')"></span>
-    </p>
-    <div class="">
-      <textarea cols="" rows="10" class="col-12 form-text" id="postContent" name="content" placeholder="Enter the text">
-        
-        <%= myPost.content%>
-      </textarea>
-    </div>
-            
-            <button class="btn btn-lg col-12 btn-outline-success mb-3 mt-4">Save changes</button>
-            
-  </form>
-</section>
+</form>
+<script src="/JS/tinymce.js"></script>

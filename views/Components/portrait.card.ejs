@@ -1,19 +1,64 @@
-<div class="portrait card overflow-hidden border col-8 col-md-4 col-lg-3">
-    <div
-        class="card-image placeholder placeholder-wave glass p-5 object-fit-cover"
-    >
-        <img class="img-fluid" src="<%= post.imageUrl %>" alt="no image" />
+ <div
+    class="article-card pb-3 col-8 col-md-8 col-lg-6 shadow border rounded d-flex flex-column flex-md-row"
+>
+    <div class="card-image col-md-4 p-1 rounded overflow-hidden">
+        <img
+            class="img-fluid placeholder"
+            src="<%= post.imageUrl %>"
+            alt=""
+        />
     </div>
-    <div class="d-flex flex-column p-2 card-info">
-        <span class="text-decoration-underline small card-category">
-            <%= post.category %>
-        </span>
-        <span class="card-title text-decoration-underline fs-6">
-            <a class="" href="/article/<%= post.slug %>"><%= post.title %></a>
-        </span>
-        <span class="card-text fw-light small">
-            <%= post.description %>
-        </span>
-        <span class="card-date py-2 small"> <%= post.updatedAt.toLocaleDateString() %> </span>
+    <div class="card-body d-flex flex-column gap- p-2 py-md-3">
+        <div class="card-info">
+            <h4 class="card-title fs-5">
+                <a href="/article/<%=post._id%>"> <%= post.title %> </a>
+            </h4>
+            <p class="card-desc small py-2 fs-6 fw-light text-muted">
+                <%= post.description %>
+            </p>
+        </div>
+        <div
+            class="card-extra-info d-flex flex-wra gap-2 align-items-center justify-content-between"
+        >
+            <div
+                class="text-secondary small d-flex justify-content-start gap-2 gap-md-3"
+            >
+                <span class="card-date"
+                    ><%= post.updatedAt.toLocaleDateString() %>
+                </span>
+                <span class="card-views">
+                    <i class="fa fa-eye"> </i>
+                    <data value="12" class="">
+                    <%= post.meta.views > 999 ?(post.meta.views/1000).toFixed(1) + "k" : post.meta.views %>
+                    </data>
+                </span>
+                <span class="card-likes">
+                    <i class="fa fa-heart"> </i>
+                    <data value="12" class="">
+                    <%= post.meta.likes > 999 ? post.meta.likes/1000: post.meta.likes %>
+                    </data>
+                </span>
+            </div>
+            <div
+                class="d-none float-end card-options px-3 gap-2 d-flex align-items-center justify-content-end"
+            >
+                <a
+                    href="/admin/posts/<%= post._id%>"
+                    class="btn btn-outline-secondary gap-2 d-flex justify-content-center align-items-center"
+                >
+                    <i class="fa fa-pencil"> </i>
+                    <span class="d-none d-md-inline"> Edit </span>
+                </a>
+
+                <button
+                    data-post-id="<%= post._id%>"
+                    type="button"
+                    class="btn btn-outline-danger gap-2 d-flex justify-content-center align-items-center"
+                >
+                    <i class="fa fa-trash"></i>
+                    <span class="d-none d-md-inline"> Delete </span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

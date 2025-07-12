@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema(
 UserSchema.index({ emailAddress: 1 }, { unique: true });
 UserSchema.virtual("slug").get(function () {
     let regex = new RegExp("[^\\w]+", "ig");
-    return this.name.replace(regex, "-") + "--" + this._id;
+    return this.name.toLowerCase().replace(regex, "-") + "--" + this._id;
 });
 
-module.exports = mongoose.models.user || new mongoose.model("user", UserSchema);
+module.exports = mongoose.models.user || mongoose.model("user", UserSchema);

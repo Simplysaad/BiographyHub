@@ -14,7 +14,7 @@ const postSchema = new mongoose.Schema(
         },
         authorId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "users"
+            ref: "user"
         },
         imageUrl: {
             type: String,
@@ -61,7 +61,7 @@ postSchema.index({ authorId: 1 });
 
 postSchema.virtual("slug").get(function () {
     let regex = new RegExp("[^\\w]+", "ig");
-    return this.title.replace(regex, "-") + "--" + this._id;
+    return this.title.toLowerCase().replace(regex, "-") + "--" + this._id;
 });
 postSchema.virtual("readTime").get(function () {
     const words = this.content.split(" ").length;

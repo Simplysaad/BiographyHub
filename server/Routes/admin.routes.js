@@ -62,7 +62,7 @@ router.get("/", async (req, res, next) => {
 router.get("/posts/add", async (req, res, next) => {
     try {
         locals.title = "Create Post | BiographyHub";
-        res.status(200).render("admin/add_post", {
+        res.status(200).render("Pages/Admin/add_post", {
             locals,
             layout: "Layouts/admin"
         });
@@ -138,36 +138,36 @@ router.get("/posts/:id", async (req, res, next) => {
             currentPost.authorId === currentUser._id ||
             currentUser.roles.includes("admin");
 
-        if (!authorized) {
-            return res.status(403).json({
-                success: false,
-                message: "insufficient authorization"
-            });
-        }
+        // if (!authorized) {
+        //     return res.status(403).json({
+        //         success: false,
+        //         message: "insufficient authorization"
+        //     });
+        // }
 
-        return res.status(200).json({
-            succes: true,
-            message: "post retrieved successfully",
-            currentPost
-        });
-
-        // return res.render("Pages/Admin/edit_post", {
-        //     locals,
-        //     currentPost,
-        //     layout: "Layouts/admin"
+        // return res.status(200).json({
+        //     succes: true,
+        //     message: "post retrieved successfully",
+        //     currentPost
         // });
+
+        return res.render("Pages/Admin/edit_post", {
+            locals,
+            currentPost,
+            layout: "Layouts/admin"
+        });
     } catch (err) {
         next(err);
     }
 });
 
 /**
- * POST
+ * PUT
  * ADMIN -edit-post
  * completed successfully
  */
 
-router.put("/posts/:id", async (req, res, next) => {
+router.post("/posts/:id", async (req, res, next) => {
     try {
         let { title, content, tags, imageUrl } = req.body;
 

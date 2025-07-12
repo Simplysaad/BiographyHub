@@ -28,18 +28,23 @@ router.get("/", async (req, res, next) => {
         const allPosts = await Post.find({})
             .sort({ updatedAt: -1 })
             .limit(40)
-            .select("title slug description updatedAt imageUrl");
+            .select("title slug description updatedAt imageUrl meta");
 
         const recentPosts = await Post.find({})
             .sort({ updatedAt: -1 })
             .limit(40)
-            .select("title slug description updatedAt imageUrl");
+            .select("title slug description updatedAt imageUrl meta");
         const topPosts = await Post.find({})
             .sort({ "meta.likes": -1, "meta.views": -1 })
             .limit(40)
-            .select("title slug description updatedAt imageUrl");
+            .select("title slug description updatedAt imageUrl meta");
 
-        return res.render("Pages/Main/index", { locals, allPosts, readTime });
+        return res.render("Pages/Main/index", {
+            locals,
+            allPosts,
+            recentPosts,
+            topPosts
+        });
     } catch (err) {
         next(err);
     }
@@ -51,9 +56,10 @@ router.get("/", async (req, res, next) => {
  */
 router.get("/author/:slug", async (req, res, next) => {
     try {
-        let { slug } = req.params;
-        let authorId = slug.split("-").at(-1);
-        let authorPosts = await Post.find({ authorId });
+        const { slug } = req.params;
+        const authorId = slug.split("-").at(-1);
+        const authorPosts = await Post.find({ authorId });
+        
         return res.render("Pages/Main/author", {
             locals,
             authorPosts,
@@ -74,13 +80,13 @@ router.get("/author/:slug", async (req, res, next) => {
 router.get("/article/:slug", async (req, res, next) => {
     try {
         let { slug } = req.params;
-      
+
         let articleId = slug.split("-").at(-1);
-        const article = await Post.findById(articleId);
-       
-        const author = await User.findById(article.authorId);
+        const article = await Post.findById(articleId).populate("authorId");
+
+        const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
-        
+
         locals.description = article.description;
         locals.imageUrl = article.imageUrl;
         locals.title = article.title;
@@ -89,7 +95,7 @@ router.get("/article/:slug", async (req, res, next) => {
             locals,
             article,
             author,
-            relatedPosts,
+            relatedPosts
         });
     } catch (err) {
         next(err);
