@@ -21,7 +21,7 @@ router.get("/register", (req, res, next) => {
         locals.title = "Create Account | BiographyHub";
         return res.render("Pages/Auth/register", {
             locals,
-            layout: "layouts/auth"
+            layout: "Layouts/auth"
         });
     } catch (err) {
         next(err);
@@ -110,7 +110,7 @@ router.get("/login", (req, res, next) => {
         locals.title = "Login | BiographyHub";
         return res.render("Pages/Auth/login", {
             locals,
-            layout: "layouts/auth"
+            layout: "Layouts/auth"
         });
     } catch (err) {
         next(err);
