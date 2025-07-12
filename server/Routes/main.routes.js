@@ -74,14 +74,13 @@ router.get("/author/:slug", async (req, res, next) => {
 router.get("/article/:slug", async (req, res, next) => {
     try {
         let { slug } = req.params;
+      
         let articleId = slug.split("-").at(-1);
-
-        let article = await Post.findById(articleId);
-
-        const allPosts = await Post.find();
+        const article = await Post.findById(articleId);
+       
         const author = await User.findById(article.authorId);
-
-        let relatedPosts = relatedPostsFunc(allPosts);
+        const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
+        
         locals.description = article.description;
         locals.imageUrl = article.imageUrl;
         locals.title = article.title;
@@ -91,7 +90,6 @@ router.get("/article/:slug", async (req, res, next) => {
             article,
             author,
             relatedPosts,
-            readTime
         });
     } catch (err) {
         next(err);

@@ -90,9 +90,9 @@
         <h3 class="fs-3 fw-light">Related Posts</h3>
     </div>
   
-    <div class="reel container">
+    <div class="reel gap-2 container">
       <% relatedPosts?.forEach((post)=>{ %>
-              <%- include('../Components/portrait.card.ejs', {post}) %>
+              <%- include('../../Components/portrait.card.ejs', {post}) %>
        <% }) %>
     </div>
   </section>
