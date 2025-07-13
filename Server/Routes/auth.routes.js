@@ -53,7 +53,7 @@ router.get("/register", async (req, res, next) => {
         locals.title = "Create Account | BiographyHub";
         return res.render("Pages/Auth/register", {
             locals,
-            layout: "Layouts/Auth"
+            layout: "Layouts/auth"
         });
     } catch (err) {
         next(err);
