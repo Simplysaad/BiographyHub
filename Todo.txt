@@ -1,0 +1,14 @@
+ISSUES
+* Some links are broken; not going anywhere
+* I've not implemented the category model
+
+TODOS: 
+* Category 
+* Search
+
+
+AI functionalities:
+* Generate article (with title, description and content in html)
+* Generate cover image for article
+* Explain and answer questions about the article (on user request)
+* Post to twitter with link to the website
