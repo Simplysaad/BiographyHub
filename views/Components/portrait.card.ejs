@@ -11,7 +11,7 @@
     <div class="card-body d-flex flex-column gap- p-2 py-md-3">
         <div class="card-info">
             <h4 class="card-title fs-5">
-                <a href="/article/<%=post._id%>"> <%= post.title %> </a>
+                <a href="/article/<%=post.slug || post._id%>"> <%= post.title %> </a>
             </h4>
             <p class="card-desc small py-2 fs-6 fw-light text-muted">
                 <%= post.description %>

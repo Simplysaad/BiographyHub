@@ -59,7 +59,7 @@ router.get("/author/:slug", async (req, res, next) => {
         const { slug } = req.params;
         const authorId = slug.split("-").at(-1);
         const authorPosts = await Post.find({ authorId });
-        
+
         return res.render("Pages/Main/author", {
             locals,
             authorPosts,
@@ -81,8 +81,23 @@ router.get("/article/:slug", async (req, res, next) => {
     try {
         let { slug } = req.params;
 
+        let update = {};
+
+        if (req.query.like) {
+            update = {
+                "meta.likes": 1
+            };
+        } else {
+            update = {
+                "meta.views": 1
+            };
+        }
         let articleId = slug.split("-").at(-1);
-        const article = await Post.findById(articleId).populate("authorId");
+        const article = await Post.findByIdAndUpdate(
+            articleId,
+            { $inc: update },
+            { new: true }
+        ).populate("authorId");
 
         const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);

@@ -13,7 +13,7 @@ const locals = {
     description: ""
 };
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 /**
  * GET
@@ -36,11 +36,12 @@ router.get("/", async (req, res, next) => {
 
         let currentUserPosts = [];
 
-        //  if (currentUser.roles.includes("admin")) {
-        currentUserPosts = await Post.find({});
-        // } else {
-        //     currentUserPosts = await Post.find({ authorId: currentUser._id });
-        // }
+        if (currentUser.roles.includes("admin")) {
+            currentUserPosts = await Post.find({});
+        } else {
+            currentUserPosts = await Post.find({ authorId: currentUser._id });
+        }
+
         locals.title = "Admin Dashboard | BiographyHub";
 
         res.render("Pages/Admin/dashboard", {
@@ -97,7 +98,7 @@ router.post("/posts", async (req, res, next) => {
             });
         }
 
-        const { title, description, content, imageUrl, tags } = req.body;
+        const { title, description, content, imageUrl, tags  } = req.body;
 
         //let description = await generateDescription(content)
         //let title = await generateTitle(content)
@@ -105,16 +106,18 @@ router.post("/posts", async (req, res, next) => {
         let newPost = new Post({
             ...req.body,
             // description,
-            tags: tags.split(","),
+            //tags: tags.split(","),
             authorId: currentUser._id
         });
         await newPost.save();
 
-        return res.status(201).json({
-            success: true,
-            message: "post created successfully",
-            newPost
-        });
+        // return res.status(201).json({
+        //     success: true,
+        //     message: "post created successfully",
+        //     newPost
+        // });
+
+        return res.redirect("/article/"+newPost.slug);
     } catch (err) {
         next(err);
     }
@@ -138,12 +141,12 @@ router.get("/posts/:id", async (req, res, next) => {
             currentPost.authorId === currentUser._id ||
             currentUser.roles.includes("admin");
 
-        // if (!authorized) {
-        //     return res.status(403).json({
-        //         success: false,
-        //         message: "insufficient authorization"
-        //     });
-        // }
+        if (!authorized) {
+            return res.status(403).json({
+                success: false,
+                message: "insufficient authorization"
+            });
+        }
 
         // return res.status(200).json({
         //     succes: true,
@@ -189,11 +192,13 @@ router.post("/posts/:id", async (req, res, next) => {
                 message: "post not found and could not be updated"
             });
         }
-        return res.status(201).json({
-            success: true,
-            message: "post updated successfully",
-            updatedPost
-        });
+        // return res.status(201).json({
+        //     success: true,
+        //     message: "post updated successfully",
+        //     updatedPost
+        // });
+
+        return res.redirect("/admin/");
     } catch (error) {
         next(error);
     }
