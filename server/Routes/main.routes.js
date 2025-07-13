@@ -98,6 +98,8 @@ router.get("/article/:slug", async (req, res, next) => {
             { $inc: update },
             { new: true }
         ).populate("authorId");
+        
+        if (req.query.like) return;
 
         const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
@@ -105,7 +107,6 @@ router.get("/article/:slug", async (req, res, next) => {
         locals.description = article.description;
         locals.imageUrl = article.imageUrl;
         locals.title = article.title;
-
         res.render("Pages/Main/article", {
             locals,
             article,

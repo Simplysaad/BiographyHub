@@ -13,10 +13,42 @@ const locals = {
 };
 
 /**
+ * POST
+ * AUTH - subscribe page
+ */
+router.post("/subscribe", async (req, res, next) => {
+    try {
+        const { emailAddress } = req.body;
+        const [name] = emailAddress.split("@");
+
+        const updatedUser = await User.findOneAndUpdate(
+            { emailAddress },
+            {
+                $setOnInsert: { name },
+                $addToSet: { roles: "subscriber" }
+            },
+            {
+                upsert: true,
+                new: true
+            }
+        );
+
+        //send welcome email, use nodemailer
+
+        return res.status(201).json({
+            success: true,
+            message: "new subscriber added"
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
  * GET
  * AUTH - register page
  */
-router.get("/register", (req, res, next) => {
+router.get("/register", async (req, res, next) => {
     try {
         locals.title = "Create Account | BiographyHub";
         return res.render("Pages/Auth/register", {
@@ -89,6 +121,7 @@ router.post("/register", async (req, res, next) => {
         req.session.userId = newUser._id;
 
         res.cookie("token", token, { httpOnly: true });
+        //send welcome email, use nodemailer
 
         return res.status(201).json({
             success: true,
@@ -197,6 +230,8 @@ router.post("/forgot-password", async (req, res, next) => {
             expiresIn: "20m"
         });
 
+        //send reset password link via email, use nodemailer
+
         return res.status(200).json({
             success: true,
             message: "this token is valid.for only 20 minutes",
@@ -264,6 +299,8 @@ router.post("/reset-password", async (req, res, next) => {
                 message: "user not found, so password could not be changed"
             });
         }
+
+        //send notification email to notify of password change, use nodemailer
 
         return res.status(201).json({
             success: true,

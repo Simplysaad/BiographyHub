@@ -1,0 +1,842 @@
+commit c2bfe2d85bcbbb5aaca76e1b3860e0096dae1854
+Author: simplysaad <saadidris70@gmail.com>
+Date:   Sun Jul 13 00:17:11 2025 +0100
+
+    impallow users tl add new posts, edit posts using 'tinyMCE'
+
+diff --git a/server/Models/post.model.js b/server/Models/post.model.js
+index 8ebe518..c640cca 100644
+--- a/server/Models/post.model.js
++++ b/server/Models/post.model.js
+@@ -14,7 +14,7 @@ const postSchema = new mongoose.Schema(
+         },
+         authorId: {
+             type: mongoose.Schema.Types.ObjectId,
+-            ref: "users"
++            ref: "user"
+         },
+         imageUrl: {
+             type: String,
+@@ -61,7 +61,7 @@ postSchema.index({ authorId: 1 });
+ 
+ postSchema.virtual("slug").get(function () {
+     let regex = new RegExp("[^\\w]+", "ig");
+-    return this.title.replace(regex, "-") + "--" + this._id;
++    return this.title.toLowerCase().replace(regex, "-") + "--" + this._id;
+ });
+ postSchema.virtual("readTime").get(function () {
+     const words = this.content.split(" ").length;
+diff --git a/server/Models/user.model.js b/server/Models/user.model.js
+index 0b8a670..63c7229 100644
+--- a/server/Models/user.model.js
++++ b/server/Models/user.model.js
+@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema(
+ UserSchema.index({ emailAddress: 1 }, { unique: true });
+ UserSchema.virtual("slug").get(function () {
+     let regex = new RegExp("[^\\w]+", "ig");
+-    return this.name.replace(regex, "-") + "--" + this._id;
++    return this.name.toLowerCase().replace(regex, "-") + "--" + this._id;
+ });
+ 
+-module.exports = mongoose.models.user || new mongoose.model("user", UserSchema);
++module.exports = mongoose.models.user || mongoose.model("user", UserSchema);
+diff --git a/server/Routes/admin.routes.js b/server/Routes/admin.routes.js
+index 35b8c10..27ccc84 100644
+--- a/server/Routes/admin.routes.js
++++ b/server/Routes/admin.routes.js
+@@ -62,7 +62,7 @@ router.get("/", async (req, res, next) => {
+ router.get("/posts/add", async (req, res, next) => {
+     try {
+         locals.title = "Create Post | BiographyHub";
+-        res.status(200).render("admin/add_post", {
++        res.status(200).render("Pages/Admin/add_post", {
+             locals,
+             layout: "Layouts/admin"
+         });
+@@ -138,36 +138,36 @@ router.get("/posts/:id", async (req, res, next) => {
+             currentPost.authorId === currentUser._id ||
+             currentUser.roles.includes("admin");
+ 
+-        if (!authorized) {
+-            return res.status(403).json({
+-                success: false,
+-                message: "insufficient authorization"
+-            });
+-        }
+-
+-        return res.status(200).json({
+-            succes: true,
+-            message: "post retrieved successfully",
+-            currentPost
+-        });
++        // if (!authorized) {
++        //     return res.status(403).json({
++        //         success: false,
++        //         message: "insufficient authorization"
++        //     });
++        // }
+ 
+-        // return res.render("Pages/Admin/edit_post", {
+-        //     locals,
+-        //     currentPost,
+-        //     layout: "Layouts/admin"
++        // return res.status(200).json({
++        //     succes: true,
++        //     message: "post retrieved successfully",
++        //     currentPost
+         // });
++
++        return res.render("Pages/Admin/edit_post", {
++            locals,
++            currentPost,
++            layout: "Layouts/admin"
++        });
+     } catch (err) {
+         next(err);
+     }
+ });
+ 
+ /**
+- * POST
++ * PUT
+  * ADMIN -edit-post
+  * completed successfully
+  */
+ 
+-router.put("/posts/:id", async (req, res, next) => {
++router.post("/posts/:id", async (req, res, next) => {
+     try {
+         let { title, content, tags, imageUrl } = req.body;
+ 
+diff --git a/server/Routes/main.routes.js b/server/Routes/main.routes.js
+index e9e811e..dc365c7 100644
+--- a/server/Routes/main.routes.js
++++ b/server/Routes/main.routes.js
+@@ -28,18 +28,23 @@ router.get("/", async (req, res, next) => {
+         const allPosts = await Post.find({})
+             .sort({ updatedAt: -1 })
+             .limit(40)
+-            .select("title slug description updatedAt imageUrl");
++            .select("title slug description updatedAt imageUrl meta");
+ 
+         const recentPosts = await Post.find({})
+             .sort({ updatedAt: -1 })
+             .limit(40)
+-            .select("title slug description updatedAt imageUrl");
++            .select("title slug description updatedAt imageUrl meta");
+         const topPosts = await Post.find({})
+             .sort({ "meta.likes": -1, "meta.views": -1 })
+             .limit(40)
+-            .select("title slug description updatedAt imageUrl");
++            .select("title slug description updatedAt imageUrl meta");
+ 
+-        return res.render("Pages/Main/index", { locals, allPosts, readTime });
++        return res.render("Pages/Main/index", {
++            locals,
++            allPosts,
++            recentPosts,
++            topPosts
++        });
+     } catch (err) {
+         next(err);
+     }
+@@ -51,9 +56,10 @@ router.get("/", async (req, res, next) => {
+  */
+ router.get("/author/:slug", async (req, res, next) => {
+     try {
+-        let { slug } = req.params;
+-        let authorId = slug.split("-").at(-1);
+-        let authorPosts = await Post.find({ authorId });
++        const { slug } = req.params;
++        const authorId = slug.split("-").at(-1);
++        const authorPosts = await Post.find({ authorId });
++        
+         return res.render("Pages/Main/author", {
+             locals,
+             authorPosts,
+@@ -74,13 +80,13 @@ router.get("/author/:slug", async (req, res, next) => {
+ router.get("/article/:slug", async (req, res, next) => {
+     try {
+         let { slug } = req.params;
+-      
++
+         let articleId = slug.split("-").at(-1);
+-        const article = await Post.findById(articleId);
+-       
+-        const author = await User.findById(article.authorId);
++        const article = await Post.findById(articleId).populate("authorId");
++
++        const { authorId: author } = article;
+         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
+-        
++
+         locals.description = article.description;
+         locals.imageUrl = article.imageUrl;
+         locals.title = article.title;
+@@ -89,7 +95,7 @@ router.get("/article/:slug", async (req, res, next) => {
+             locals,
+             article,
+             author,
+-            relatedPosts,
++            relatedPosts
+         });
+     } catch (err) {
+         next(err);
+diff --git a/views/Components/portrait.card.ejs b/views/Components/portrait.card.ejs
+index 1752425..444ed2b 100644
+--- a/views/Components/portrait.card.ejs
++++ b/views/Components/portrait.card.ejs
+@@ -1,19 +1,64 @@
+-<div class="portrait card overflow-hidden border col-8 col-md-4 col-lg-3">
+-    <div
+-        class="card-image placeholder placeholder-wave glass p-5 object-fit-cover"
+-    >
+-        <img class="img-fluid" src="<%= post.imageUrl %>" alt="no image" />
++ <div
++    class="article-card pb-3 col-8 col-md-8 col-lg-6 shadow border rounded d-flex flex-column flex-md-row"
++>
++    <div class="card-image col-md-4 p-1 rounded overflow-hidden">
++        <img
++            class="img-fluid placeholder"
++            src="<%= post.imageUrl %>"
++            alt=""
++        />
+     </div>
+-    <div class="d-flex flex-column p-2 card-info">
+-        <span class="text-decoration-underline small card-category">
+-            <%= post.category %>
+-        </span>
+-        <span class="card-title text-decoration-underline fs-6">
+-            <a class="" href="/article/<%= post.slug %>"><%= post.title %></a>
+-        </span>
+-        <span class="card-text fw-light small">
+-            <%= post.description %>
+-        </span>
+-        <span class="card-date py-2 small"> <%= post.updatedAt.toLocaleDateString() %> </span>
++    <div class="card-body d-flex flex-column gap- p-2 py-md-3">
++        <div class="card-info">
++            <h4 class="card-title fs-5">
++                <a href="/article/<%=post._id%>"> <%= post.title %> </a>
++            </h4>
++            <p class="card-desc small py-2 fs-6 fw-light text-muted">
++                <%= post.description %>
++            </p>
++        </div>
++        <div
++            class="card-extra-info d-flex flex-wra gap-2 align-items-center justify-content-between"
++        >
++            <div
++                class="text-secondary small d-flex justify-content-start gap-2 gap-md-3"
++            >
++                <span class="card-date"
++                    ><%= post.updatedAt.toLocaleDateString() %>
++                </span>
++                <span class="card-views">
++                    <i class="fa fa-eye"> </i>
++                    <data value="12" class="">
++                    <%= post.meta.views > 999 ?(post.meta.views/1000).toFixed(1) + "k" : post.meta.views %>
++                    </data>
++                </span>
++                <span class="card-likes">
++                    <i class="fa fa-heart"> </i>
++                    <data value="12" class="">
++                    <%= post.meta.likes > 999 ? post.meta.likes/1000: post.meta.likes %>
++                    </data>
++                </span>
++            </div>
++            <div
++                class="d-none float-end card-options px-3 gap-2 d-flex align-items-center justify-content-end"
++            >
++                <a
++                    href="/admin/posts/<%= post._id%>"
++                    class="btn btn-outline-secondary gap-2 d-flex justify-content-center align-items-center"
++                >
++                    <i class="fa fa-pencil"> </i>
++                    <span class="d-none d-md-inline"> Edit </span>
++                </a>
++
++                <button
++                    data-post-id="<%= post._id%>"
++                    type="button"
++                    class="btn btn-outline-danger gap-2 d-flex justify-content-center align-items-center"
++                >
++                    <i class="fa fa-trash"></i>
++                    <span class="d-none d-md-inline"> Delete </span>
++                </button>
++            </div>
++        </div>
+     </div>
+-</div>
++</div>
+\ No newline at end of file
+diff --git a/views/Pages/Admin/add_post.ejs b/views/Pages/Admin/add_post.ejs
+index 990b252..b12f84a 100644
+--- a/views/Pages/Admin/add_post.ejs
++++ b/views/Pages/Admin/add_post.ejs
+@@ -1,71 +1,139 @@
+-<section class="container add-post">
+-  <h3 class="display-5">
+-    Create New post
+-  </h3>
++<form
++    class="py-5 col-12 col-md-8 col-lg-6"
++    action="/admin/posts"
++    method="post"
++    enctype="multipart/form-data"
++    accept-charset="utf-8"
++>
++    <legend class="heading my-4">
++        <span class="small fw-light fs-6 text-muted">
++            Start writing
++        </span>
++        <h3 class="display-3 fw-semibold text-capitalize">
++            Create Post
++        </h3>
++    </legend>
++    <fieldset class="my-4 d-flex gap-3 flex-column">
++        <div class="form-group my-1">
++            <label for="title" class=""> Title </label>
++            <input
++                type="text"
++                class="form-control"
++                name="title"
++                id="title"
++                placeholder=""
++            />
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text"
++                    >Invalid title</span
++                >
++            </span>
++        </div>
++        <div class="form-group my-1">
++            <label for="description" class=""
++                >Short description
++            </label>
++            <input
++                class="form-control"
++                rows="3"
++                name="description"
++                id="description"
++                placeholder="What's the post about?"
++            />
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text"
++                    >Invalid Description</span
++                >
++            </span>
++        </div>
+ 
+-  <form class="" method="post" action="/admin/add-post">
+-    <p class="fs-5 form-label my-3">
+-      Add a descriptive Title
+-    </p>
+-    <div class="form-floating mb-3">
+-      <input class="form-control" id="title" name="title" placeholder="" value="hello world">
+-      <label for="postTitle" id="xyz">
+-        Post Title
+-      </label>
+-    </div>
+-
+-
+-    <div class="form-floating">
+-      <input class="form-control" type="date" id="birthDate" name="birthDate" placeholder="Leave blank if not an individual">
+-      <label for="birthDate">Birth Date</label>
+-    </div>
+-    <p class="fs-6 fw-light">
+-      Leave blank if not an individual
+-    </p>
+-    <div class="form-floating">
+-      <input class="form-control" type="date" id="deathDate" name="deathDate" placeholder="Leave blank if not an individual">
+-      <label for="deathDate">Death Date</label>
+-    </div>
+-    <p class="fs-6 fw-light">
+-      Leave blank if not an individual
+-    </p>
++        <div class="image-choice">
++            <div class="form-group my-1">
++                <label for="postImage" class=""> Image File </label>
++                <input
++                    type="file"
++                    class="form-control"
++                    name="postImage"
++                    accept="image/*"
++                    id="postImage"
++                    multiple=""
++                    placeholder=""
++                />
++                <span
++                    class="small d-none text-danger error-message"
++                >
++                    <i class="fa fa-exclamation-circle small"> </i>
++                    <span class="error-message-text"
++                        >Invalid PostImage</span
++                    >
++                </span>
++            </div>
++            <div class="form-group my-1">
++                <label for="imageUrl" class=""> Image URL </label>
++                <input
++                    type="url"
++                    class="form-control"
++                    name="imageUrl"
++                    id="imageUrl"
++                    placeholder=""
++                />
++                <span
++                    class="small d-none text-danger error-message"
++                >
++                    <i class="fa fa-exclamation-circle small"> </i>
++                    <span class="error-message-text"
++                        >Invalid imageUrl</span
++                    >
++                </span>
++            </div>
++        </div>
+ 
+-    <div class="form-floating">
+-      <select name="category" class="form-control">
+-        <option value="Discussions">
+-          Discussions
+-        </option>
+-        <option value="People">
+-          People
+-        </option>
+-        <option value="News">
+-          News
+-        </option>
+-        <option value="Events">
+-          Events
+-        </option>
+-      </select>
+-    </div>
++        <div class="form-group my-1">
++            <label for="category" class=""> Category </label>
++            <input
++                type="text"
++                class="form-control"
++                name="category"
++                id="category"
++                placeholder=""
++            />
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text"
++                    >Invalid Category</span
++                >
++            </span>
++        </div>
+ 
+-    <div class="form-floating">
+-      <input class="form-control" type="text" name="tags" placeholder="Separate keywords with commas">
++        <div class="form-group my-1">
++            <label for="content" class=""> Content </label>
++            <textarea
++                class="form-control tinymce"
++                name="content"
++                rows="5"
++                id="content"
++                placeholder="Start writing..."
++            ></textarea>
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text"
++                    >Invalid Content</span
++                >
++            </span>
++        </div>
++    </fieldset>
++    <div class="cta d-flex py-4 gap-2 flex-column">
++        <button class="btn btn-lg btn-success shadow" type="submit">
++            Publish now
++        </button>
++        <button
++            class="btn btn-lg btn-outline-success shadow"
++            type="submit"
++        >
++            Save as draft
++        </button>
+     </div>
+-    <div class="input-group flex-nowrap">
+-      <input class="form-control" required type="url" id="imageUrl" name="imageUrl" placeholder="Image Url">
+-      <span class="p-3 input-group-text fa fa-clipboard" onclick="pasteText('imageUrl')"> </span>
+-    </div>
+-
+-    <p class="fs-5 form-label my-3">
+-      Write the content
+-      <span class="fa fa-clipboard float-end" onclick="pasteText('content')"></span>
+-    </p>
+-    <div class="form-floating">
+-      <textarea cols="" rows="10" class="col-12" id="content" name="content" placeholder="Enter the text">
+-      
+-      </textarea>
+-    </div>
+-
+-    <button class="btn btn-lg col-12 btn-outline-success mb-3 mt-4">Submit</button>
+-
+-  </form>
+-</section>
+\ No newline at end of file
++</form>
++<script src="/JS/tinymce.js"></script>
+\ No newline at end of file
+diff --git a/views/Pages/Admin/dashboard.ejs b/views/Pages/Admin/dashboard.ejs
+index cd33ffa..cb35e98 100644
+--- a/views/Pages/Admin/dashboard.ejs
++++ b/views/Pages/Admin/dashboard.ejs
+@@ -1,33 +1,75 @@
+ <section class="my-5 user_posts container">
++    <a class="btn border rounded clear-end mx-3 my-2" href="/admin/posts/add">
++      <i class="fa fa-plus"></i> 
++      Add Post
++    </a>
+ 
+-  <a class="btn btn-dark clear-end mx-3 my-2 d-block" href="/admin/posts/add"><i class="fa fa-plus"></i> Add Post</a>
++    <div class="">
++        <% currentUserPosts.forEach((post)=> { %>
++        <div
++            class="article-card col-lg-8 shadow border rounded d-flex flex-column flex-md-row"
++        >
++            <div class="card-image col-md-4 p-1 rounded overflow-hidden">
++                <img
++                    class="img-fluid placeholder"
++                    src="<%= post.imageUrl %>"
++                    alt=""
++                />
++            </div>
++            <div class="card-body d-flex flex-column gap- p-2 py-md-3">
++                <div class="card-info">
++                    <h4 class="card-title fs-5">
++                        <a href="/article/<%=post.slug%>"> <%= post.title %> </a>
++                    </h4>
++                    <p class="card-desc small py-2 fs-6 fw-light text-muted">
++                        <%= post.description %>
++                    </p>
++                </div>
++                <div
++                    class="card-extra-info d-flex  align-items-center justify-content-between"
++                >
++                    <div
++                        class="text-secondary small d-flex justify-content-start gap-2 gap-md-3"
++                    >
++                        <span class="card-date"
++                            ><%= post.createdAt.toLocaleDateString() %>
++                        </span>
++                        <span class="card-views">
++                            <i class="fa fa-eye"> </i>
++                            <data value="12" class="">
++                            <%= post.meta.views > 999 ?(post.meta.views/1000).toFixed(1) + "k" : post.meta.views %>
++                            </data>
++                        </span>
++                        <span class="card-likes">
++                            <i class="fa fa-heart"> </i>
++                            <data value="12" class="">
++                            <%= post.meta.likes > 999 ? post.meta.likes/1000: post.meta.likes %>
++                            </data>
++                        </span>
++                    </div>
++                    <div
++                        class="d-non float-end card-options px-3 gap-2 d-flex align-items-center justify-content-end"
++                    >
++                        <a
++                            href="/admin/posts/<%= post._id%>"
++                            class="btn btn-outline-secondary gap-2 d-flex justify-content-center align-items-center"
++                        >
++                            <i class="fa fa-pencil"> </i>
++                            <span class="d-none d-md-inline"> Edit </span>
++                        </a>
+ 
+-  <% currentUserPosts.forEach((post)=> {
+-    %>
+-    <div class="article-card">
+-      <div class="card-body p-1 col-7 col-md-9">
+-        <a href="/article/<%=post._id%>" class="card-title">
+-          <%= post.title%>
+-        </a>
+-        <p class="card-age">
+-          Last updated on <%= post.updatedAt.toDateString()%>
+-        </p>
+-      </div>
+-      <div class="options d-flex">
+-        <a href="/admin/posts/<%= post._id%>" class="btn btn-dark">
+-          <i class="fa fa-pencil me-2"></i>
+-          <span class="d-none d-md-inline">Edit</span>
+-        </a>
+-
+-        <form action="/admin/posts/<%= post._id%>" class="d-inline" method="delete">
+-          <button type="submit" class="btn btn-danger">
+-            <i class="fa fa-trash "></i>
+-            <span class="d-none d-md-inline ms-1">Delete</span>
+-          </button>
+-        </form>
+-
+-      </div>
++                        <button
++                            data-post-id="<%= post._id%>"
++                            type="button"
++                            class="btn btn-outline-danger gap-2 d-flex justify-content-center align-items-center"
++                        >
++                            <i class="fa fa-trash"></i>
++                            <span class="d-none d-md-inline"> Delete </span>
++                        </button>
++                    </div>
++                </div>
++            </div>
++        </div>
++        <% })%>
+     </div>
+-    <%
+-  })%>
+ </section>
+diff --git a/views/Pages/Admin/edit_post.ejs b/views/Pages/Admin/edit_post.ejs
+index a8788f8..611ff96 100644
+--- a/views/Pages/Admin/edit_post.ejs
++++ b/views/Pages/Admin/edit_post.ejs
+@@ -1,55 +1,115 @@
+-<section class="container edit-post">
++<form
++    class="py-5 col-12 col-md-8 col-lg-6"
++    action="/admin/posts/<%= currentPost._id %>"
++    method="post"
++    accept-charset="utf-8"
++>
++    <legend class="heading my-4">
++        <span class="small fw-light fs-6 text-muted"> Keep writing </span>
++        <h3 class="display-3 fw-semibold text-capitalize">Edit Post</h3>
++    </legend>
++    <fieldset class="my-4 d-flex gap-3 flex-column">
++        <div class="form-group my-1">
++            <label for="title" class=""> Title </label>
++            <input
++                type="text"
++                class="form-control"
++                name="title"
++                id="title"
++                value="<%= currentPost.title %>"
++                placeholder=""
++            />
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text">Invalid title</span>
++            </span>
++        </div>
++        <div class="form-group my-1">
++            <label for="description" class="">Short description </label>
++            <input
++                class="form-control"
++                rows="3"
++                name="description"
++                id="description"
++                value="<%= currentPost.description %>"
++                placeholder="What's the post about?"
++            />
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text">Invalid Description</span>
++            </span>
++        </div>
+ 
+-<a class="btn btn-dark mx-auto my-3 d-block p-2 col-md-4" href="/admin/add-post">
+-  <i class="fa fa-plus"></i>
+-  Add Post
+-</a>
+-  
+-  <h3 class="display-5 d-block  mx-auto fw-bold text-center mt-3 mb-4">
+-    Edit post
+-  </h3>
+-
+-
+-  <form class="" method="post" action="/admin/edit-post/<%= myPost._id %>">
+-    
+-    <div class="form-floating">
+-      <input class="form-control" id="postTitle" name="title" placeholder=" " value="<%= myPost.title%>">
+-      <label for="postTitle">
+-        Post Title
+-      </label>
+-    </div>
+-    <p class="fs-6 fw-light">
+-      Edit Title or leave as it is
+-    </p>
+-
+-<div class="form-floating">
+-              <input class="form-control" type="date" id="birthDate" name="birthDate" placeholder="Leave blank if not an individual">
+-              <label for="birthDate">Birth Date</label>
++        <div class="image-choice">
++            <div class="form-group my-1">
++                <label for="postImage" class=""> Image File </label>
++                <input
++                    type="file"
++                    class="form-control"
++                    name="postImage"
++                    accept="image/*"
++                    id="postImage"
++                    multiple=""
++                    placeholder=""
++                />
++                <span class="small d-none text-danger error-message">
++                    <i class="fa fa-exclamation-circle small"> </i>
++                    <span class="error-message-text">Invalid PostImage</span>
++                </span>
+             </div>
+-            <p class="fs-6 fw-light">Leave blank if not an individual</p>
+-            <div class="form-floating">
+-              <input class="form-control" type="date" id="deathDate" name="deathDate" placeholder="Leave blank if not an individual">
+-              <label for="deathDate">Death Date</label>
+-            </div>
+-            <p class="fs-6 fw-light">Leave blank if not an individual</p>
+-          
+-            <div class="input-group flex-nowrap">
+-              <input class="form-control" required type="url" id="imageUrl" name="imageUrl" placeholder="Image Url" value="<%= myPost.imageUrl%>">
+-              <span class="p-3 input-group-text fa fa-clipboard" onclick="pasteText('imageUrl')"></span>
++            <div class="form-group my-1">
++                <label for="imageUrl" class=""> Image URL </label>
++                <input
++                    type="url"
++                    class="form-control"
++                    name="imageUrl"
++                    id="imageUrl"
++                    value="<%= currentPost.imageUrl %>"
++                    placeholder=""
++                />
++                <span class="small d-none text-danger error-message">
++                    <i class="fa fa-exclamation-circle small"> </i>
++                    <span class="error-message-text">Invalid imageUrl</span>
++                </span>
+             </div>
++        </div>
++
++        <div class="form-group my-1">
++            <label for="category" class=""> Category </label>
++            <input
++                type="text"
++                class="form-control"
++                name="category"
++                id="category"
++                value="<%= currentPost.category %>"
++                placeholder=""
++            />
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text">Invalid Category</span>
++            </span>
++        </div>
++
++        <div class="form-group my-1">
++            <label for="content" class=""> Content </label>
++            <textarea
++                class="form-control tinymce"
++                name="content"
++                rows="5"
++                id="content"
++                placeholder="Start writing..."
++            ><%= currentPost.content %></textarea>
++            <span class="small d-none text-danger error-message">
++                <i class="fa fa-exclamation-circle small"> </i>
++                <span class="error-message-text">Invalid Content</span>
++            </span>
++        </div>
++    </fieldset>
++    <div class="cta d-flex py-4 gap-2 flex-column">
++        <button class="btn btn-lg btn-success shadow" type="submit">
++            Publish 
++        </button>
+ 
+-    <p class="fs-5 form-label my-3" onclick="">
+-  Edit content
+-      <span class="fa fa-clipboard float-end" onclick="pasteText('postContent')"></span>
+-    </p>
+-    <div class="">
+-      <textarea cols="" rows="10" class="col-12 form-text" id="postContent" name="content" placeholder="Enter the text">
+-        
+-        <%= myPost.content%>
+-      </textarea>
+     </div>
+-            
+-            <button class="btn btn-lg col-12 btn-outline-success mb-3 mt-4">Save changes</button>
+-            
+-  </form>
+-</section>
+\ No newline at end of file
++</form>
++<script src="/JS/tinymce.js"></script>
+diff --git a/views/Pages/Main/article.ejs b/views/Pages/Main/article.ejs
+index ac88e38..3caddaf 100644
+--- a/views/Pages/Main/article.ejs
++++ b/views/Pages/Main/article.ejs
+@@ -15,7 +15,7 @@
+             <%= article.title%>
+         </h3>
+     </div>
+-    <div class="article-info d-flex flex-column">
++    <div class="article-info text-muted d-flex flex-column">
+         <span class="text-capitalize"><%= article.author%> </span>
+         <span class="small"><%= article.updatedAt.toDateString() %> </span>
+         <span class="small"><%= article.readTime %>  </span>
+@@ -87,7 +87,7 @@
+   </section>
+   <section id="relatedSection" class="my-5">
+     <div class="heading my-3">
+-        <h3 class="fs-3 fw-light">Related Posts</h3>
++        <h3 class="fs-3 fw-light">Recommended Posts</h3>
+     </div>
+   
+     <div class="reel gap-2 container">
+diff --git a/views/Pages/Main/index.ejs b/views/Pages/Main/index.ejs
+index 3b17814..d6f2642 100644
+--- a/views/Pages/Main/index.ejs
++++ b/views/Pages/Main/index.ejs
+@@ -1,4 +1,5 @@
+-    <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
++<section id="">
++      <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
+         <div
+             class="rounded mx-2 p-2 hero-content col-md-6 col-lg-6 text-center text-md-start clearfix float-md-end"
+         >
+@@ -20,12 +21,14 @@
+         </div>
+     </section>
+     <section id="topicsSection" class=""></section>
+-    <section id="topStoriesSection" class="">
++    <section id="topStoriesSection" class="overflow-hidden">
+         <div class="heading py-3">
+             <h2 class="display-6">Top Stories</h2>
+         </div>
+-        <div class="reel py-3 px-2 gap-3 overflow-x-scroll d-flex flex-wra">
+-            <% allPosts.forEach((post)=>{ %> <%-
+-            include("../../Components/portrait.card.ejs", {post}) %> <% })%>
++        <div class="reel py-3 px-2 gap-3 overflow-scroll d-flex flex-wra">
++            <% allPosts.forEach((post)=>{ %> 
++            <%- include("../../Components/portrait.card.ejs", {post}) %> <% })%>
+         </div>
+     </section>
++
++</section>
+\ No newline at end of file
+diff --git a/views/layouts/admin.ejs b/views/layouts/admin.ejs
+index 3f32306..1f2bf13 100644
+--- a/views/layouts/admin.ejs
++++ b/views/layouts/admin.ejs
+@@ -37,7 +37,7 @@
+             type=""
+         />
+     </head>
+-    <body class="" data-bs-theme="">
++    <body class="" data-bs-theme="dark">
+         <%- include('../partials/_header.ejs')%>
+ 
+         <main id="mainContent" class="d-flex flex-column container my-3 flex-md-row gap-2">
+diff --git a/views/layouts/main.ejs b/views/layouts/main.ejs
+index 8ce9c50..195581a 100644
+--- a/views/layouts/main.ejs
++++ b/views/layouts/main.ejs
+@@ -36,7 +36,7 @@
+     </head>
+     <body class="" data-bs-theme="dark">
+         <%- include('../Partials/_header.ejs')%>
+-          <main id="mainContent" class="d-flex flex-column container my-3 flex-md-row gap-2">
++          <main id="mainContent" class="d-flex flex-column container">
+               <%- body %>
+           </main>
+         <%- include('../Partials/_footer.ejs')%>

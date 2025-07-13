@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Biography Hub</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            title="bootstrap"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./css/style.css"
+            type="text/css"
+            media="all"
+        />
+        <link
+            rel="stylesheet"
+            href="./css/index.css"
+            type="text/css"
+            media="all"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+            title=""
+            type=""
+        />
+    </head>
+    <body class="" data-bs-theme="dark">
+        <header id="navBar" class="nav shadow-sm mx-md-2 navbar">
+            <div
+                class="container pt-sm-2 d-flex justify-content-between flex-wrap flex-md-nowrap"
+            >
+                <div class="navbar-brand order-1">
+                    <a href="/" class=" "> BiographyHub </a>
+                </div>
+                <div
+                    id="horizontalNav"
+                    class="horizontal-nav order-3 order-md-2 overflow-x-scroll"
+                >
+                    <ul
+                        class="d-flex overflow-x-scroll my-2 px-0 align-items-center gap-2"
+                    >
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/people"
+                            >
+                                people
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/news"
+                            >
+                                news
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/events"
+                            >
+                                events
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/discussion"
+                            >
+                                discussion
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/this-day"
+                            >
+                                this day
+                            </a>
+                        </li>
+                        <li class="nav-item border">
+                            <a
+                                class="nav-link text-capitalize"
+                                href="/category/guess-game"
+                            >
+                                guess game
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex order-2 order-md-3 gap-2 navbar-options">
+                    <a href="/search" class="" id="btnLoginPage">
+                        <i class="fa fa-search"></i>
+                        <span class="d-none d-lg-inline">Search</span>
+                    </a>
+                    <a href="/notifications" class="" id="btnLoginPage">
+                        <i class="fa fa-bell"></i>
+                        <span class="d-none d-lg-inline">Notifications</span>
+                    </a>
+                    <a href="/auth/login" class="" id="btnLoginPage">
+                        <i class="fa fa-user"></i>
+                        <span class="d-none d-lg-inline">Login</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="d-flex flex-column container my-3 flex-md-row gap-3">
+            <main id="mainContent" class="col-md-8 col-lg-9">
+                <section id="infoSection">
+                    <div class="article-image overflow-hidden">
+                        <div
+                            class="col-md-10 col-12 py-5 position-absolut placeholder-wave placeholder"
+                        ></div>
+                        <img
+                            src="./IMG/image.jpg"
+                            alt="no image"
+                            class="img-fluid w-100 h-auto object-fit-cover"
+                        />
+                    </div>
+                    <div class="article-title py-3">
+                        <span class="rounded small text-uppercase">
+                            technology
+                        </span>
+                        <h3 class="fs-1 led">
+                            Lorem ipsum dolor sit: amet consectetur adipisicing
+                            elit. Quidem, nostrum?
+                        </h3>
+                    </div>
+                    <div class="article-info d-flex flex-column">
+                        <span class="text-capitalize">Author: John Doe </span>
+                        <span class="small">Last updated: 31-2-2025 </span>
+                        <span class="small">Average read time: 2 mins </span>
+                    </div>
+                </section>
+                <article id="mainArticle" class="py-4">
+                    <p class="">
+                        Lorem ipsum dolor sit amet consectetur, adipisicing
+                        elit. Quisquam eligendi facere voluptatem odit aut odio
+                        sapiente reiciendis culpa a blanditiis!
+                    </p>
+                    <p class="">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing
+                        elit. Nostrum iure, odit veniam soluta commodi minima
+                        labore debitis dolorum eveniet et quam molestiae iusto
+                        ea eligendi repudiandae accusantium obcaecati sequi
+                        vitae perferendis. Animi minus officia incidunt dolorum
+                        dignissimos nihil aliquid quam.
+                    </p>
+                    <p class="">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Minus dicta soluta sed deserunt quod quis animi, enim
+                        odit, neque deleniti magnam consectetur voluptate
+                        doloribus veniam asperiores accusantium. Consectetur,
+                        error autem!
+                    </p>
+                    <div class="article-share d-flex gap-2 fs-2">
+                        <span id="btnShare">
+                            <i class="fa fa-share-alt"> </i>
+                        </span>
+                        <a href="" class="share-icon">
+                            <i class="fab fa-whatsapp"> </i>
+                        </a>
+                        <a href="" class="share-icon">
+                            <i class="fab fa-twitter"> </i>
+                        </a>
+                        <a href="" class="share-icon">
+                            <i class="fab fa-facebook"> </i>
+                        </a>
+                    </div>
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        <span class="fs-6 text-muted">
+                            Was this article helpful?
+                        </span>
+                        <span class="d-flex gap-2">
+                            <a
+                                class="text-decoration-none p-2 border text-secondary"
+                                href="/article/<%=article._id %>?like=1"
+                            >
+                                <i class="fa fa-thumbs-up"></i>
+                            </a>
+                            <a
+                                class="text-decoration-none p-2 border text-secondary"
+                                href="/article/<%=article._id %>?like=1"
+                            >
+                                <i class="fa fa-thumbs-down"></i>
+                            </a>
+                        </span>
+                    </div>
+                </article>
+                <section id="chatbotSection" class="col-md-8">
+                    <div class="heading my-4">
+                        <h3 class="fs-2 lead">Ask Ai!</h3>
+                        <h3 class="fs-6 fw-light">
+                            For more insight and context
+                        </h3>
+                    </div>
+                    <div class="input-bar border rounded gap-1 d-flex">
+                        <input
+                            class="border-0 form-control"
+                            type="text"
+                            name="message"
+                            id="inputMessage"
+                            placeholder="Ask anything..."
+                            value=""
+                        />
+                        <button id="btnVoiceSearch" class="btn border-0">
+                            <i class="fa fa-microphone"> </i>
+                        </button>
+                        <button
+                            id="btnSendMessage"
+                            class="btn btn-outline-light"
+                        >
+                            <i class="fa fa-paper-plane"> </i>
+                        </button>
+                    </div>
+                    <div class="input-suggestions my-4">
+                        <div
+                            class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+                        >
+                            <span class="col-8 text-truncate">
+                                lorem ipsum dolor sit amet consectetur?
+                            </span>
+                            <i class="fa small fa-search"> </i>
+                        </div>
+                        <div
+                            class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+                        >
+                            <span class="col-8 text-truncate">
+                                lorem ipsum dolor sit amet consectetur?
+                            </span>
+                            <i class="fa small fa-search"> </i>
+                        </div>
+                    </div>
+                </section>
+                <section id="relatedSection" class="my-5">
+                    <div class="heading my-3">
+                        <h3 class="fs-3 fw-light">Related Posts</h3>
+                    </div>
+
+                    <div class="reel container">
+                        <div
+                            class="portrait card overflow-hidden border col-8 col-md-4 col-lg-3"
+                        >
+                            <div
+                                class="card-image placeholder placeholder-wave glass p-5 object-fit-cover"
+                            >
+                                <img
+                                    class="img-fluid"
+                                    src="./image.jpeg"
+                                    alt="no image"
+                                />
+                            </div>
+                            <div class="d-flex flex-column p-2 card-info">
+                                <span
+                                    class="text-decoration-underline small card-category"
+                                >
+                                    Technology
+                                </span>
+                                <span
+                                    class="card-title text-decoration-underline fs-6"
+                                >
+                                    <a class="" href="#"
+                                        >Lorem ipsum dolor sit</a
+                                    >
+                                </span>
+                                <span class="card-text fw-light small">
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit. Aliquid totam nobis
+                                    assumenda...
+                                </span>
+                                <span class="card-date py-2 small">
+                                    March 2, 2025
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <aside class="col-md-4 col-lg-3 border border-danger">
+                <section
+                    id="authorSection"
+                    class="d-flex container py-2 flex-column gap-1 author-box"
+                >
+                    <div class="author-image overflow-hidden rounded">
+                        <img
+                            class="img-thumbnail img-author"
+                            src="./IMG/image.jpeg"
+                            alt="no image"
+                        />
+                    </div>
+                    <div class="author-info d-flex flex-column">
+                        <span class="fs-4 text-capitalize">John Doe</span>
+                        <span class="small">Freelance writer</span>
+                    </div>
+                    <div class="author-bio">
+                        <p class="fw-light">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing
+                            elit. Exercitationem fuga, laborum ipsam deleniti
+                            debitis tempore non rem harum nesciunt dolorum!
+                        </p>
+                    </div>
+                    <div class="author-socials fs-4 d-flex gap-3">
+                        <a class="social-link" href="#">
+                            <i class="fab fa-instagram"> </i>
+                        </a>
+                        <a class="social-link" href="#">
+                            <i class="fab fa-facebook"> </i>
+                        </a>
+                        <a class="social-link" href="#">
+                            <i class="fab fa-twitter"> </i>
+                        </a>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <footer class="border-top bottom-0 mt-5 pt-5">
+            <div
+                class="container fw-light d-flex flex-wrap gap-2 justify-content-between"
+            >
+                <div class="col-md-4 col-lg-3 my-3">
+                    <a href="/" class="display-6 text-decoration-none">
+                        BiographyHub
+                    </a>
+                    <div class="col-md-12 px-0 my-4">
+                        <form
+                            class="input-group py-3"
+                            method="post"
+                            action="/subscribe"
+                        >
+                            <div class="">
+                                <p class="fw-light">
+                                    Join For More enlightening updates in your
+                                    inbox Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Vel, fuga. Officia magni
+                                    dignissimos nulla! Libero magni reiciendis
+                                    odio alias quos.
+                                </p>
+                            </div>
+                            <div class="input-group">
+                                <input
+                                    class="form-control"
+                                    type="email"
+                                    id="emailAddress"
+                                    name="emailAddress"
+                                    required
+                                    placeholder="Email Address"
+                                />
+                                <!-- when subscribe is clicked, a modal should appear thanking the user for subscribing  -->
+                                <button class="btn btn-lg border" type="submit">
+                                    Subscribe
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-3 list-group my-3">
+                    <h3 class="fs-4">Categories</h3>
+                    <a
+                        href="/category/Events"
+                        class="text-secondary text-decoration-none"
+                        >Events</a
+                    >
+                    <a
+                        href="/category/People"
+                        class="text-secondary text-decoration-none"
+                        >People</a
+                    >
+                    <a
+                        href="/category/News"
+                        class="text-secondary text-decoration-none"
+                        >News</a
+                    >
+                    <a
+                        href="/category/Topics"
+                        class="text-secondary text-decoration-none"
+                        >Discussions</a
+                    >
+                </div>
+
+                <div class="col-md-3 list-group my-3">
+                    <h3 class="fs-4">Legal</h3>
+                    <a
+                        href="/partnerships"
+                        class="text-secondary text-decoration-none"
+                        >Patnerships</a
+                    >
+                    <a
+                        href="/privacy-policy"
+                        class="text-secondary text-decoration-none"
+                        >Privacy policy</a
+                    >
+                    <a
+                        href="/data-security"
+                        class="text-secondary text-decoration-none"
+                        >Do not sell my data</a
+                    >
+                </div>
+                <div class="col-md-2 list-group my-3">
+                    <h3 class="fs-4">Advertising</h3>
+                    <a
+                        href="/advertising#pricing"
+                        class="text-secondary text-decoration-none"
+                        >Pricing</a
+                    >
+                    <a
+                        href="/advertising#affiliate"
+                        class="text-secondary text-decoration-none"
+                        >Affiliate Marketing</a
+                    >
+                    <a
+                        href="/sitemap"
+                        class="text-secondary text-decoration-none"
+                        >SiteMap</a
+                    >
+                </div>
+            </div>
+            <hr />
+            <div class="footer-socials text-center text-secondary mb-3 mt-5">
+                <div class="d-flex mx-auto justify-content-center gap-3">
+                    <a
+                        href="https://www.instagram.com/simply_sa_ad"
+                        class="fab fa-instagram"
+                    ></a>
+                    <a
+                        href="https://www.github.com/simplysaad"
+                        class="fab fa-github"
+                    ></a>
+                    <a
+                        href="https://x.com/simply_saad?s=09"
+                        class="fab fa-twitter"
+                    ></a>
+                    <a
+                        href="https://wa.me/+2348100389197?text=hello+from+your+biographyHub.onrender.com"
+                        class="fab fa-whatsapp"
+                    ></a>
+                </div>
+                <div class="footer-text text-center">
+                    &copy;2025 biographyHub, inc. All rights reserved
+                </div>
+            </div>
+        </footer>
+    </body>
+    <script src="./JS/index.js" type="text/javascript" charset="utf-8"></script>
+</html>
