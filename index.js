@@ -46,7 +46,7 @@ app.use(cookieParser());
 
 //VIEWS
 app.set("view engine", "ejs");
-app.set("views", "views");
+app.set("views", "Views");
 
 //LAYOUTS
 app.use(expressLayouts);
