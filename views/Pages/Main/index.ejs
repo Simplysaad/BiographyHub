@@ -1,0 +1,34 @@
+<section id="">
+      <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
+        <div
+            class="rounded mx-2 p-2 hero-content col-md-6 col-lg-6 text-center text-md-start clearfix float-md-end"
+        >
+            <span
+                class="d-none d-md-inline-block content-tag text-uppercase text-start"
+            >
+                Technology
+            </span>
+            <h2 class="content-title">
+                Emerging Technologies in africa: the uprising
+            </h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Voluptate temporibus veniam consequuntur excepturi
+            </p>
+            <a href="" class="btn border border-2 btn-outline-light">
+                Read more</a
+            >
+        </div>
+    </section>
+    <section id="topicsSection" class=""></section>
+    <section id="topStoriesSection" class="overflow-hidden">
+        <div class="heading py-3">
+            <h2 class="display-6">Top Stories</h2>
+        </div>
+        <div class="reel py-3 px-2 gap-3 overflow-scroll d-flex flex-wra">
+            <% allPosts.forEach((post)=>{ %> 
+            <%- include("../../Components/portrait.card.ejs", {post}) %> <% })%>
+        </div>
+    </section>
+
+</section>

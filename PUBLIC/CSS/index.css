@@ -1,0 +1,86 @@
+/* @media (prefers-color-scheme: dark) {} */
+:root {
+    --white-100: #f5f5f5;
+    --grey-100: #cfd8dc;
+    --grey-200: #b0bec5;
+    --grey-300: #263238;
+    --green-100: #a5d6a7;
+    --green-200: #81c784;
+    --green-300: #188050;
+    --red-200: #e53935;
+    --black-300: #000000;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+.text-green-100 {
+    color: var(--green-100);
+}
+.text-green-200 {
+    color: var(--green-200);
+}
+.text-green-300 {
+    color: var(--green-300);
+}
+
+.text-grey-100 {
+    color: var(--grey-100);
+}
+.text-grey-200 {
+    color: var(--grey-200);
+}
+.text-grey-300 {
+    color: var(--grey-300);
+}
+
+.text-white-100 {
+    color: var(--white-100);
+}
+.text-black-200 {
+    color: var(--black-300);
+}
+.text-red-300 {
+    color: var(--red-200);
+}
+
+.bg-green-100 {
+    background-color: var(--green-100);
+}
+.bg-green-200 {
+    background-color: var(--green-200);
+}
+.bg-green-300 {
+    background-color: var(--green-300);
+}
+
+.bg-grey-100 {
+    background-color: var(--grey-100);
+}
+.bg-grey-200 {
+    background-color: var(--grey-200);
+}
+.bg-grey-300 {
+    background-color: var(--grey-300);
+}
+
+.bg-white-100 {
+    background-color: var(--white-100);
+}
+.bg-black-200 {
+    background-color: var(--black-300);
+}
+.bg-red-300 {
+    background-color: var(--red-200);
+}
+
+.glass {
+    /* background: var(--green-300); */
+    background-blend-mode: multiply;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

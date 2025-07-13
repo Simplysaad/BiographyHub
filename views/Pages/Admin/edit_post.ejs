@@ -1,0 +1,115 @@
+<form
+    class="py-5 col-12 col-md-8 col-lg-6"
+    action="/admin/posts/<%= currentPost._id %>"
+    method="post"
+    accept-charset="utf-8"
+>
+    <legend class="heading my-4">
+        <span class="small fw-light fs-6 text-muted"> Keep writing </span>
+        <h3 class="display-3 fw-semibold text-capitalize">Edit Post</h3>
+    </legend>
+    <fieldset class="my-4 d-flex gap-3 flex-column">
+        <div class="form-group my-1">
+            <label for="title" class=""> Title </label>
+            <input
+                type="text"
+                class="form-control"
+                name="title"
+                id="title"
+                value="<%= currentPost.title %>"
+                placeholder=""
+            />
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid title</span>
+            </span>
+        </div>
+        <div class="form-group my-1">
+            <label for="description" class="">Short description </label>
+            <input
+                class="form-control"
+                rows="3"
+                name="description"
+                id="description"
+                value="<%= currentPost.description %>"
+                placeholder="What's the post about?"
+            />
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid Description</span>
+            </span>
+        </div>
+
+        <div class="image-choice">
+            <div class="form-group my-1">
+                <label for="postImage" class=""> Image File </label>
+                <input
+                    type="file"
+                    class="form-control"
+                    name="postImage"
+                    accept="image/*"
+                    id="postImage"
+                    multiple=""
+                    placeholder=""
+                />
+                <span class="small d-none text-danger error-message">
+                    <i class="fa fa-exclamation-circle small"> </i>
+                    <span class="error-message-text">Invalid PostImage</span>
+                </span>
+            </div>
+            <div class="form-group my-1">
+                <label for="imageUrl" class=""> Image URL </label>
+                <input
+                    type="url"
+                    class="form-control"
+                    name="imageUrl"
+                    id="imageUrl"
+                    value="<%= currentPost.imageUrl %>"
+                    placeholder=""
+                />
+                <span class="small d-none text-danger error-message">
+                    <i class="fa fa-exclamation-circle small"> </i>
+                    <span class="error-message-text">Invalid imageUrl</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group my-1">
+            <label for="category" class=""> Category </label>
+            <input
+                type="text"
+                class="form-control"
+                name="category"
+                id="category"
+                value="<%= currentPost.category %>"
+                placeholder=""
+            />
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid Category</span>
+            </span>
+        </div>
+
+        <div class="form-group my-1">
+            <label for="content" class=""> Content </label>
+            <textarea
+                class="form-control tinymce"
+                name="content"
+                rows="5"
+                id="content"
+                placeholder="Start writing..."
+            ><%= currentPost.content %></textarea>
+            <span class="small d-none text-danger error-message">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">Invalid Content</span>
+            </span>
+        </div>
+    </fieldset>
+    <div class="cta d-flex py-4 gap-2 flex-column">
+        <button class="btn btn-lg btn-success shadow" type="submit">
+            Publish 
+        </button>
+
+    </div>
+</form>
+<script src="/JS/tinymce.js"></script>
