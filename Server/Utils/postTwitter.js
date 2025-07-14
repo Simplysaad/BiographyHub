@@ -20,10 +20,8 @@ async function postTweet(text, url, ...paths) {
             }
 
             response = await client.v2.tweet({ text, media: { media_ids } });
-            console.log("Tweet posted with media", response.data);
         } else {
             response = await client.v2.tweet(text);
-            console.log("Tweet posted without media", response.data);
         }
 
         // return res.status(201).json({
@@ -31,8 +29,8 @@ async function postTweet(text, url, ...paths) {
         //     message: "posted to twitter successfully",
         //     data: response
         // });
-        
-        return response
+
+        return response;
     } catch (error) {
         console.error("Error posting tweet:", error);
     }
