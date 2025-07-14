@@ -191,6 +191,5 @@ let dummyData = [
         meta: { views: 95, likes: 7, commentsCount: 1 }
     }
 ];
-console.log("hello world");
 
 module.exports = dummyData;

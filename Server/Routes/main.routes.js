@@ -1,12 +1,16 @@
 const express = require("express");
 //const dummyData = require("./dummyData");
 const router = express.Router();
+const cron = require("node-cron");
 
 const Post = require("../Models/post.model.js");
 const User = require("../Models/user.model.js");
 const Category = require("../Models/category.model.js");
 
 const helper = require("../Utils/helper");
+const automate = require("../Utils/automate.js");
+
+
 const locals = {
     title: "BiographyHub",
     imageUrl: "/IMG/brand-image.png",
@@ -16,6 +20,8 @@ const locals = {
 const dummyData = require("../Utils/posts.js");
 const relatedPostsFunc = helper.relatedPostsFunc;
 const readTime = helper.readTime;
+const createCategory = require("../Utils/category.js");
+
 /**
  * GET
  * main -index page
@@ -44,6 +50,27 @@ router.get("/", async (req, res, next) => {
             allPosts,
             recentPosts,
             topPosts
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post("/automate", async (req, res, next) => {
+    try {
+        const response = await automate();
+
+        if (response.success) {
+            return res.json({
+                success: false,
+                message: "could not be posted",
+                response
+            });
+        }
+        return res.json({
+            success: true,
+            message: "posted successfully",
+            response
         });
     } catch (err) {
         next(err);
@@ -98,7 +125,7 @@ router.get("/article/:slug", async (req, res, next) => {
             { $inc: update },
             { new: true }
         ).populate("authorId");
-        
+
         if (req.query.like) return;
 
         const { authorId: author } = article;
@@ -117,7 +144,36 @@ router.get("/article/:slug", async (req, res, next) => {
         next(err);
     }
 });
+router.post("/category", async (req, res) => {
+    try {
+        const { name, description, parent } = req.body;
 
+        if (parent) {
+            const parentCategory = await Category.findOne({
+                name: parent.toLowerCase().trim()
+            });
+        }
+
+        let newCategory = new Category({
+            name,
+            description,
+            parent,
+            slug: name.toLowerCase().replace(/!W+/g, "-").split(" ").join("-")
+        });
+
+        console.log(newCategory);
+
+        await newCategory.save();
+
+        return res.status(201).json({
+            success: true,
+            message: "new category added successfully",
+            newCategory
+        });
+    } catch (err) {
+        next(err);
+    }
+});
 /**
  * GET
  * MAIN - get all posts in the same category
@@ -127,22 +183,19 @@ router.get("/category/:slug/", async (req, res, next) => {
     try {
         let { slug } = req.params;
 
-        let categoryId = slug.split("-").at(-1);
-
-        const categoryPosts = await Post.find({ categoryId }).populate(
-            "categoryId"
+        const categoryPosts = await Post.find({ category: slug }).populate(
+            "category"
         );
 
-        const category = await Category.findOne({ _id: categoryId });
+        const category = await Category.findOne({ name: slug });
 
-        locals.title = "BiographyHub | " + category.name;
+        locals.title = category.name + " - BiographyHub";
         locals.description = category.description;
 
         res.render("Pages/Main/category", {
             locals,
             categoryPosts,
-            category,
-            readTime
+            category
         });
     } catch (err) {
         next(err);

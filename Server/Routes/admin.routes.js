@@ -5,7 +5,11 @@ const jwt = require("jsonwebtoken");
 
 const Post = require("../Models/post.model.js");
 const User = require("../Models/user.model.js");
+const Category = require("../Models/category.model.js");
+
 const authMiddleware = require("../Utils/auth.middleware.js");
+const generateApiKey = require("../Utils/generateApiKey.js");
+const automate = require("../Utils/automate.js");
 
 const locals = {
     title: "Admin | BiographyHub",
@@ -33,7 +37,6 @@ router.get("/", async (req, res, next) => {
                 message: "user not logged in"
             });
         }
-
         let currentUserPosts = [];
 
         if (currentUser.roles.includes("admin")) {
@@ -63,9 +66,32 @@ router.get("/", async (req, res, next) => {
 router.get("/posts/add", async (req, res, next) => {
     try {
         locals.title = "Create Post | BiographyHub";
+
+        const categories = await Category.find({ parent: null }).select(
+            "name _id"
+        );
+        const subCategories = await Category.find({
+            parent: { $ne: null }
+        }).select("name _id");
+
+        let categoriesArray = [];
+
+        categories.forEach(category => {
+            let children = subCategories.filter(
+                subCategory => subCategory.parent === category._id
+            );
+
+            categoriesArray.push({
+                parent: category,
+                children
+            });
+        });
+        console.log("categoriesArray", categoriesArray);
+
         res.status(200).render("Pages/Admin/add_post", {
             locals,
-            layout: "Layouts/admin"
+            layout: "Layouts/admin",
+            categoriesArray
         });
     } catch (err) {
         next(err);
@@ -98,26 +124,50 @@ router.post("/posts", async (req, res, next) => {
             });
         }
 
-        const { title, description, content, imageUrl, tags  } = req.body;
+        const {
+            title,
+            description,
+            content,
+            imageUrl,
+            tags,
+            category,
+            subCategory
+        } = req.body;
+
+        let parent = await Category.findOne({
+            name: category.toLowerCase().trim()
+        });
+        // let mainCategory = await Category.findOneAndUpdate(
+        //     { name: subCategory },
+        //     {
+        //         $set: {
+        //             name: subCategory,
+        //             parent: parent._id,
+        //             ancestors: [...parent.ancestors, parent._id],
+        //             slug: (subCategory )?.toLowerCase().trim().replace(/\W+/g, "-")
+        //         }
+        //     },
+        //     { upsert: true, new: true }
+        // );
 
         //let description = await generateDescription(content)
         //let title = await generateTitle(content)
 
         let newPost = new Post({
             ...req.body,
-            // description,
-            //tags: tags.split(","),
+            category: parent._id,
             authorId: currentUser._id
+            // ,category: mainCategory._id,
         });
         await newPost.save();
 
-        // return res.status(201).json({
-        //     success: true,
-        //     message: "post created successfully",
-        //     newPost
-        // });
+        return res.status(201).json({
+            success: true,
+            message: "post created successfully",
+            data: newPost
+        });
 
-        return res.redirect("/article/"+newPost.slug);
+        // return res.redirect("/article/" + newPost.slug);
     } catch (err) {
         next(err);
     }

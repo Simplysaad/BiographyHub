@@ -123,11 +123,13 @@ router.post("/register", async (req, res, next) => {
         res.cookie("token", token, { httpOnly: true });
         //send welcome email, use nodemailer
 
-        return res.status(201).json({
-            success: true,
-            message: "new user created successfully",
-            newUser
-        });
+        // return res.status(201).json({
+        //     success: true,
+        //     message: "new user created successfully",
+        //     newUser
+        // });
+        
+        return res.redirect("/admin/")
     } catch (err) {
         next(err);
     }
@@ -191,11 +193,14 @@ router.post("/login", async (req, res, next) => {
             }
         );
         res.cookie("token", token, { httpOnly: true });
-        return res.status(200).json({
-            success: true,
-            message: "user logged in successfully",
-            currentUser
-        });
+        // return res.status(200).json({
+        //     success: true,
+        //     message: "user logged in successfully",
+        //     currentUser
+        // });
+        
+        return res.redirect("/admin/")
+        
     } catch (error) {
         next(error);
     }

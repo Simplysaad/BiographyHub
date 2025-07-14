@@ -4,6 +4,7 @@ const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
 const expressLayouts = require("express-ejs-layouts");
 const morgan = require("morgan");
+const cron = require("node-cron");
 
 require("dotenv").config();
 
@@ -20,8 +21,8 @@ app.listen(PORT, () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//Morgan 
-app.use(morgan("dev"))
+//Morgan
+app.use(morgan("dev"));
 
 //EXPRESS SESSIONS
 app.use(
@@ -59,3 +60,14 @@ app.use(express.static("./Public"));
 app.use("/auth", require("./Server/Routes/auth.routes.js"));
 app.use("/admin", require("./Server/Routes/admin.routes.js"));
 app.use("/", require("./Server/Routes/main.routes.js"));
+
+cron.schedule("30 7,14,19 * * *", async () => {
+    try {
+        await fetch("https://biographyhub.onrender.com/automate");
+        console.log(
+            "Posted a new blog automatically at " + new Date().toLocaleString()
+        );
+    } catch (err) {
+        console.error(err);
+    }
+});
