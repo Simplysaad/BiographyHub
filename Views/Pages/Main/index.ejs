@@ -6,18 +6,17 @@
             <span
                 class="d-none d-md-inline-block content-tag text-uppercase text-start"
             >
-                Technology
+                <%= allPosts[0].category.name %>
             </span>
             <h2 class="content-title">
-                Emerging Technologies in africa: the uprising
+                 <%= allPosts[0].title %>
             </h2>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Voluptate temporibus veniam consequuntur excepturi
+                 <%= allPosts[0].description.replace("#", "") %>
             </p>
-            <a href="" class="btn border border-2 btn-outline-light">
-                Read more</a
-            >
+            <a href="/article/<%= allPosts[0].slug %>" class="btn border border-2 btn-outline-light">
+                Read more
+            </a>
         </div>
     </section>
     <section id="topicsSection" class=""></section>

@@ -32,18 +32,21 @@ router.get("/", async (req, res, next) => {
         //ENSURE THAT THE POSTS RETURNED ARE PUBLISHED {status: "published"}
 
         const allPosts = await Post.find({})
+            .populate("category")
             .sort({ updatedAt: -1 })
             .limit(40)
-            .select("title slug description updatedAt imageUrl meta");
+            .select("title slug description category updatedAt imageUrl meta");
+
+        console.log(allPosts);
 
         const recentPosts = await Post.find({})
             .sort({ updatedAt: -1 })
             .limit(40)
-            .select("title slug description updatedAt imageUrl meta");
+            .select("title slug description category updatedAt imageUrl meta");
         const topPosts = await Post.find({})
             .sort({ "meta.likes": -1, "meta.views": -1 })
             .limit(40)
-            .select("title slug description updatedAt imageUrl meta");
+            .select("title slug description category updatedAt imageUrl meta");
 
         return res.render("Pages/Main/index", {
             locals,
@@ -186,9 +189,11 @@ router.get("/category/:slug/", async (req, res, next) => {
 
         slug = slug.toLowerCase().split("-").join(" ");
 
-        const categoryPosts = await Post.find({ category: slug });
 
         const category = await Category.findOne({ name: slug });
+        const categoryPosts = await Post.find({ category: category._id }).populate(
+            "category"
+        );
 
         locals.title = category.name + " - BiographyHub";
         locals.description = category.description;

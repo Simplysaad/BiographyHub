@@ -1,9 +1,45 @@
-<section class="container">
-<h2 class="text-center fw-bold my-3 py-3 text-secondary-emphasis display-3 border-1 border-top border-bottom">
-  <%= categoryName %>
-</h2>
-
-<% categoryPosts.forEach((post)=>{%>
-    <%- include("../component/portrait.card.ejs", {post}) %>
-<% })%>
+<section id="">
+    <% if(categoryPosts.length > 0){ %>
+    <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
+        <div
+            class="rounded mx-2 p-2 hero-content col-md-6 col-lg-6 text-center text-md-start clearfix float-md-end"
+        >
+            <span
+                class="d-none d-md-inline-block content-tag text-uppercase text-start"
+            >
+                <%= categoryPosts[0].category.name %>
+            </span>
+            <h2 class="content-title"><%= categoryPosts[0].title %></h2>
+            <p><%= categoryPosts[0].description.replace("#", "") %></p>
+            <a
+                href="/article/<%= categoryPosts[0].slug %>"
+                class="btn border border-2 btn-outline-light"
+            >
+                Read more
+            </a>
+        </div>
+    </section>
+    <% } %>
+    <section id="headingSection" class="">
+        <h2
+            class="text-center text-capitalize fw-semibold my-3 py-3 text-secondary-emphasis fs-3 border-1 border-top border-bottom"
+        >
+            <%= category.name %>
+        </h2>
+    </section>
+    <section id="topStoriesSection" class="overflow-hidden">
+        <div class="heading py-3">
+            <h2 class="display-6">Top Stories</h2>
+        </div>
+        <div class="reel py-3 px-2 gap-3 overflow-scroll d-flex flex-wra">
+            <% if(categoryPosts.length > 0){ %> <%
+            categoryPosts.forEach((post)=>{ %> <%-
+            include("../../Components/portrait.card.ejs", {post}) %> <% })%> <%
+            }else{ %>
+            <p class="text-center fw-semibold fs-4">
+                Nothing to see here! <a class="" href="/">Go home</a>
+            </p>
+            <% } %>
+        </div>
+    </section>
 </section>

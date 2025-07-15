@@ -20,10 +20,10 @@ const postSchema = new mongoose.Schema(
             type: String,
             default: "https://picsum.photos/600/400"
         },
-        // category: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "categories"
-        // },
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "category"
+        },
         tags: [String],
         status: {
             type: String,
