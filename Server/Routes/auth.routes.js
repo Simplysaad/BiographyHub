@@ -258,7 +258,6 @@ router.get("/reset-password", async (req, res, next) => {
         let decoded = jwt.verify(token, process.env.SECRET_KEY);
 
         if (!token) {
-            console.log(decoded);
             return res.status(403).json({
                 success: false,
                 message: "invalid token"

@@ -88,7 +88,6 @@ router.get("/posts/add", async (req, res, next) => {
                 children
             });
         });
-        console.log("categoriesArray", categoriesArray);
 
         res.status(200).render("Pages/Admin/add_post", {
             locals,

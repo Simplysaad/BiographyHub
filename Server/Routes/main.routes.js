@@ -37,7 +37,6 @@ router.get("/", async (req, res, next) => {
             .limit(40)
             .select("title slug description category updatedAt imageUrl meta");
 
-        console.log(allPosts);
 
         const recentPosts = await Post.find({})
             .sort({ updatedAt: -1 })
@@ -164,8 +163,6 @@ router.post("/category", async (req, res) => {
             parent,
             slug: name.toLowerCase().replace(/!W+/g, "-").split(" ").join("-")
         });
-
-        console.log(newCategory);
 
         await newCategory.save();
 
