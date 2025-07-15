@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const postSchema = new mongoose.Schema(
     {
         title: {
@@ -18,7 +19,7 @@ const postSchema = new mongoose.Schema(
         },
         imageUrl: {
             type: String,
-            default: "https://picsum.photos/600/400"
+            default: `https://picsum.photos/seed/${getRandomText()}/600/400`
         },
         category: {
             type: mongoose.Schema.Types.ObjectId,
@@ -69,3 +70,16 @@ postSchema.virtual("readTime").get(function () {
 });
 
 module.exports = mongoose.models.post || mongoose.model("post", postSchema);
+
+
+function getRandomText(length = 6) {
+    const chars = "1234567890abcdefghijklmnopqrstuvwxyz";
+    let randomText = "";
+
+    for (i = 0; i < length; i++) {
+        let randomIndex = Math.floor(Math.random() * 36);
+        randomText += chars[randomIndex];
+    }
+    console.log(randomText);
+    return randomText;
+}
