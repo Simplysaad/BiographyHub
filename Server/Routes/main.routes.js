@@ -121,14 +121,14 @@ router.get("/article/:slug", async (req, res, next) => {
                 },
                 { new: true }
             );
-            return;
+            return res.status(204).end()
         }
 
         const article = await Post.findByIdAndUpdate(
             articleId,
             {
                 $inc: {
-                    "meta.likes": 1
+                    "meta.views": 1
                 }
             },
             { new: true }

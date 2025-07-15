@@ -1,5 +1,5 @@
 <div
-    class="article-card flex-grow-1 masonry-item pb-3 shadow border rounded d-flex flex-column flex-lg-row"
+    class="recommend-card flex-grow-1 col-9 col-md-7 col-lg-4 pb-3 shadow border rounded d-flex flex-column"
 >
     <div class="card-image p-1 rounded overflow-hidden">
         <img class="img-fluid placeholder" src="<%= post.imageUrl %>" alt="" />
@@ -12,7 +12,7 @@
                 </a>
             </h4>
             <p class="card-desc small py-2 fs-6 fw-light text-muted">
-                <%= post.description %>
+                <%= post.description.split(" ").splice(0, 19).join(" ") + "..." %>
             </p>
         </div>
         <div

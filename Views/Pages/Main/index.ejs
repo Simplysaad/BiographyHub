@@ -8,11 +8,11 @@
             >
                 <%= allPosts[0].category.name %>
             </span>
-            <h2 class="content-title">
-                 <%= allPosts[0].title %>
+            <h2 class="fs-2 fw-semibold content-title">
+                 <%= allPosts[0].title.split(" ").splice(0, 11).join(" ") + "..." %>
             </h2>
             <p>
-                 <%= allPosts[0].description.replace("#", "") %>
+                 <%= allPosts[0].description.replace("/#/g", "").split(" ").splice(0, 30).join(" ")+"..." %>
             </p>
             <a href="/article/<%= allPosts[0].slug %>" class="btn border border-2 btn-outline-light">
                 Read more
@@ -22,9 +22,9 @@
     <section id="topicsSection" class=""></section>
     <section id="topStoriesSection" class="overflow-hidden">
         <div class="heading py-3">
-            <h2 class="display-6">Top Stories</h2>
+            <h2 class="display-6">Recent Posts</h2>
         </div>
-        <div class="reel py-3 px-2 gap-3 overflow-scroll d-flex flex-wra">
+        <div class="masonry py-3 px-2">
             <% allPosts.forEach((post)=>{ %> 
             <%- include("../../Components/portrait.card.ejs", {post}) %> <% })%>
         </div>
