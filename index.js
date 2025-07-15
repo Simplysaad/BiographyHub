@@ -67,10 +67,12 @@ cron.schedule("30 7,14,19 * * *", async () => {
         let response = await fetch(
             "https://biographyhub.onrender.com/automate"
         );
+
+        let data = await response.json();
         console.log(
             "Posted a new blog automatically at " + new Date().toLocaleString()
         );
-        console.log({ ...response });
+        console.log({ response, data });
     } catch (err) {
         console.error(err);
     }
