@@ -257,7 +257,7 @@ router.post("/subscribe", async (req, res, next) => {
  * THIS PAGE COULD NOT BE FOUND
  */
 
-router.get("/*", (req, res, next) => {
+router.get("/*path", (req, res, next) => {
     res.render("Pages/Error/404", { locals });
 });
 
