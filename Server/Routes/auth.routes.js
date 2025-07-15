@@ -7,11 +7,12 @@ const User = require("../Models/user.model.js");
 const authMiddleware = require("../Utils/auth.middleware.js");
 
 const locals = {
-    title: "Auth | BiographyHub",
+    title: "Auth - BiographyHub",
     imageUrl: "/IMG/brand-image.png",
-    description: ""
+    description:
+        "Stay ahead with expert insights on AI, emerging tech, digital marketing strategies, and productivity tools to supercharge your growth.",
+    url: "https://biographyhub.onrender.com/auth/login"
 };
-
 /**
  * POST
  * AUTH - subscribe page
@@ -50,7 +51,9 @@ router.post("/subscribe", async (req, res, next) => {
  */
 router.get("/register", async (req, res, next) => {
     try {
-        locals.title = "Create Account | BiographyHub";
+        locals.title = "Register - BiographyHub";
+        locals.url = "https://biographyhub.onrender.com/auth/register";
+
         return res.render("Pages/Auth/register", {
             locals,
             layout: "Layouts/auth"
@@ -128,8 +131,8 @@ router.post("/register", async (req, res, next) => {
         //     message: "new user created successfully",
         //     newUser
         // });
-        
-        return res.redirect("/admin/")
+
+        return res.redirect("/admin/");
     } catch (err) {
         next(err);
     }
@@ -142,7 +145,9 @@ router.post("/register", async (req, res, next) => {
 
 router.get("/login", (req, res, next) => {
     try {
-        locals.title = "Login | BiographyHub";
+        locals.title = "Login - BiographyHub";
+        locals.url = "https://biographyhub.onrender.com/auth/login";
+
         return res.render("Pages/Auth/login", {
             locals,
             layout: "Layouts/Auth"
@@ -198,9 +203,8 @@ router.post("/login", async (req, res, next) => {
         //     message: "user logged in successfully",
         //     currentUser
         // });
-        
-        return res.redirect("/admin/")
-        
+
+        return res.redirect("/admin/");
     } catch (error) {
         next(error);
     }

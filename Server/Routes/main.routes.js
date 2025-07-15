@@ -10,17 +10,17 @@ const Category = require("../Models/category.model.js");
 const helper = require("../Utils/helper");
 const automate = require("../Utils/automate.js");
 
-
 const locals = {
     title: "BiographyHub",
     imageUrl: "/IMG/brand-image.png",
     description:
-        "Find out about notable events, influential individuals and discusions"
+        "Stay ahead with expert insights on AI, emerging tech, digital marketing strategies, and productivity tools to supercharge your growth.",
+    url: "https://biographyhub.onrender.com/"
 };
+
 const dummyData = require("../Utils/posts.js");
 const relatedPostsFunc = helper.relatedPostsFunc;
 const readTime = helper.readTime;
-const createCategory = require("../Utils/category.js");
 
 /**
  * GET
@@ -131,10 +131,11 @@ router.get("/article/:slug", async (req, res, next) => {
         const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
 
+        locals.title = article.title + " - BiographyHub";
         locals.description = article.description;
         locals.imageUrl = article.imageUrl;
-        locals.title = article.title;
-        res.render("Pages/Main/article", {
+
+        return res.render("Pages/Main/article", {
             locals,
             article,
             author,
@@ -183,16 +184,16 @@ router.get("/category/:slug/", async (req, res, next) => {
     try {
         let { slug } = req.params;
 
-        const categoryPosts = await Post.find({ category: slug }).populate(
-            "category"
-        );
+        slug = slug.toLowerCase().split("-").join(" ");
+
+        const categoryPosts = await Post.find({ category: slug });
 
         const category = await Category.findOne({ name: slug });
 
         locals.title = category.name + " - BiographyHub";
         locals.description = category.description;
 
-        res.render("Pages/Main/category", {
+        return res.render("Pages/Main/category", {
             locals,
             categoryPosts,
             category
@@ -256,8 +257,8 @@ router.post("/subscribe", async (req, res, next) => {
  * THIS PAGE COULD NOT BE FOUND
  */
 
-// router.get("/", (req, res, next) => {
-//     res.render("Pages/Error/404", { locals });
-// });
+router.get("/*", (req, res, next) => {
+    res.render("Pages/Error/404", { locals });
+});
 
 module.exports = router;

@@ -12,9 +12,11 @@ const generateApiKey = require("../Utils/generateApiKey.js");
 const automate = require("../Utils/automate.js");
 
 const locals = {
-    title: "Admin | BiographyHub",
+    title: "BiographyHub",
     imageUrl: "/IMG/brand-image.png",
-    description: ""
+    description:
+        "Stay ahead with expert insights on AI, emerging tech, digital marketing strategies, and productivity tools to supercharge your growth.",
+    url: "https://biographyhub.onrender.com/admin"
 };
 
 router.use(authMiddleware);
