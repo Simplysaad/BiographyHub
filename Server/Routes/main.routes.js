@@ -36,7 +36,7 @@ router.get("/", async (req, res, next) => {
             .sort({ updatedAt: -1 })
             .limit(40)
             .select("title slug description category updatedAt imageUrl meta");
-
+console.log(allPosts)
 
         const recentPosts = await Post.find({})
             .sort({ updatedAt: -1 })

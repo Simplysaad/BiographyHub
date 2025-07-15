@@ -150,7 +150,7 @@ router.get("/login", (req, res, next) => {
 
         return res.render("Pages/Auth/login", {
             locals,
-            layout: "Layouts/Auth"
+            layout: "Layouts/auth"
         });
     } catch (err) {
         next(err);
