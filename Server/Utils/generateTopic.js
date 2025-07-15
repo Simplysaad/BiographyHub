@@ -4,21 +4,20 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 const systemInstruction =
-    "respond with a single response, straight to the point, nothing more";
+    "Return one random topic from *only one* of the following categories, and rotate categories evenly over time: artificial intelligence, technology, digital marketing, or productivity. Do not repeat the same category twice in a row. Topics must be relevant, creative, and specific (not general ideas).";
 async function generateTopic() {
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents:
-            "Return a single topic on either of these categories: artificial intelligence, technology, digital marketing or productivity",
+        contents:"Give me one creative and specific topic idea from your current category. Keep it fresh, useful, and not overly generic.",
         config: {
             systemInstruction
         }
     });
+    console.log("gemini topic:", response.text);
     return response.text;
 }
 
 module.exports = generateTopic;
-
 
 // Here are the main Gemini models available with the API right now:
 

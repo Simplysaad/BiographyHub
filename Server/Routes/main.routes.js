@@ -9,6 +9,7 @@ const Category = require("../Models/category.model.js");
 
 const helper = require("../Utils/helper");
 const automate = require("../Utils/automate.js");
+const { generateSlug } = require("../Utils/generateSlug.js");
 
 const locals = {
     title: "BiographyHub",
@@ -36,7 +37,6 @@ router.get("/", async (req, res, next) => {
             .sort({ updatedAt: -1 })
             .limit(40)
             .select("title slug description category updatedAt imageUrl meta");
-console.log(allPosts)
 
         const recentPosts = await Post.find({})
             .sort({ updatedAt: -1 })
@@ -58,21 +58,21 @@ console.log(allPosts)
     }
 });
 
-router.post("/automate", async (req, res, next) => {
+router.get("/automate", async (req, res, next) => {
     try {
         const response = await automate();
+        // const { newPost, twitterPost, success } = await response.json();
+        // const data = await response.json();
 
-        if (response.success) {
-            return res.json({
-                success: false,
-                message: "could not be posted",
-                response
-            });
-        }
+        // if (.success) {
+        //     return res.json({
+        //         success: false,
+        //         message: "could not be posted",
+        //         response
+        //     });
+        // }
         return res.json({
-            success: true,
-            message: "posted successfully",
-            response
+            ...response
         });
     } catch (err) {
         next(err);
@@ -109,38 +109,49 @@ router.get("/author/:slug", async (req, res, next) => {
 router.get("/article/:slug", async (req, res, next) => {
     try {
         let { slug } = req.params;
-
-        let update = {};
+        let articleId = slug.split("-").at(-1);
 
         if (req.query.like) {
-            update = {
-                "meta.likes": 1
-            };
-        } else {
-            update = {
-                "meta.views": 1
-            };
+            await Post.findByIdAndUpdate(
+                articleId,
+                {
+                    $inc: {
+                        "meta.likes": 1
+                    }
+                },
+                { new: true }
+            );
+            return;
         }
-        let articleId = slug.split("-").at(-1);
+
         const article = await Post.findByIdAndUpdate(
             articleId,
-            { $inc: update },
+            {
+                $inc: {
+                    "meta.likes": 1
+                }
+            },
             { new: true }
-        ).populate("authorId");
-
-        if (req.query.like) return;
+        )
+            .populate("authorId")
+            .populate("category");
 
         const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
+
+        relatedPosts.map(post => (post.slug = generateSlug(post)));
 
         locals.title = article.title + " - BiographyHub";
         locals.description = article.description;
         locals.imageUrl = article.imageUrl;
 
+        let currentUrl = "https://biographyhub.onrender.com" + req.originalUrl;
+
         return res.render("Pages/Main/article", {
             locals,
             article,
             author,
+            currentUrl,
             relatedPosts
         });
     } catch (err) {
@@ -186,11 +197,10 @@ router.get("/category/:slug/", async (req, res, next) => {
 
         slug = slug.toLowerCase().split("-").join(" ");
 
-
         const category = await Category.findOne({ name: slug });
-        const categoryPosts = await Post.find({ category: category._id }).populate(
-            "category"
-        );
+        const categoryPosts = await Post.find({
+            category: category._id
+        }).populate("category");
 
         locals.title = category.name + " - BiographyHub";
         locals.description = category.description;

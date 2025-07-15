@@ -8,7 +8,7 @@
           />
         </div>
         <div class="article-title py-3">
-            <span class="rounded small text-uppercase"> technology </span>
+            <span class="rounded small text-uppercase"> <%= article.category.name || "tech" %> </span>
             <h3 class="fs-1 led"><%= article.title%></h3>
         </div>
         <div class="article-info text-muted d-flex flex-column">
@@ -44,13 +44,13 @@
             <span id="btnShare" data-title="<%= article.title %>">
                 <i class="fa fa-share-alt"> </i>
             </span>
-            <a href="" id="whatsapp" class="share-icon">
+            <a href="https://wa.me/?text=<%= article.title+ "%0A%0A" + article.description + "%0A%0A" + currentUrl %>" id="whatsapp" class="share-icon">
                 <i class="fab fa-whatsapp"> </i>
             </a>
-            <a href="" id="facebook" class="share-icon">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= currentUrl %>" id="facebook" class="share-icon">
                 <i class="fab fa-facebook"> </i>
             </a>
-            <a href="" id="twitter" class="share-icon">
+            <a href="https://x.com/intent/tweet?text=<%= article.title+ "%0A" + article.description + "%0A" %>&url=<%= currentUrl %>" id="twitter" class="share-icon">
                 <i class="fab fa-twitter"> </i>
             </a>
         </div>

@@ -62,7 +62,7 @@ app.use("/auth", require("./Server/Routes/auth.routes.js"));
 app.use("/admin", require("./Server/Routes/admin.routes.js"));
 app.use("/", require("./Server/Routes/main.routes.js"));
 
-cron.schedule("30 7,14,19 * * *", async () => {
+cron.schedule("30 9,15,21 * * *", async () => {
     try {
         let response = await fetch(
             "https://biographyhub.onrender.com/automate"
