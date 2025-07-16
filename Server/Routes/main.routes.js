@@ -110,7 +110,16 @@ router.get("/article/:slug", async (req, res, next) => {
     try {
         let { slug } = req.params;
         let articleId = slug.split("-").at(-1);
-
+        
+        if(!articleId){
+          let [article] = await Post.aggregate([{sample: {size: 1}}])
+          
+          let slug = generateSlug(article)
+          
+          return res.redirect(`https://biographyhub.onrender.com/article/${slug}`)
+          
+        }
+        
         if (req.query.like) {
             await Post.findByIdAndUpdate(
                 articleId,
