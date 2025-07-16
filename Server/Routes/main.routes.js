@@ -2,6 +2,8 @@ const express = require("express");
 //const dummyData = require("./dummyData");
 const router = express.Router();
 const cron = require("node-cron");
+const mongoose = require("mongoose");
+
 
 const Post = require("../Models/post.model.js");
 const User = require("../Models/user.model.js");
@@ -111,16 +113,6 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
         let { slug } = req.params;
         let articleId = slug.split("-").at(-1);
 
-        if (!articleId) {
-            let [article] = await Post.aggregate([{ sample: { size: 1 } }]);
-
-            let slug = generateSlug(article);
-
-            return res.redirect(
-                `https://biographyhub.onrender.com/article/${slug}`
-            );
-        }
-
         if (req.query.like) {
             await Post.findByIdAndUpdate(
                 articleId,
@@ -146,7 +138,8 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
             .populate("authorId")
             .populate("category");
 
-        if (!articleId || !article) {
+        const isValidObjectId = mongoose.Types.ObjectId.isValid(articleId);
+        if (!isValidObjectId || !article) {
             let [article] = await Post.aggregate([{ sample: { size: 1 } }]);
 
             let slug = generateSlug(article);
@@ -155,6 +148,7 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
                 `https://biographyhub.onrender.com/article/${slug}`
             );
         }
+
         const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
 
