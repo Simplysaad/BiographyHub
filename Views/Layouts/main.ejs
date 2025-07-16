@@ -45,5 +45,13 @@
             <%- body %>
         </main>
         <%- include('../Partials/_footer.ejs')%>
+    <script>
+        let placeholders = document.querySelectorAll(".placeholder")
+        placeholders.forEach((placeholder)=>{
+          placeholder.onload=()=>{
+            placeholder.classList.remove("placeholder", "placeholder-glow", "placeholder-wave")
+          }
+        })
+    </script>
     </body>
 </html>

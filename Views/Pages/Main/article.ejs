@@ -2,7 +2,10 @@
 <main id="mainContent" class="col-md-8 col-lg-9">
     <section id="infoSection">
         <div class="article-image overflow-hidden">
-          <img class="image" src="article.imageUrl "  />
+          <img
+              src="<%= article.imageUrl %>"
+              class="img-fluid w-100 placeholder placeholder-wave h-auto object-fit-cover"
+          />        
         </div>
         <div class="article-title py-3">
             <span class="rounded small text-uppercase"> <%= article.category.name || "tech" %> </span>
@@ -133,44 +136,49 @@
 </aside>
 </div>
 
-<style>
+<!-- <style>
+    .content {
+        max-width: 100%;
+        line-height: 1.7;
+        word-wrap: break-word;
+        font-size: 1rem;
+    }
+    .content h1 {
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+    .content h2 {
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    .content h3 {
+        font-weight: 500;
+    }
+    .content p {
+        margin: 1rem 0;
+        font-weight: 400;
+    }
+    .content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+        margin: 1rem auto;
+    }
+    .content ul,
+    .content ol {
+        padding-left: 1.5rem;
+        margin: 1rem 0;
+    }
+    .content blockquote {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: #f9f9f9;
+        border-left: 4px solid #ccc;
+        font-style: italic;
+    }
 
-.content {
-  max-width: 100%;
-  line-height: 1.7;
-  word-wrap: break-word;
-  font-size: 1rem;
-}
-.content h1,.content h2,.content h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 0.7rem;
-  font-weight: bold;
-}
-.content p {
-  margin: 1rem 0;
-}
-.content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-  margin: 1rem auto;
-}
-.content ul,.content ol {
-  padding-left: 1.5rem;
-  margin: 1rem 0;
-}
-.content blockquote {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-left: 4px solid #ccc;
-  font-style: italic;
-}
-.content iframe {
-  max-width: 100%;
-  height: auto;
-}
-</style>
+</style> -->
+
 
 <script src="/JS/article.js"></script>
