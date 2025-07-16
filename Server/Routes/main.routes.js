@@ -106,20 +106,21 @@ router.get("/author/:slug", async (req, res, next) => {
  * @params {String} id
  */
 
-router.get("/article/:slug", async (req, res, next) => {
+router.get(["/article/", "/article/:slug"], async (req, res, next) => {
     try {
         let { slug } = req.params;
         let articleId = slug.split("-").at(-1);
-        
-        if(!articleId){
-          let [article] = await Post.aggregate([{sample: {size: 1}}])
-          
-          let slug = generateSlug(article)
-          
-          return res.redirect(`https://biographyhub.onrender.com/article/${slug}`)
-          
+
+        if (!articleId) {
+            let [article] = await Post.aggregate([{ sample: { size: 1 } }]);
+
+            let slug = generateSlug(article);
+
+            return res.redirect(
+                `https://biographyhub.onrender.com/article/${slug}`
+            );
         }
-        
+
         if (req.query.like) {
             await Post.findByIdAndUpdate(
                 articleId,
@@ -130,7 +131,7 @@ router.get("/article/:slug", async (req, res, next) => {
                 },
                 { new: true }
             );
-            return res.status(204).end()
+            return res.status(204).end();
         }
 
         const article = await Post.findByIdAndUpdate(
@@ -145,6 +146,15 @@ router.get("/article/:slug", async (req, res, next) => {
             .populate("authorId")
             .populate("category");
 
+        if (!articleId || !article) {
+            let [article] = await Post.aggregate([{ sample: { size: 1 } }]);
+
+            let slug = generateSlug(article);
+
+            return res.redirect(
+                `https://biographyhub.onrender.com/article/${slug}`
+            );
+        }
         const { authorId: author } = article;
         const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
 
@@ -155,7 +165,7 @@ router.get("/article/:slug", async (req, res, next) => {
         locals.imageUrl = article.imageUrl;
 
         let currentUrl = "https://biographyhub.onrender.com" + req.originalUrl;
-
+        console.log(currentUrl);
         return res.render("Pages/Main/article", {
             locals,
             article,

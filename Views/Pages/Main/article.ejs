@@ -2,12 +2,9 @@
 <main id="mainContent" class="col-md-8 col-lg-9">
     <section id="infoSection">
         <div class="article-image overflow-hidden">
-          <img
-            src="<%= article.imageUrl%>"
-            alt="<%= article.title + " image" %>"
-            class="img-fluid w-100 h-auto placeholde object-fit-cover"
-          />
+
         </div>
+        <%= currentUrl %>
         <div class="article-title py-3">
             <span class="rounded small text-uppercase"> <%= article.category.name || "tech" %> </span>
             <h3 class="fs-1 led"><%= article.title%></h3>
@@ -45,13 +42,13 @@
             <span id="btnShare" data-title="<%= article.title %>">
                 <i class="fa fa-share-alt"> </i>
             </span>
-            <a href="https://wa.me/?text=<%= article.title+ "%0A%0A" + article.description + "%0A%0A" + currentUrl %>" id="whatsapp" class="share-icon">
+            <a href="https://wa.me/?text=<%= article.title+ "\n"+"\n" + article.description + "\n\n" + currentUrl %>" id="whatsapp" class="share-icon">
                 <i class="fab fa-whatsapp"> </i>
             </a>
             <a href="https://www.facebook.com/sharer/sharer.php?u=<%= currentUrl %>" id="facebook" class="share-icon">
                 <i class="fab fa-facebook"> </i>
             </a>
-            <a href="https://x.com/intent/tweet?text=<%= article.title+ "%0A" + article.description + "%0A" %>&url=<%= currentUrl %>" id="twitter" class="share-icon">
+            <a href="https://x.com/intent/tweet?text=<%= article.title+ "\n\n" + article.description + "\n\n" + currentUrl %>" id="twitter" class="share-icon">
                 <i class="fab fa-twitter"> </i>
             </a>
         </div>
@@ -136,6 +133,7 @@
     </section>
 </aside>
 </div>
+
 <style>
 
 .content {
@@ -175,3 +173,5 @@
   height: auto;
 }
 </style>
+
+<script src="/JS/article.js"></script>
