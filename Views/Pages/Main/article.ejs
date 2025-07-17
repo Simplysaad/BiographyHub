@@ -8,16 +8,16 @@
           />        
         </div>
         <div class="article-title py-3">
-            <span class="rounded small text-uppercase"> <%= article.category.name || "tech" %> </span>
+            <span class="rounded small text-uppercase text-success"> <%= article.category.name || "tech" %> </span>
             <h3 class="fs-1 led"><%= article.title%></h3>
         </div>
-        <div class="article-info text-muted d-flex flex-column">
+        <div class="article-info text-muted d-flex align-items-start flex-wrap gap-2">
             <span class="text-capitalize"><%= article.authorId?.name %> </span>
-            <span class="small"
+            <span class=""
                 ><%= article.updatedAt.toLocaleDateString("en-US", {year:
                 "numeric", month: "long", day: "numeric"}) %>
             </span>
-            <span class="small"><%= article.readTime %> </span>
+            <span class="d-none small"><%= article.readTime %> </span>
         </div>
     </section>
     <article id="mainArticle" class="content py-4">

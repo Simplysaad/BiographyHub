@@ -1,31 +1,42 @@
-<section class="container my-3 mb-4">
-
-<h3 class="display-5 my-4">
-  Other posts by <%= name%>
-</h3>
-    
-<% data.forEach((post)=>{ %>
-        <div class="article-card">
-    <div class="card-image col-5 col-md-4">
-      <img src="<%= post.imageUrl %>" alt="<%= post.title%>" class="img-fluid img-post" alt="image">
-    </div>
-    <div class="card-body p-1 col-7 col-md-9">
-      <a href="/category/<%= post.category %>" class="text-warning text-uppercase card-category p-0"><%= post.category%> </a>
-      <a href="/article/<%= post._id%>" class="card-title">
-        <%=post.title%>
-      </a>
-      <p class="card-description d-none d-md-block"><%= post.content.split(' ').slice(0, 20).join(' ')%> </p>
-      <div class="">
-        <img src="<%= post.imageUrl %>" alt="<%= post.imageUrl %>" class="img-profile">
-        <a href="/author/<%= post.author %>" class="card-author">
-          <%= post.author %>
-        </a>
-        <span class="separator d-inline"></span>
-        <span class="card-age">
-          <%= readTime(post.content)%>
-        </span>
-      </div>
-    </div>
-        </div>
-<% })%>
-</section>       
+<div class="d-flex gap-2 flex-column flex-md-row">
+    <section id="mainContent" class="col-md-8 col-lg-9">
+        <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
+            <div
+                class="rounded mx-2 p-2 hero-content col-md-6 col-lg-6 text-center text-md-start clearfix float-md-end"
+            >
+                <span
+                    class="d-none d-md-inline-block content-tag text-uppercase text-start"
+                >
+                    <%= authorPosts[0].category.name %>
+                </span>
+                <h2 class="fs-2 fw-semibold content-title">
+                    <%= authorPosts[0].title.split(" ").splice(0, 11).join("
+                    ") + "..." %>
+                </h2>
+                <p>
+                    <%= authorPosts[0].description.replace("/#/g", "").split("
+                    ").splice(0, 30).join(" ")+"..." %>
+                </p>
+                <a
+                    href="/article/<%= authorPosts[0].slug %>"
+                    class="btn border border-2 btn-outline-light"
+                >
+                    Read more
+                </a>
+            </div>
+        </section>
+        <section id="topicsSection" class="">
+            <h1 class="display-5"><%="Other posts by "+  name %></h1>
+        </section>
+        <section id="topStoriesSection" class="overflow-hidden">
+            <div class="heading py-3">
+                <h2 class="display-6">Top Stories</h2>
+            </div>
+            <div class="masonry py-3 px-2">
+                <% authorPosts.forEach((post)=>{ %> <%-
+                include("../../Components/portrait.card.ejs", {post}) %> <% })%>
+            </div>
+        </section>
+    </section>
+    <aside class="col-md-4 col-lg-3 border"></aside>
+</div>

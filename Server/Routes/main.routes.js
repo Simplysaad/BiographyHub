@@ -4,7 +4,6 @@ const router = express.Router();
 const cron = require("node-cron");
 const mongoose = require("mongoose");
 
-
 const Post = require("../Models/post.model.js");
 const User = require("../Models/user.model.js");
 const Category = require("../Models/category.model.js");
@@ -85,20 +84,32 @@ router.get("/automate", async (req, res, next) => {
  * GET
  * MAIN -get all posts by the same author
  */
-router.get("/author/:slug", async (req, res, next) => {
+router.get(["/author/", "/author/:slug"], async (req, res, next) => {
     try {
         const { slug } = req.params;
         const authorId = slug.split("-").at(-1);
+        const isValidObjectId = mongoose.Types.ObjectId(authorId);
+
+        if (!slug || !isValidObjectId) {
+            let [randomAuthor] = await User.aggregate([
+                { $match: { roles: "author" } },
+                { $sample: { size: 1 } },
+                { $project: { _id: 1 } }
+            ]);
+
+            return res.redirect(`/author/${randomAuthor._id}`);
+        }
+
         const authorPosts = await Post.find({ authorId });
+        const author = await User.findById(authorId);
 
         return res.render("Pages/Main/author", {
             locals,
             authorPosts,
-            name,
-            readTime
+            author
         });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 });
 
@@ -150,7 +161,18 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
         }
 
         const { authorId: author } = article;
-        const relatedPosts = await Post.aggregate([{ $sample: { size: 6 } }]);
+        const relatedPosts = await Post.aggregate([
+            { $sample: { size: 6 } },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            }
+        ]);
+        console.log(relatedPosts[0]);
 
         relatedPosts.map(post => (post.slug = generateSlug(post)));
 
@@ -234,19 +256,16 @@ router.get("/category/:slug/", async (req, res, next) => {
  * search author, tags, content, title, imageUrl
  */
 
-router.post("/search", async (req, res, next) => {
+router.all("/search", async (req, res, next) => {
     try {
-        let searchTerm = req.body.searchTerm;
+        let { searchTerm } = req.query;
         let newRegex = new RegExp(searchTerm, "i");
 
         let searchResults = await Post.find({
             $or: [
-                { category: { $regex: newRegex } },
+                { tags: { $regex: newRegex } },
                 { title: { $regex: newRegex } },
-                { content: { $regex: newRegex } },
-                { imageUrl: { $regex: newRegex } },
-                { author: { $regex: newRegex } },
-                { category: { $regex: newRegex } }
+                { content: { $regex: newRegex } }
             ]
         });
 
@@ -255,7 +274,7 @@ router.post("/search", async (req, res, next) => {
             searchResults.length ?? "no"
         } results `;
 
-        return res.render("Pages/Main/search", { locals, searchResults });
+        return res.render("Pages/Main/search", { locals,searchTerm, searchResults });
     } catch (err) {
         next(err);
     }

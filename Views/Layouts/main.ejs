@@ -9,15 +9,19 @@
         <meta name="keywords" content="<%= locals.keywords %>" />
 
         <meta name="robots" content="index, follow" />
-        <meta name="google-adsense-account" content="ca-pub-7324337655317650">
-        
+        <meta name="google-adsense-account" content="ca-pub-7324337655317650" />
+
         <meta property="og:title" content="<%= locals.title %>" />
         <meta property="og:image" content="<%= locals.imageUrl %>" />
         <meta property="og:description" content="<%= locals.description %>" />
 
         <link rel="canonical" href="<%= locals.url %>" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7324337655317650" crossorigin="anonymous"></script>
-     
+        <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7324337655317650"
+            crossorigin="anonymous"
+        ></script>
+
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css"
@@ -41,17 +45,25 @@
 
     <body class="" data-bs-theme="dark">
         <%- include('../Partials/_header.ejs')%>
-        <main id="mainContent" class="d-flex flex-column container">
+        <main
+            id="mainContent"
+            class="min-vh-100 d-flex flex-column container-fluid px-2"
+        >
             <%- body %>
         </main>
         <%- include('../Partials/_footer.ejs')%>
-    <script>
-        let placeholders = document.querySelectorAll(".placeholder")
-        placeholders.forEach((placeholder)=>{
-          placeholder.onload=()=>{
-            placeholder.classList.remove("placeholder", "placeholder-glow", "placeholder-wave")
-          }
-        })
-    </script>
+        <script>
+            let placeholders = document.querySelectorAll(".placeholder");
+            placeholders.forEach(placeholder => {
+                placeholder.onload = () => {
+                    placeholder.classList.remove(
+                        "placeholder",
+                        "placeholder-glow",
+                        "placeholder-wave"
+                    );
+                };
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/js/bootstrap.js"></script>
     </body>
 </html>

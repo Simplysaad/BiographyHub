@@ -5,34 +5,35 @@
         <img class="img-fluid placeholder placeholder-wave" src="<%= post.imageUrl %>" alt="<% post.title %>" />
     </div>
     <div class="card-body d-flex flex-column gap- p-2 py-md-3">
-        <div class="card-info">
-            <h4 class="card-title fs-5">
+        <div class="card-info py-2">
+        <span class="card-category small text-uppercase text-success py-1 ">
+          <%= post.category[0].name %>
+        </span>
+            <h4 class="card-title fw-semibold fs-6">
                 <a href="/article/<%=post.slug || post._id%>">
                     <%= post.title %>
                 </a>
             </h4>
-            <p class="card-desc small py-2 fs-6 fw-light text-muted">
-                <%= post.description.split(" ").splice(0, 19).join(" ") + "..." %>
-            </p>
         </div>
         <div
             class="card-extra-info d-flex flex-wra gap-2 align-items-center justify-content-between"
         >
             <div
-                class="text-secondary small d-flex justify-content-start gap-2 gap-md-3"
+                class="text-secondary small py-2 d-flex justify-content-start gap-2 gap-md-3"
             >
                 <span class="card-date"
-                    ><%= post.updatedAt.toLocaleDateString() %>
+                    ><%= post.updatedAt.toLocaleDateString("en-US", {year:
+                "numeric", month: "long", day: "numeric"}) %>
                 </span>
-                <span class="card-views">
+                <span class="card-views d-none">
                     <i class="fa fa-eye"> </i>
-                    <data value="12" class="">
+                    <data value="12" class="d-none">
                         <%= post.meta.views > 999
                         ?(post.meta.views/1000).toFixed(1) + "k" :
                         post.meta.views %>
                     </data>
                 </span>
-                <span class="card-likes">
+                <span class="card-likes d-none">
                     <i class="fa fa-heart"> </i>
                     <data value="12" class="">
                         <%= post.meta.likes > 999 ? post.meta.likes/1000:
@@ -63,25 +64,3 @@
         </div>
     </div>
 </div>
-<style>
-    .masonry {
-        column-count: 2;
-        column-gap: 1rem;
-    }
-    .masonry-item {
-        break-inside: avoid;
-        margin-bottom: 1rem;
-    }
-
-    @media (max-width: 768px) {
-        .masonry {
-            column-count: 2;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .masonry {
-            column-count: 1;
-        }
-    }
-</style>
