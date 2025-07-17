@@ -10,12 +10,10 @@
                     <%= authorPosts[0].category.name %>
                 </span>
                 <h2 class="fs-2 fw-semibold content-title">
-                    <%= authorPosts[0].title.split(" ").splice(0, 11).join("
-                    ") + "..." %>
+                    <%= authorPosts[0].title.split(' ').splice(0, 11).join(' ') + '...' %>
                 </h2>
                 <p>
-                    <%= authorPosts[0].description.replace("/#/g", "").split("
-                    ").splice(0, 30).join(" ")+"..." %>
+                    <%= authorPosts[0].description.replace('/#/g', ' ').split(' ').splice(0, 30).join(' ')+'...' %>
                 </p>
                 <a
                     href="/article/<%= authorPosts[0].slug %>"
@@ -26,7 +24,7 @@
             </div>
         </section>
         <section id="topicsSection" class="">
-            <h1 class="display-5"><%="Other posts by "+  name %></h1>
+            <h1 class="display-5"><%="Other posts by "+  author.name %></h1>
         </section>
         <section id="topStoriesSection" class="overflow-hidden">
             <div class="heading py-3">

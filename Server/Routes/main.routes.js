@@ -87,8 +87,8 @@ router.get("/automate", async (req, res, next) => {
 router.get(["/author/", "/author/:slug"], async (req, res, next) => {
     try {
         const { slug } = req.params;
-        const authorId = slug.split("-").at(-1);
-        const isValidObjectId = mongoose.Types.ObjectId(authorId);
+        const authorId = slug?.split("-").at(-1);
+        const isValidObjectId =  mongoose.Types.ObjectId.isValid(authorId);
 
         if (!slug || !isValidObjectId) {
             let [randomAuthor] = await User.aggregate([
@@ -274,7 +274,11 @@ router.all("/search", async (req, res, next) => {
             searchResults.length ?? "no"
         } results `;
 
-        return res.render("Pages/Main/search", { locals,searchTerm, searchResults });
+        return res.render("Pages/Main/search", {
+            locals,
+            searchTerm,
+            searchResults
+        });
     } catch (err) {
         next(err);
     }

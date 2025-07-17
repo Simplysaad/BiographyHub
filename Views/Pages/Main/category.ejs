@@ -10,12 +10,10 @@
                     <%= categoryPosts[0].category.name %>
                 </span>
                 <h2 class="fs-2 fw-semibold content-title">
-                    <%= categoryPosts[0].title.split(" ").splice(0, 11).join("
-                    ") + "..." %>
+                    <%= categoryPosts[0].title.split(' ').splice(0, 11).join(' ') + '...' %>
                 </h2>
                 <p>
-                    <%= categoryPosts[0].description.replace("/#/g", "").split("
-                    ").splice(0, 30).join(" ")+"..." %>
+                    <%= categoryPosts[0].description.replace('/#/g', ' ').split(' ').splice(0, 30).join(' ')+'...' %>
                 </p>
                 <a
                     href="/article/<%= categoryPosts[0].slug %>"

@@ -19,7 +19,7 @@
                             placeholder="Search for people events and discussions"
                             type="search"
                             id="searchInput"
-                            value="<%= searchTerm??'' %>"
+                            value="<%=  typeof searchTerm !== 'undefined' ? searchTerm : '' %>"
                             name="searchTerm"
                         />
                         <label class="" for="searchInput"> </label>

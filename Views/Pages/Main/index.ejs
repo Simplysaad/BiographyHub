@@ -10,12 +10,11 @@
                     <%= allPosts[0].category.name %>
                 </span>
                 <h2 class="fs-2 fw-semibold content-title">
-                    <%= allPosts[0].title.split(" ").splice(0, 11).join(" ") +
-                    "..." %>
+                    <%= allPosts[0].title.split(' ').splice(0, 11).join(' ') +
+                    '...' %>
                 </h2>
                 <p>
-                    <%= allPosts[0].description.replace("/#/g", "").split("
-                    ").splice(0, 30).join(" ")+"..." %>
+                    <%= allPosts[0].description.replace('/#/g', '').split(' ').splice(0, 30).join(' ')+'...' %>
                 </p>
                 <a
                     href="/article/<%= allPosts[0].slug %>"
@@ -32,7 +31,7 @@
             </div>
             <div class="masonry py-3 px-2">
                 <% allPosts.forEach((post)=>{ %> <%-
-                include("../../Components/portrait.card.ejs", {post}) %> <% })%>
+                include('../../Components/portrait.card.ejs', {post}) %> <% })%>
             </div>
         </section>
     </section>
