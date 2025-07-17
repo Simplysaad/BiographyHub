@@ -172,7 +172,6 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
                 }
             }
         ]);
-        console.log(relatedPosts[0]);
 
         relatedPosts.map(post => (post.slug = generateSlug(post)));
 
@@ -181,7 +180,6 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
         locals.imageUrl = article.imageUrl;
 
         let currentUrl = "https://biographyhub.onrender.com" + req.originalUrl;
-        console.log(currentUrl);
         return res.render("Pages/Main/article", {
             locals,
             article,
