@@ -43,7 +43,7 @@ async function automate() {
 
     let slug = generateSlug(newPost);
     let url = "https://biographyhub.onrender.com/article/" + slug;
-    const twitterPost = await postTweet(newPost.title, url);
+    const twitterPost = await postTweet(newPost.description, url);
 
     return {
         newPost,

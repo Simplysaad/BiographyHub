@@ -54,15 +54,15 @@
         <%- include('../Partials/_footer.ejs')%>
         <script>
             let placeholders = document.querySelectorAll(".placeholder");
+        window.addEventListener("load", () => {
             placeholders.forEach(placeholder => {
-                placeholder.onload = () => {
-                    placeholder.classList.remove(
-                        "placeholder",
-                        "placeholder-glow",
-                        "placeholder-wave"
-                    );
-                };
+                placeholder.classList.remove(
+                    "placeholder",
+                    "placeholder-wave",
+                    "placeholder-glow"
+                );
             });
+        });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/js/bootstrap.js"></script>
     </body>
