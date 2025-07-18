@@ -8,7 +8,7 @@ const { generateSlug } = require("./generateSlug.js");
 
 async function automate() {
     let post = await generatePost();
-    let query = post.keywords.join("+");
+    let query = post.keywords?.join("+") || post.tags?.join("+")
 
     let unsplashResponse = await fetch(
         `https://api.unsplash.com/search/photos?query=${query}`,
