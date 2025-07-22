@@ -135,9 +135,21 @@ router.post("/posts", async (req, res, next) => {
             subCategory
         } = req.body;
 
-        let parent = await Category.findOne({
-            name: category.toLowerCase().trim()
-        });
+        let parent = await Category.findOneAndUpdate(
+            {
+                name: category.toLowerCase().trim()
+            },
+            {
+                $setOnInsert: {
+                    name: category.toLowerCase().trim(),
+                    parent: null,
+                    slug: category.toLowerCase().trim().replace(/\W+/gi, "-")
+                },
+                $inc:{post_count: 1}
+            },
+            { upsert: true, new: true }
+        );
+
         // let mainCategory = await Category.findOneAndUpdate(
         //     { name: subCategory },
         //     {
@@ -157,9 +169,10 @@ router.post("/posts", async (req, res, next) => {
         let newPost = new Post({
             ...req.body,
             category: parent._id,
-            authorId: currentUser._id
+            authorId: currentUser?._id
             // ,category: mainCategory._id,
         });
+        
         await newPost.save();
 
         return res.status(201).json({

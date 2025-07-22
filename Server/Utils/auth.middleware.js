@@ -7,7 +7,6 @@ const authMiddleware = (req, res, next) => {
     try {
         const token = req.cookies.token || req.headers.authorization;
 
-        console.log(token, req.headers);
         if (!token) {
             // return res.status(403).json({
             //     success: false,

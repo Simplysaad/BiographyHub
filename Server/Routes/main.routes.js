@@ -10,6 +10,7 @@ const Category = require("../Models/category.model.js");
 
 const helper = require("../Utils/helper");
 const automate = require("../Utils/automate.js");
+const searchPictures = require("../Utils/searchPicture.js");
 const { generateSlug } = require("../Utils/generateSlug.js");
 
 const locals = {
@@ -19,6 +20,19 @@ const locals = {
         "Stay ahead with expert insights on AI, emerging tech, digital marketing strategies, and productivity tools to supercharge your growth.",
     url: "https://biographyhub.onrender.com/"
 };
+
+router.use(async (req, res, next) => {
+    try {
+        const categories = await Category.find({})
+            .select("_id name slug")
+            .sort({ post_count: -1 });
+
+        res.locals.categories = categories;
+        next()
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 const dummyData = require("../Utils/posts.js");
 const relatedPostsFunc = helper.relatedPostsFunc;
@@ -36,23 +50,52 @@ router.get("/", async (req, res, next) => {
         const allPosts = await Post.find({})
             .populate("category")
             .sort({ updatedAt: -1 })
-            .limit(40)
+            .limit(10)
             .select("title slug description category updatedAt imageUrl meta");
+
+        const postsByCategory = await Post.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    posts: { $push: "$$ROOT" }
+                }
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: "$category.name",
+                    posts: 1
+                }
+            }
+        ]);
+        console.log("postsByCategory", postsByCategory);
 
         const recentPosts = await Post.find({})
             .sort({ updatedAt: -1 })
-            .limit(40)
+            .limit(10)
             .select("title slug description category updatedAt imageUrl meta");
         const topPosts = await Post.find({})
             .sort({ "meta.likes": -1, "meta.views": -1 })
-            .limit(40)
+            .limit(10)
             .select("title slug description category updatedAt imageUrl meta");
 
         return res.render("Pages/Main/index", {
             locals,
             allPosts,
             recentPosts,
-            topPosts
+            topPosts,
+            postsByCategory
         });
     } catch (err) {
         next(err);
@@ -65,7 +108,7 @@ router.get("/automate", async (req, res, next) => {
         // const { newPost, twitterPost, success } = await response.json();
         // const data = await response.json();
 
-        // if (.success) {
+        // if (!data.success) {
         //     return res.json({
         //         success: false,
         //         message: "could not be posted",
@@ -88,7 +131,7 @@ router.get(["/author/", "/author/:slug"], async (req, res, next) => {
     try {
         const { slug } = req.params;
         const authorId = slug?.split("-").at(-1);
-        const isValidObjectId =  mongoose.Types.ObjectId.isValid(authorId);
+        const isValidObjectId = mongoose.Types.ObjectId.isValid(authorId);
 
         if (!slug || !isValidObjectId) {
             let [randomAuthor] = await User.aggregate([
@@ -191,29 +234,65 @@ router.get(["/article/", "/article/:slug"], async (req, res, next) => {
         next(err);
     }
 });
+
 router.post("/category", async (req, res) => {
     try {
-        const { name, description, parent } = req.body;
+        let categories = [
+            {
+                name: "Web development",
+                description:
+                    "Dive into the ever-evolving world of web development—where creative code meets beautiful design. From beginner basics to advanced trends, we help you build modern websites that wow, inspire, and connect people everywhere."
+            },
+            {
+                name: "AI/ML",
+                description:
+                    "Step into the future with AI and machine learning! Explore groundbreaking stories, practical projects, and guides that reveal how machine intelligence is transforming everything from business and art to everyday life."
+            },
+            {
+                name: "Frontend Frameworks",
+                description:
+                    "Discover the magic behind stunning, interactive sites—React, Angular, Vue, and more. We share hands-on tutorials, expert tips, and innovative ideas to help you craft seamless experiences your users will love."
+            },
+            {
+                name: "Backend and Databases",
+                description:
+                    "Peek behind the curtain at the unsung heroes of every app—robust backends and reliable databases. Learn to create scalable, secure, and lightning-fast architectures that power the world’s most exciting digital products."
+            },
+            {
+                name: "Productivity and Tools",
+                description:
+                    "Supercharge your workflow with proven productivity hacks, essential tools, and insider recommendations. Whether you’re coding, creating, or collaborating, we help you work smarter—not harder—every step of the way."
+            },
+            {
+                name: "Security and best practices",
+                description:
+                    "Build with confidence by mastering security essentials and industry best practices. Explore strategies to protect your code, data, and users from today’s evolving threats—security starts here."
+            },
+            {
+                name: "Tech News and Trends",
+                description:
+                    "Stay tuned to the pulse of the tech world. We bring you breaking news, bold innovations, and expert insights on the latest trends shaping tomorrow’s technology landscape."
+            }
+        ];
 
-        if (parent) {
-            const parentCategory = await Category.findOne({
-                name: parent.toLowerCase().trim()
-            });
-        }
+        await Promise.all(
+            categories.map(async category => {
+                let [image] = await searchPictures(category.name);
+                category.imageUrl = image.urls.raw;
+                category.name = category.name.toLowerCase().trim();
+                category.slug = category.name
+                    .trim()
+                    .toLowerCase()
+                    .replace(/\W+/g, "-");
+            })
+        );
 
-        let newCategory = new Category({
-            name,
-            description,
-            parent,
-            slug: name.toLowerCase().replace(/!W+/g, "-").split(" ").join("-")
-        });
-
-        await newCategory.save();
+        let newCategories = await Category.insertMany(categories);
 
         return res.status(201).json({
             success: true,
-            message: "new category added successfully",
-            newCategory
+            message: "new categories added successfully",
+            newCategories
         });
     } catch (err) {
         next(err);

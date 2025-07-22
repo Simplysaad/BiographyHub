@@ -71,7 +71,6 @@ postSchema.virtual("readTime").get(function () {
 
 module.exports = mongoose.models.post || mongoose.model("post", postSchema);
 
-
 function getRandomText(length = 6) {
     const chars = "1234567890abcdefghijklmnopqrstuvwxyz";
     let randomText = "";
@@ -80,6 +79,5 @@ function getRandomText(length = 6) {
         let randomIndex = Math.floor(Math.random() * 36);
         randomText += chars[randomIndex];
     }
-    console.log(randomText);
     return randomText;
 }

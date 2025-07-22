@@ -5,49 +5,37 @@ const generateTopic = require("./generateTopic.js");
 const generatePost = require("./generatePost.js");
 const postTweet = require("./postTwitter.js");
 const { generateSlug } = require("./generateSlug.js");
+const searchPicture = require("./searchPicture.js");
 
 async function automate() {
     let post = await generatePost();
-    let query = post.keywords?.join("+") || post.tags?.join("+")
 
-    let unsplashResponse = await fetch(
-        `https://api.unsplash.com/search/photos?query=${query}`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
-            }
-        }
-    );
+    let query = post.keywords || post.tags;
+    let [image] = await searchPicture(query, 1);
+    let altImageUrl = image.urls.raw + "&w=600&h=400";
 
-    if (!unsplashResponse.ok) {
-        return {
-            success: false,
-            message: "error while retrieving unsplashResults"
-        };
-    }
+    let prodMode = process.env.NODE_ENV === "production";
 
-    let unsplashResults = await unsplashResponse.json();
-    let imageUrl = unsplashResults.results[0].urls.raw;
+    const BASE_URL = prodMode ? process.env.PROD_URL : process.env.LOCAL_URL;
 
-    let response = await fetch(`${process.env.BASE_URL}/admin/posts`, {
+    let response = await fetch(`${BASE_URL}/admin/posts`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             Authorization: process.env.BOT_API_KEY
         },
-        body: JSON.stringify({ ...post, imageUrl })
+        body: JSON.stringify({ ...post, imageUrl: altImageUrl })
     });
+
     let { data: newPost } = await response.json();
 
     let slug = generateSlug(newPost);
-    let url = "https://biographyhub.onrender.com/article/" + slug;
-    const twitterPost = await postTweet(newPost.description, url);
+    let url = `${BASE_URL}/article/` + slug;
+     const twitterPost = await postTweet(newPost.description, url);
 
     return {
         newPost,
-        imageUrl,
+        altImageUrl,
         twitterPost
     };
 }

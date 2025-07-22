@@ -17,10 +17,14 @@ a {
     scroll-snap-type: x mandatory;
     overflow: scroll;
     display: flex;
-    align-items: flex-start;
+    /* column-count: 1; */
+    column-gap: 1rem;
 }
-.reel .story-card {
-    scroll-snap-align: center;
+.reel .reel-item {
+    min-width: 300px;
+    break-inside: avoid;
+    flex-grow: 1;
+    margin-bottom: 1rem;
 }
 #searchInput::placeholder {
     color: #909f90;
@@ -78,7 +82,7 @@ a {
     column-count: 1;
     column-gap: 1rem;
 }
-.masonry-item {
+.masonry.masonry-item {
     break-inside: avoid;
     margin-bottom: 1rem;
 }

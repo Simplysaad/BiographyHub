@@ -59,35 +59,17 @@
         class="horizontal-nav justify-content-center collapse px-1 mx-aut overflow-x-scroll"
     >
         <ul class="d-flex overflow-x-scroll my-2 px-0 align-items-center gap-2">
+           <% categories.forEach((category)=>{ %>
+             
             <li class="nav-item border">
                 <a
                     class="nav-link text-capitalize"
-                    href="/category/artificial-intelligence"
+                    href="/category/<%= category.slug %>"
                 >
-                    artificial intelligence
+                    <%= category.name %>
                 </a>
             </li>
-            <li class="nav-item border">
-                <a class="nav-link text-capitalize" href="/category/technology">
-                    technology
-                </a>
-            </li>
-            <li class="nav-item border">
-                <a
-                    class="nav-link text-capitalize"
-                    href="/category/digital-marketing"
-                >
-                    digital marketing
-                </a>
-            </li>
-            <li class="nav-item border">
-                <a
-                    class="nav-link text-capitalize"
-                    href="/category/digital-marketing"
-                >
-                    productivity
-                </a>
-            </li>
+           <% }) %>
         </ul>
     </div>
 </header>
