@@ -7,16 +7,16 @@
                 <span
                     class="d-none d-md-inline-block content-tag text-uppercase text-start"
                 >
-                    <%= authorPosts[0].category.name %>
+                    <%= authorPosts[0]?.category.name %>
                 </span>
                 <h2 class="fs-2 fw-semibold content-title">
-                    <%= authorPosts[0].title.split(' ').splice(0, 11).join(' ') + '...' %>
+                    <%= authorPosts[0]?.title.split(' ').splice(0, 11).join(' ') + '...' %>
                 </h2>
                 <p>
-                    <%= authorPosts[0].description.replace('/#/g', ' ').split(' ').splice(0, 30).join(' ')+'...' %>
+                    <%= authorPosts[0]?.description.replace('/#/g', ' ').split(' ').splice(0, 30).join(' ')+'...' %>
                 </p>
                 <a
-                    href="/article/<%= authorPosts[0].slug %>"
+                    href="/article/<%= authorPosts[0]?.slug %>"
                     class="btn border border-2 btn-outline-light"
                 >
                     Read more

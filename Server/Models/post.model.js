@@ -46,10 +46,11 @@ const postSchema = new mongoose.Schema(
             },
             sources: [
                 {
+                    _id: false,
                     name: String,
                     count: {
                         type: Number,
-                        default: 0
+                        default: 1
                     }
                 }
             ]
@@ -67,6 +68,12 @@ postSchema.virtual("slug").get(function () {
 postSchema.virtual("readTime").get(function () {
     const words = this.content.split(" ").length;
     return Math.ceil(words / 200) + " min read";
+});
+
+postSchema.index({
+    title: "text",
+    content: "text",
+    tags: "text"
 });
 
 module.exports = mongoose.models.post || mongoose.model("post", postSchema);

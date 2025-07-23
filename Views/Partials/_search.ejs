@@ -1,12 +1,21 @@
-<section class="search-container container" id="searchContainer">
-
-    <form action="/search" method="post">
-      <div class="input-group my-2">
-        <input class="form-control" placeholder="Search for people events and discussions" type="search" id="searchInput" name="searchTerm">
-        <label class="" for="searchInput">
-          
-        </label>
-        <button class="btn btn-search btn-warning" id="btnSearch">Search</button>
-      </div>
-    </form>
-</section>
+<form action="/search">
+        <div
+            class="input-group dropdown flex-grow-1 d-flex align-items-start py-md-0 py-2"
+        >
+            <div class="flex-grow-1">
+                <input
+                    class="form-control w-100 dropdown-toggle"
+                    placeholder="Search for topics, articles or authors..."
+                    type="search"
+                    id="searchInput"
+                    value="<%=  typeof searchTerm !== 'undefined' ? searchTerm : '' %>"
+                    name="searchTerm"
+                />
+                <ul class="dropdown-menu col-12" id="suggestionContainer"></ul>
+                <label class="" for="searchInput"> </label>
+            </div>
+            <button class="btn btn-search btn-outline-success" id="btnSearch">
+                Search
+            </button>
+        </div>
+</form>

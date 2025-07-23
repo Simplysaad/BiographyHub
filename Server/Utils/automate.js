@@ -30,7 +30,7 @@ async function automate() {
     let { data: newPost } = await response.json();
 
     let slug = generateSlug(newPost);
-    let url = `${BASE_URL}/article/` + slug;
+    let url = `${BASE_URL}/article/` + slug + "?source=twitter";
      const twitterPost = await postTweet(newPost.description, url);
 
     return {

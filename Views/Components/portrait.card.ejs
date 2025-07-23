@@ -14,7 +14,7 @@
           <%= post.category.name %>
         </span>
             <h4 class="card-title fs-5 py-2">
-                <a href="/article/<%=post.slug || post._id%>">
+                <a href="/article/<%= (post.slug || post._id) + '?source='+ (source || null) %>">
                     <%= post.title %>
                 </a>
             </h4>

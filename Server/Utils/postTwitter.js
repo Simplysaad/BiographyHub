@@ -7,6 +7,8 @@ const client = new TwitterApi({
     accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
+
+
 async function postTweet(text, url, ...paths) {
     try {
         let response;

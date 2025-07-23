@@ -31,7 +31,7 @@
             </div>
             <div class="masonr reel py-3 px-2">
                 <% topPosts.forEach((post)=>{ %> <%-
-                include('../../Components/portrait.card.ejs', {post}) %> <% })%>
+                include('../../Components/portrait.card.ejs', {post, source: "home"}) %> <% })%>
             </div>
         </section>
         <section id="recentPostsSection" class="overflow-hidden">
@@ -40,7 +40,7 @@
             </div>
             <div class="masonr reel  py-3 px-2">
                 <% recentPosts.forEach((post)=>{ %> <%-
-                include('../../Components/portrait.card.ejs', {post}) %> <% })%>
+                include('../../Components/portrait.card.ejs', {post, source: "home"}) %> <% })%>
             </div>
         </section>
 
@@ -51,7 +51,7 @@
             </div>
             <div class="reel masonr py-3 px-2">
                 <% category.posts.forEach((post)=>{ %> <%-
-                include('../../Components/portrait.card.ejs', {post}) %> <% })%>
+                include('../../Components/portrait.card.ejs', {post, source: "home"}) %> <% })%>
             </div>
         </section>
         <% })%>

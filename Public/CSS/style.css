@@ -29,13 +29,13 @@ a {
 #searchInput::placeholder {
     color: #909f90;
 }
-#searchInput {
+/* #searchInput {
     width: 100%;
     background: inherit;
-    outline: none;
+    outline: none; 
     border: none;
     color: #fff;
-}
+} */
 .navbar-search {
     border: 1px solid #909f90;
     padding: 5px 10px;

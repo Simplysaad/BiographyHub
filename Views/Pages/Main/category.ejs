@@ -32,7 +32,7 @@
             </div>
             <div class="masonry py-3 px-2">
                 <% categoryPosts.forEach((post)=>{ %> <%-
-                include("../../Components/portrait.card.ejs", {post}) %> <% })%>
+                include("../../Components/portrait.card.ejs", {post, source:"categoryPage"}) %> <% })%>
             </div>
         </section>
     </section>

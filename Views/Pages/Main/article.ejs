@@ -1,139 +1,165 @@
 <div class="d-flex gap-2 flex-column flex-md-row">
-<main id="mainContent" class="col-md-8 col-lg-9">
-    <section id="infoSection">
-        <div class="article-image overflow-hidden">
-          <img
-              src="<%= article.imageUrl %>"
-              class="img-fluid w-100 placeholder placeholder-wave h-auto object-fit-cover"
-          />        
-        </div>
-        <div class="article-title py-3">
-            <span class="rounded small text-uppercase text-success"> <%= article.category.name || "tech" %> </span>
-            <h3 class="fs-1 led"><%= article.title%></h3>
-        </div>
-        <div class="article-info text-muted d-flex align-items-start flex-wrap gap-2">
-            <span class="text-capitalize"><%= article.authorId?.name %> </span>
-            <span class=""
-                ><%= article.updatedAt.toLocaleDateString("en-US", {year:
-                "numeric", month: "long", day: "numeric"}) %>
-            </span>
-            <span class="d-none small"><%= article.readTime %> </span>
-        </div>
-    </section>
-    <article id="mainArticle" class="content py-4">
-        <div class=""><%- article.content %></div>
-        <div class="d-flex justify-content-between align-items-center">
-            <span class="fs-6 text-muted"> Was this article helpful? </span>
-            <span class="d-flex btn-group gap-2">
-                <a
-                    class="text-decoration-none p-2 btn btn-outline-secondary"
-                    href="/article/<%=article._id %>?like=1"
-                >
-                    <i class="fa fa-thumbs-up"></i>
-                </a>
-                <a
-                    class="text-decoration-none p-2 btn btn-outline-secondary"
-                    href="/article/<%=article._id %>"
-                >
-                    <i class="fa fa-thumbs-down"></i>
-                </a>
-            </span>
-        </div>
-
-        <div class="article-share d-flex gap-3 fs-2">
-            <span id="btnShare" data-title="<%= article.title %>">
-                <i class="fa fa-share-alt"> </i>
-            </span>
-            <a href="https://wa.me/?text=<%= article.title+ "\n"+"\n" + article.description + "\n\n" + currentUrl %>" id="whatsapp" class="share-icon">
-                <i class="fab fa-whatsapp"> </i>
-            </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= currentUrl %>" id="facebook" class="share-icon">
-                <i class="fab fa-facebook"> </i>
-            </a>
-            <a href="https://x.com/intent/tweet?text=<%= article.title+ "\n\n" + article.description + "\n\n" + currentUrl %>&url=<%= currentUrl %>"  id="twitter" class="share-icon">
-                <i class="fab fa-twitter"> </i>
-            </a>
-        </div>
-    </article>
-    <section id="chatbotSection" class="col-md-8">
-        <div class="heading my-4">
-            <h3 class="fs-2 lead">Ask Ai!</h3>
-            <h3 class="fs-6 fw-light">For more insight and context</h3>
-        </div>
-        <div class="input-bar border rounded gap-1 d-flex">
-            <input
-                class="border-0 form-control"
-                type="text"
-                name="message"
-                id="inputMessage"
-                placeholder="Ask follow up..."
-                value=""
-            />
-            <button id="btnVoiceSearch" class="btn border-0">
-                <i class="fa fa-microphone"> </i>
-            </button>
-            <button id="btnSendMessage" class="btn btn-outline-light">
-                <i class="fa fa-paper-plane"> </i>
-            </button>
-        </div>
-        <div class="d-none input-suggestions my-4">
-            <div
-                class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
-            >
-                <span class="col-8 text-truncate">
-                    lorem ipsum dolor sit amet consectetur?
+    <main id="mainContent" class="col-md-8 col-lg-9">
+        <section id="infoSection">
+            <div class="article-image overflow-hidden">
+                <img
+                    src="<%= article.imageUrl %>"
+                    class="img-fluid w-100 placeholder placeholder-wave h-auto object-fit-cover"
+                />
+            </div>
+            <div class="article-title py-3">
+                <span class="rounded small text-uppercase text-success">
+                    <%= article.category.name || "tech" %>
                 </span>
-                <i class="fa small fa-search"> </i>
+                <h3 class="fs-1 led"><%= article.title%></h3>
             </div>
             <div
-                class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+                class="article-info text-muted d-flex align-items-start flex-wrap gap-2"
             >
-                <span class="col-8 text-truncate">
-                    lorem ipsum dolor sit amet consectetur?
+                <span class="text-capitalize"
+                    ><%= article.authorId?.name %>
                 </span>
-                <i class="fa small fa-search"> </i>
+                <span class=""
+                    ><%= article.updatedAt.toLocaleDateString("en-US", {year:
+                    "numeric", month: "long", day: "numeric"}) %>
+                </span>
+                <span class="d-none small"><%= article.readTime %> </span>
             </div>
-        </div>
-    </section>
-    <section id="relatedSection" class="my-5">
-        <div class="heading my-3">
-            <h3 class="fs-3 fw-light">Recommended Posts</h3>
-        </div>
+        </section>
+        <article id="mainArticle" class="content py-4">
+            <div class=""><%- article.content %></div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fs-6 text-muted"> Was this article helpful? </span>
+                <span class="d-flex btn-group gap-2">
+                    <a
+                        class="text-decoration-none p-2 btn btn-outline-secondary"
+                        href="/article/<%=article._id %>?like=1"
+                    >
+                        <i class="fa fa-thumbs-up"></i>
+                    </a>
+                    <a
+                        class="text-decoration-none p-2 btn btn-outline-secondary"
+                        href="/article/<%=article._id %>"
+                    >
+                        <i class="fa fa-thumbs-down"></i>
+                    </a>
+                </span>
+            </div>
+            <div class="article-share d-flex gap-3 fs-2">
+                <span id="btnShare" data-title="<%= article.title %>">
+                    <i class="fa fa-share-alt"></i>
+                </span>
+                <a
+                    href="https://wa.me/?text=<%= encodeURIComponent(article.title + '\n\n' + article.description + '\n\n' + currentUrl) %>"
+                    id="whatsapp"
+                    class="share-icon"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a
+                    href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>"
+                    id="facebook"
+                    class="share-icon"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a
+                    href="https://x.com/intent/tweet?text=<%= encodeURIComponent(article.title + '\n\n' + currentUrl) %>"
+                    id="twitter"
+                    class="share-icon"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+        </article>
+        <section id="chatbotSection" class="col-md-8">
+            <div class="heading my-4">
+                <h3 class="fs-2 lead">Ask Ai!</h3>
+                <h3 class="fs-6 fw-light">For more insight and context</h3>
+            </div>
+            <div class="input-bar border rounded gap-1 d-flex">
+                <input
+                    class="border-0 form-control"
+                    type="text"
+                    name="message"
+                    id="inputMessage"
+                    placeholder="Ask follow up..."
+                    value=""
+                />
+                <button id="btnVoiceSearch" class="btn border-0">
+                    <i class="fa fa-microphone"> </i>
+                </button>
+                <button id="btnSendMessage" class="btn btn-outline-light">
+                    <i class="fa fa-paper-plane"> </i>
+                </button>
+            </div>
+            <div class="d-none input-suggestions my-4">
+                <div
+                    class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+                >
+                    <span class="col-8 text-truncate">
+                        lorem ipsum dolor sit amet consectetur?
+                    </span>
+                    <i class="fa small fa-search"> </i>
+                </div>
+                <div
+                    class="suggestion my-2 text-muted d-flex px-2 border-bottom align-items-center justify-content-between"
+                >
+                    <span class="col-8 text-truncate">
+                        lorem ipsum dolor sit amet consectetur?
+                    </span>
+                    <i class="fa small fa-search"> </i>
+                </div>
+            </div>
+        </section>
+        <section id="relatedSection" class="my-5">
+            <div class="heading my-3">
+                <h3 class="fs-3 fw-light">Recommended Posts</h3>
+            </div>
 
-        <div class=" d-flex align-items-start flex-nowrap overflow-scroll gap-2 container">
-            <% relatedPosts?.forEach((post)=>{ %> <%-
-            include('../../Components/recommend.card.ejs', {post}) %> <% }) %>
-        </div>
-    </section>
-</main>
-<aside class="col-md-4 col-lg-3 border">
-    <section
-        id="authorSection"
-        class="d-flex container py-2 flex-column gap-1 author-box"
-    >
-        <div class="author-image overflow-hidden rounded">
-            <img
-                class="img-thumbnail img-author"
-                src="<%= author?.profileImage%>"
-                alt="no image"
-            />
-        </div>
-        <div class="author-info d-flex flex-column">
-            <span class="fs-4 text-capitalize"><%= author?.name %></span>
-            <span class="small"><%= author?.title %></span>
-        </div>
-        <div class="author-bio">
-            <p class="fw-light"><%= author?.bio %></p>
-        </div>
-        <div class="author-socials fs-4 d-flex gap-3">
-            <% author?.socials.forEach((social)=>{ %>
-            <a class="social-link" href="<%= social.url %>">
-                <i class="fab fa- <%= social.name %>"> </i>
-            </a>
-            <% }) %>
-        </div>
-    </section>
-</aside>
+            <div
+                class="d-flex align-items-start flex-nowrap overflow-scroll gap-2 container"
+            >
+                <% relatedPosts?.forEach((post)=>{ %> <%-
+                include('../../Components/recommend.card.ejs', {post, source:
+                "recommendation"}) %> <% }) %>
+            </div>
+        </section>
+    </main>
+    <aside class="col-md-4 col-lg-3 border">
+        <section
+            id="authorSection"
+            class="d-flex container py-2 flex-column gap-1 author-box"
+        >
+            <div class="author-image overflow-hidden rounded">
+                <img
+                    class="img-thumbnail img-author"
+                    src="<%= author?.profileImage%>"
+                    alt="no image"
+                />
+            </div>
+            <div class="author-info d-flex flex-column">
+                <span class="fs-4 text-capitalize"><%= author?.name %></span>
+                <span class="small"><%= author?.title %></span>
+            </div>
+            <div class="author-bio">
+                <p class="fw-light"><%= author?.bio %></p>
+            </div>
+            <div class="author-socials fs-4 d-flex gap-3">
+                <% author?.socials.forEach((social)=>{ %>
+                <a class="social-link" href="<%= social.url %>">
+                    <i class="fab fa- <%= social.name %>"> </i>
+                </a>
+                <% }) %>
+            </div>
+        </section>
+    </aside>
 </div>
 
 <!-- <style>
@@ -179,6 +205,5 @@
     }
 
 </style> -->
-
 
 <script src="/JS/article.js"></script>

@@ -10,7 +10,7 @@
           <%= post.category[0].name %>
         </span>
             <h4 class="card-title fw-semibold fs-6">
-                <a href="/article/<%=post.slug || post._id%>">
+                <a href="/article/<%= (post.slug || post._id) + '?source='+ (source || null) %>">
                     <%= post.title %>
                 </a>
             </h4>

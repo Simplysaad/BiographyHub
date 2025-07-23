@@ -9,35 +9,15 @@
             id="searchContainer"
             class="search-container collapse flex-grow-1 order-3 order-md-2"
         >
-            <form action="/search">
-                <div
-                    class="input-group flex-grow-1 d-flex align-items-start py-md-0 py-2"
-                >
-                    <div class="flex-grow-1">
-                        <input
-                            class="form-control w-100"
-                            placeholder="Search for people events and discussions"
-                            type="search"
-                            id="searchInput"
-                            value="<%=  typeof searchTerm !== 'undefined' ? searchTerm : '' %>"
-                            name="searchTerm"
-                        />
-                        <label class="" for="searchInput"> </label>
-                    </div>
-                    <button
-                        class="btn btn-search btn-outline-success"
-                        id="btnSearch"
-                    >
-                        Search
-                    </button>
-                </div>
-            </form>
+          <%- include('./_search.ejs') %>
         </div>
-        <div class="d-flex order-2 collapse order-md-3 gap-2 navbar-options ms-md-3">
+        <div
+            class="d-flex order-2 collapse order-md-3 gap-2 navbar-options ms-md-3"
+        >
             <button
                 data-bs-toggle="collapse"
                 data-bs-target="#searchContainer"
-                class="btn  p-2"
+                class="btn p-2"
                 id="btnToggleSearch"
             >
                 <i class="fa fa-search"></i>
@@ -59,8 +39,8 @@
         class="horizontal-nav justify-content-center collapse px-1 mx-aut overflow-x-scroll"
     >
         <ul class="d-flex overflow-x-scroll my-2 px-0 align-items-center gap-2">
-           <% categories.forEach((category)=>{ %>
-             
+            <% categories.forEach((category)=>{ %>
+
             <li class="nav-item border">
                 <a
                     class="nav-link text-capitalize"
@@ -69,7 +49,7 @@
                     <%= category.name %>
                 </a>
             </li>
-           <% }) %>
+            <% }) %>
         </ul>
     </div>
 </header>
