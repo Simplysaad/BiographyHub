@@ -1,9 +1,40 @@
-<section class="container">
-<h2 class="text-center fw-bold my-3 py-3 text-secondary-emphasis display-3 border-1 border-top border-bottom">
-  <%= categoryName %>
-</h2>
-
-<% categoryPosts.forEach((post)=>{%>
-    <%- include("../component/portrait.card.ejs", {post}) %>
-<% })%>
-</section>
+<div class="d-flex gap-2 flex-column flex-md-row">
+    <section id="mainContent" class="col-md-8 col-lg-9">
+        <section id="heroSection" class="my-5 hero py-5 overflow-auto mh-100">
+            <div
+                class="rounded mx-2 p-2 hero-content col-md-6 col-lg-6 text-center text-md-start clearfix float-md-end"
+            >
+                <span
+                    class="d-none d-md-inline-block content-tag text-uppercase text-start"
+                >
+                    <%= categoryPosts[0].category.name %>
+                </span>
+                <h2 class="fs-2 fw-semibold content-title">
+                    <%= categoryPosts[0].title.split(' ').splice(0, 11).join(' ') + '...' %>
+                </h2>
+                <p>
+                    <%= categoryPosts[0].description.replace('/#/g', ' ').split(' ').splice(0, 30).join(' ')+'...' %>
+                </p>
+                <a
+                    href="/article/<%= categoryPosts[0].slug %>"
+                    class="btn border border-2 btn-outline-light"
+                >
+                    Read more
+                </a>
+            </div>
+        </section>
+        <section id="topicsSection" class="">
+            <h1 class="display-5 text-capitalize"><%= category.name %></h1>
+        </section>
+        <section id="topStoriesSection" class="overflow-hidden">
+            <div class="heading py-3">
+                <h2 class="display-6">Top Stories</h2>
+            </div>
+            <div class="masonry py-3 px-2">
+                <% categoryPosts.forEach((post)=>{ %> <%-
+                include("../../Components/portrait.card.ejs", {post, source:"categoryPage"}) %> <% })%>
+            </div>
+        </section>
+    </section>
+    <aside class="col-md-4 col-lg-3 border"></aside>
+</div>

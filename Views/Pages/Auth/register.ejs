@@ -1,100 +1,100 @@
-    <form
-        class="py-5 col-12 col-md-8 col-lg-6"
-        action="/auth/register"
-        method="post"
-        accept-charset="utf-8"
-    >
-        <legend class="heading my-4">
-            <span class="small fw-light fs-6 text-muted"> Welcome back </span>
-            <h3 class="display-3 fw-semibold text-capitalize">Register</h3>
-        </legend>
-        <fieldset class="my-4 d-flex gap-3 flex-column">
-            <div class="form-floating">
-                <input
-                    type="text"
-                    class="form-control"
-                    name="name"
-                    id="name"
-                    placeholder=""
-                />
-                <label for="name" class="">
-                    <i class="fa fa-user text-muted small"> </i>
-                    <span class="mx-2"> Full name </span>
-                </label>
-                <span class="error-message d-none small text-danger">
-                    <i class="fa fa-exclamation-circle small"> </i>
-                    <span class="error-message-text"> Invalid name </span>
-                </span>
-            </div>
-            <div class="form-floating">
-                <input
-                    type="email"
-                    class="form-control"
-                    name="emailAddress"
-                    id="emailAddress"
-                    placeholder=""
-                />
-                <label for="emailAddress" class="">
-                    <i class="fa fa-envelope text-muted small"> </i>
-                    <span class="mx-2"> Email Address </span>
-                </label>
-                <span class="error-message d-none small text-danger">
-                    <i class="fa fa-exclamation-circle small"> </i>
-                    <span class="error-message-text">
-                        Invalid email address
-                    </span>
-                </span>
-            </div>
-            <div class="form-floating">
-                <input
-                    type="password"
-                    class="form-control"
-                    name="password"
-                    id="password"
-                    placeholder=""
-                />
-                <label for="password">
-                    <i class="fa fa-lock text-muted small"> </i>
-                    <span class="mx-2"> Password </span>
-                </label>
-                <span class="error-message d-none small text-danger">
-                    <i class="fa fa-exclamation-circle small"> </i>
-                    <span class="error-message-text"> Invalid password </span>
-                </span>
-            </div>
-            <div class="form-floating">
-                <input
-                    type="password"
-                    class="form-control"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    placeholder=""
-                />
-                <label for="confirmPassword">
-                    <i class="fa fa-lock text-muted small"> </i>
-                    <span class="mx-2"> Confirm password </span>
-                </label>
-                <span class="error-message d-none small text-danger">
-                    <i class="fa fa-exclamation-circle small"> </i>
-                    <span class="error-message-text">
-                        Invalid password confirmation
-                    </span>
-                </span>
-            </div>
-        </fieldset>
-        <div class="cta d-flex py-4 gap-2 flex-column">
-            <button class="btn btn-lg btn-success shadow" type="submit">
-                Submit
-            </button>
-            <span class="my-2">
-                Already have an account?
-                <a
-                    class="link-success text-decoration-underline"
-                    href="/auth/login"
-                >
-                    Login!
-                </a>
+<form
+    class="py-5 col-12 col-md-8 col-lg-6"
+    action="/auth/register"
+    method="post"
+    accept-charset="utf-8"
+>
+    <legend class="heading my-4">
+        <span class="small fw-light fs-6 text-muted"> Welcome back </span>
+        <h3 class="display-3 fw-semibold text-capitalize">Register</h3>
+    </legend>
+    <fieldset class="my-4 d-flex gap-3 flex-column">
+        <div class="form-floating">
+            <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="name"
+                placeholder=""
+            />
+            <label for="name" class="">
+                <i class="fa fa-user text-muted small"> </i>
+                <span class="mx-2"> Full name </span>
+            </label>
+            <span class="error-message d-none small text-danger">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text"> Invalid name </span>
             </span>
         </div>
-    </form>
+        <div class="form-floating">
+            <input
+                type="email"
+                class="form-control"
+                name="emailAddress"
+                id="emailAddress"
+                placeholder=""
+            />
+            <label for="emailAddress" class="">
+                <i class="fa fa-envelope text-muted small"> </i>
+                <span class="mx-2"> Email Address </span>
+            </label>
+            <span class="error-message d-none small text-danger">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">
+                    Invalid email address
+                </span>
+            </span>
+        </div>
+        <div class="form-floating">
+            <input
+                type="password"
+                class="form-control"
+                name="password"
+                id="password"
+                placeholder=""
+            />
+            <label for="password">
+                <i class="fa fa-lock text-muted small"> </i>
+                <span class="mx-2"> Password </span>
+            </label>
+            <span class="error-message d-none small text-danger">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text"> Invalid password </span>
+            </span>
+        </div>
+        <div class="form-floating">
+            <input
+                type="password"
+                class="form-control"
+                name="confirmPassword"
+                id="confirmPassword"
+                placeholder=""
+            />
+            <label for="confirmPassword">
+                <i class="fa fa-lock text-muted small"> </i>
+                <span class="mx-2"> Confirm password </span>
+            </label>
+            <span class="error-message d-none small text-danger">
+                <i class="fa fa-exclamation-circle small"> </i>
+                <span class="error-message-text">
+                    Invalid password confirmation
+                </span>
+            </span>
+        </div>
+    </fieldset>
+    <div class="cta d-flex py-4 gap-2 flex-column">
+        <button class="btn btn-lg btn-success shadow" type="submit">
+            Submit
+        </button>
+        <span class="my-2">
+            Already have an account?
+            <a
+                class="link-success text-decoration-underline"
+                href="/auth/login"
+            >
+                Login!
+            </a>
+        </span>
+    </div>
+</form>
 <script src="/JS/register.js" type="text/javascript" charset="utf-8"></script>

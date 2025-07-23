@@ -1,0 +1,29 @@
+ISSUES
+* Some links are broken; not going anywhere
+* ✓ I've not implemented the category model : FIXED
+
+TODOS:
+* ✓ Category: FIXED
+* Search
+
+
+AI functionalities:
+* ✓ Generate article (with title, description and content in html)
+* Generate cover image for article
+* Explain and answer questions about the article (on user request)
+* ✓ Post to twitter with link to the website
+
+
+
+NAME IDEAS FOR THE WEBSITE
+
+1. *TechPulse Daily*
+2. *AI & Hustle*
+3. *Digital Drift*
+4. *FutureStacked*
+5. *SmartShift Hub*
+6. *The Growth Circuit*
+7. *NeuroNiche*
+8. *Byte & Boost*
+9. *NextGen Hustle*
+10. *OptimizeIQ*

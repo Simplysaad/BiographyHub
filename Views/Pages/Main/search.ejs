@@ -9,7 +9,7 @@
     <div class="article-card py-2">
       
       <div class="card-body p-1 col my-0">
-        <a href="/article/<%= post._id%>" class="card-title">
+        <a href="/article/<%=( post.slug || post._id ) + '?source=search'%>" class="card-title">
           <%= post.title%>
         </a>
         <div class="float-end">

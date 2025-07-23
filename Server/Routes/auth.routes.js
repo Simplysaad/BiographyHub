@@ -7,11 +7,12 @@ const User = require("../Models/user.model.js");
 const authMiddleware = require("../Utils/auth.middleware.js");
 
 const locals = {
-    title: "Auth | BiographyHub",
+    title: "Auth - BiographyHub",
     imageUrl: "/IMG/brand-image.png",
-    description: ""
+    description:
+        "Stay ahead with expert insights on AI, emerging tech, digital marketing strategies, and productivity tools to supercharge your growth.",
+    url: "https://biographyhub.onrender.com/auth/login"
 };
-
 /**
  * POST
  * AUTH - subscribe page
@@ -50,10 +51,12 @@ router.post("/subscribe", async (req, res, next) => {
  */
 router.get("/register", async (req, res, next) => {
     try {
-        locals.title = "Create Account | BiographyHub";
+        locals.title = "Register - BiographyHub";
+        locals.url = "https://biographyhub.onrender.com/auth/register";
+
         return res.render("Pages/Auth/register", {
             locals,
-            layout: "Layouts/Auth"
+            layout: "Layouts/auth"
         });
     } catch (err) {
         next(err);
@@ -123,11 +126,13 @@ router.post("/register", async (req, res, next) => {
         res.cookie("token", token, { httpOnly: true });
         //send welcome email, use nodemailer
 
-        return res.status(201).json({
-            success: true,
-            message: "new user created successfully",
-            newUser
-        });
+        // return res.status(201).json({
+        //     success: true,
+        //     message: "new user created successfully",
+        //     newUser
+        // });
+
+        return res.redirect("/admin/");
     } catch (err) {
         next(err);
     }
@@ -140,10 +145,12 @@ router.post("/register", async (req, res, next) => {
 
 router.get("/login", (req, res, next) => {
     try {
-        locals.title = "Login | BiographyHub";
+        locals.title = "Login - BiographyHub";
+        locals.url = "https://biographyhub.onrender.com/auth/login";
+
         return res.render("Pages/Auth/login", {
             locals,
-            layout: "Layouts/Auth"
+            layout: "Layouts/auth"
         });
     } catch (err) {
         next(err);
@@ -191,11 +198,13 @@ router.post("/login", async (req, res, next) => {
             }
         );
         res.cookie("token", token, { httpOnly: true });
-        return res.status(200).json({
-            success: true,
-            message: "user logged in successfully",
-            currentUser
-        });
+        // return res.status(200).json({
+        //     success: true,
+        //     message: "user logged in successfully",
+        //     currentUser
+        // });
+
+        return res.redirect("/admin/");
     } catch (error) {
         next(error);
     }
@@ -249,7 +258,6 @@ router.get("/reset-password", async (req, res, next) => {
         let decoded = jwt.verify(token, process.env.SECRET_KEY);
 
         if (!token) {
-            console.log(decoded);
             return res.status(403).json({
                 success: false,
                 message: "invalid token"

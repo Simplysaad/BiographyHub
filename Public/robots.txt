@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /auth/
+Sitemap: https://biographyhub.onrender.com/sitemap.xml
