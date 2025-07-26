@@ -9,14 +9,13 @@
             href="/article/<%=( post.slug || post._id ) + '?source=search'%>"
             class="list-group-item my-3 list-group-item-action mb-3 shadow-sm rounded"
         >
-            <div class="d-flex w-100 justify-content-between">
+            <div class="d-md-flex gap-2 py-2 w-100 justify-content-between">
                 <h5 class="mb-1 fw-semibold"><%= post.title %></h5>
-                <small class="text-muted"><%= getRelativeTime(post.updatedAt) %></small>
+                <small class="text-muted py-2"><%= getRelativeTime(post.updatedAt) %></small>
             </div>
             <p class="mb-1 text-muted"><%= post.description.split(" ").slice(0,25).join(" ") %></p>
             <small class="text-secondary"
-                ><%= post.category?.name || 'General' + ' · ' + post.readTime + ' min read' %>5
-                min
+                ><%= post.category?.name || 'General' + ' · ' + post.readTime %>
             </small>
         </a>
         <% }) %>
