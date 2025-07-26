@@ -2,7 +2,6 @@ const express = require("express");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
-const expressLayouts = require("express-ejs-layouts");
 const morgan = require("morgan");
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
@@ -46,16 +45,7 @@ app.use(errorMiddleWare);
 //USE COOKIE PARSER
 app.use(cookieParser());
 
-//VIEWS
-app.set("view engine", "ejs");
-app.set("views", "Views");
 
-//LAYOUTS
-app.use(expressLayouts);
-app.set("layout", "Layouts/main");
-
-//STATIC
-app.use(express.static("./Public"));
 
 //ROUTING
 app.use("/auth", require("./Server/Routes/auth.routes.js"));

@@ -64,7 +64,7 @@ exports.getHome = async (req, res, next) => {
             .limit(10)
             .select("title slug description category updatedAt imageUrl meta");
 
-        return res.render("Pages/Main/index", {
+        return res.json({
             locals,
             allPosts,
             recentPosts,
@@ -116,8 +116,9 @@ exports.getAuthor = async (req, res, next) => {
         const authorPosts = await Post.find({ authorId });
         const author = await User.findById(authorId);
 
-        return res.render("Pages/Main/author", {
-            locals,
+        return res.json({
+            success: true,
+            message: "author posts fetched successfully",
             authorPosts,
             author
         });
@@ -193,7 +194,7 @@ exports.getArticle = async (req, res, next) => {
             let slug = generateSlug(article);
 
             return res.redirect(
-                `https://biographyhub.onrender.com/article/${slug}?source=random_article`
+                `${locals.url}/article/${slug}?source=random_article`
             );
         }
 
@@ -217,8 +218,9 @@ exports.getArticle = async (req, res, next) => {
         locals.imageUrl = article.imageUrl;
 
         let currentUrl = "https://biographyhub.onrender.com" + req.originalUrl;
-        return res.render("Pages/Main/article", {
-            locals,
+        return res.json({
+            success: true,
+            message: "article fetched successfully",
             article,
             author,
             currentUrl,
@@ -307,8 +309,9 @@ exports.getCategory = async (req, res, next) => {
         locals.title = category.name + " - BiographyHub";
         locals.description = category.description;
 
-        return res.render("Pages/Main/category", {
-            locals,
+        return res.json({
+            success: true,
+            message: "category posts fetched successfully",
             categoryPosts,
             category
         });
@@ -375,8 +378,9 @@ exports.allSearch = async (req, res, next) => {
         } results `;
 
         // return res.json({
-        return res.render("Pages/Main/search", {
-            locals,
+        return res.json({
+            success: true,
+            message: "search results fetched successfully",
             searchTerm,
             searchResults
         });
