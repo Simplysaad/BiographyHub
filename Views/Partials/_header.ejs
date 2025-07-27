@@ -3,7 +3,18 @@
         class="container-fluid pt-sm-2 d-flex align-items-start justify-content-between flex-wrap flex-md-nowrap"
     >
         <div class="navbar-brand order-1 me-2">
+                        <button
+                class="btn p-2"
+                data-bs-toggle="collapse"
+                data-bs-target="#horizontalNav"
+                id="navBarToggler"
+            >
+                <i class="fa fa-bars"></i>
+                <span class="d-none sr-only">Login</span>
+            </button>
+                <span class="">
             <a href="/" class=""> BiographyHub </a>
+                </span>
         </div>
         <div
             id="searchContainer"
@@ -23,15 +34,12 @@
                 <i class="fa fa-search"></i>
                 <span class="d-none sr-only">Search</span>
             </button>
-            <button
-                class="btn p-2"
-                data-bs-toggle="collapse"
-                data-bs-target="#horizontalNav"
-                id="navBarToggler"
-            >
-                <i class="fa fa-bars"></i>
-                <span class="d-none sr-only">Login</span>
-            </button>
+                    <button class="btn p-2" id="themeToggler">
+                        <i class="fa fa-sun"></i>
+                        <span class="d-none sr-only">Toggle theme</span>
+                    </button>
+
+
         </div>
     </div>
     <div

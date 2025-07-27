@@ -1,98 +1,98 @@
+const themeToggler = document.querySelector("#themeToggler");
+themeToggler.addEventListener("click", () => {
+    //let theme = localStorage.getItem("theme");
+    const isDark = localStorage.getItem("theme") === "dark";
 
-// const searchCont = document.querySelector('#searchContainer')
-// const searchInput = document.querySelector('#searchInput')
-// const btnDisplaySearch = document.querySelector('#btnDisplaySearch')
-// //let searchContDisplay = searchCont.style.visibility
+    let theme = isDark ? "light" : "dark";
 
-// btnDisplaySearch.addEventListener('click', ()=>{
-  
-//   if(searchCont.style.visibility !== 'visible' ){
-//     searchCont.style.visibility = 'visible'
-//     console.log('not visible')
-//   }
-//   else{
-//     searchCont.style.visibility = 'hidden'
-//     console.log('not hidden')
-//   }
-// })
+    localStorage.setItem("theme", theme);
+    document.body.dataset.bsTheme = theme;
+    let icon = isDark ? "moon" : "sun";
 
+    themeToggler.innerHTML = `<i class="fa fa-${icon}"></i>`;
+});
 
-// const pasteText = (textId)=> {
-//       let textInput = document.getElementById(textId)
-//       console.log(textId)
-      
-//       navigator.clipboard.readText()
-//       .then((data)=>{
-//         textInput.value = data
-//         console.log('clipboard text: ', data)
-//       })
-//       .catch((err) => console.log('Error:', err))
-// }
+window.addEventListener("DOMContentLoaded", () => {
+    let theme = localStorage.getItem("theme");
+    if (!theme) {
+        theme = "dark";
+        localStorage.setItem("theme", theme);
+    }
+    document.body.dataset.bsTheme = theme;
 
-// const copyText = (textId)=> {
-//       let textInput = document.getElementById(textId)
-//       console.log(textId)
-      
-//       navigator.clipboard.writeText(textInput.value)
-//       .then((data)=>{
-        
-//         console.log('clipboard text: ', data)
-//       })
-//       .catch((err) => console.log('Error:', err))
-// }
+    let isDark = theme === "dark";
+    let icon = isDark ? "sun" : "moon";
+    themeToggler.innerHTML = `<i class="fa fa-${icon}"></i>`;
+});
 
+const searchInput = document.getElementById("searchInput");
+const suggestionContainer = document.getElementById("suggestionContainer");
 
-// const readTime =(content)=>{
-//   let words = content.split(' ').length
-//   let speed = 200
+function debounce(func, delay = 400) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+}
 
-//   return Math.ceil(words/speed) + ' min read'
-// }
-// let btnSubscribe = document.getElementById("btnSubscribe");
-// let subscribeForm = document.getElementById("subscribeForm");
-// let subscribed = document.getElementById("subscribed");
+function shuffle(arr) {
+    for (i = 0; i < arr.length; i++) {
+        let j = Math.floor(Math.random() * arr.length);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
 
-// subscribeForm.addEventListener("submit", () => {
-//     subscribed.style.display = "block";
-//     subscribeForm.style.display = "none";
-//     alert(subscribed.textContent);
-// });
+async function showSuggestions() {
+    try {
+        suggestionContainer.innerHTML = "";
+        if (searchInput.value === "") {
+            console.error("searchInput", searchInput.value);
+            suggestionContainer.classList.remove("show");
+            return;
+        }
 
-// const inputName = document.getElementById("name");
-// const inputUsername = document.getElementById("username");
-// const inputEmail = document.getElementById("emailAddress");
-// const inputPassword = document.getElementById("password");
-// const confirmPassword = document.getElementById("passwordConfirm");
-// const btnSubmit = document.getElementById("btnSubmit");
-// const form = document.getElementById("form");
-// const btnLogin = document.getElementById("btnLogin");
-// const loginForm = document.getElementById("loginForm");
-// const error = document.querySelectorAll(".text-error");
-// console.log(error);
+        let response = await fetch(`/autocomplete?text=${searchInput.value}`);
+        let { suggestions } = await response.json();
 
-// btnLogin.addEventListener("click", async e => {
-//     e.preventDefault();
-//     if (inputPassword.value.length < 8) {
-//         error[3].style.visibility = "visible";
-//     } else {
-//         console.log("form validated successfully");
-//         // loginForm.action = "/login";
-//         // loginForm.submit();
-//     }
-// });
+        // let suggestions = ["mth", "mee", "foo", "bar"];
+        // suggestions = shuffle(suggestions);
 
-// btnSubmit.addEventListener("click", e => {
-//     e.preventDefault();
-//     console.log("submit button clicked")
-//     if (inputName.value.length < 2) {
-//         error[0].style.visibility = "visible";
-//     } else if (inputPassword.value.length < 8) {
-//         error[3].style.visibility = "visible";
-//     } else if (inputPassword.value !== confirmPassword.value) {
-//         error[4].style.visibility = "visible";
-//     } else {
-//         console.log("form validated successfully");
-//         // form.action = "/register";
-//         // form.submit();
-//     }
-// });
+        suggestions.map(suggestion => {
+            let newItem = document.createElement("li");
+            newItem.classList.add(
+                "dropdown-item",
+                "text-truncate",
+                "d-flex",
+                "gap-2",
+                "justify-content-between"
+            );
+            newItem.innerHTML = `
+                  <a
+                      class="col-10 text-truncate"
+                      href="/search?searchTerm=${suggestion.searchTerm}"
+                  >
+                      ${suggestion.searchTerm} 
+                  </a>
+                  <span class="inputSuggestion col-2 text-end"  data-value="${suggestion.searchTerm}">
+                      <i class="fa-solid fa-arrow-up-left"> </i>
+                  </span>`;
+
+            newItem.addEventListener("click", () => {
+                searchInput.value = suggestion.searchTerm;
+            });
+
+            suggestionContainer.appendChild(newItem);
+        });
+        if (suggestions.length !== 0) {
+            suggestionContainer.classList.add("show");
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+searchInput.addEventListener("input", debounce(showSuggestions, 500));
