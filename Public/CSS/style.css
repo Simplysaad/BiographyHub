@@ -3,6 +3,13 @@ a {
     text-decoration: none;
 }
 
+* {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+::-webkit-scrollbar {
+    display: none;
+}
 .hero {
     background-origin: content-box;
     background-repeat: no-repeat;
